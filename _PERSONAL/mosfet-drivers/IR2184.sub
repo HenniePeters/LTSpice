@@ -1,0 +1,512 @@
+**********************************************************************
+*
+*  Copyright (c) International Rectifier
+*
+*  IR2184: High and Low Side Driver
+*   
+*  Ports 
+*    IN:  Logic Input for High and Low Side Gate Driver Outputs (HO and LO), 
+*         in phase with HO
+*    SD:  Logic Input for Shutdown, active low
+*    VB:  High Side Floating Supply 
+*    HO:  High Side Gate Driver Output
+*    VS:  High Side Floating Supply Return
+*    VCC: Low Side and Logic Fixed Supply
+*    LO:  Low Side Gate Driver Output
+*    COM: Low Side Return
+*
+*  Created by Pspice Version 8 
+*
+*  Date Created: 04/2003
+*
+***********************************************************************
+*
+*  This behavioral model was developed in compliance with Data Sheet 
+*  No. PD60174-D except noted below: 
+*  (1) There is no frequency effect on temperature.
+*  (2) The power dissipation is different. 
+*  (3) The values of output high/low short circuit current are adjusted 
+*      for the proper modeling of turn-on rise/turn-off fall time.
+*  (4) The "Low side return (COM)" pin must be grounded.
+***********************************************************************
+
+.SUBCKT IR2184 VCC IN SD com VB HO VS LO 
++PARAMS:
++         Cdelay=50n Rdelay=50 
++         T1=-40 T2=25 T3=125
++         V1=10 V2=15 V3=20
++         toffT1=270n toffT2=270n toffT3=270n
++         toffV1=270n toffV2=270n toffV3=270n
++         tonT1=210n tonT2=210n tonT3=210n
++         tonV1=210n tonV2=210n tonV3=210n
+
+.MODEL diode25 d
++IS=1.0e-14 RS=0.01 N=1 EG=1.11
++XTI=3 BV=25 IBV=0.0001 CJO=0
++VJ=0.75 M=0.333 FC=0.5 TT=0
++KF=0 AF=1
+
+.MODEL diode625 d
++IS=1.0e-14 RS=0.01 N=1 EG=1.11
++XTI=3 BV=625 IBV=0.0001 CJO=0
++VJ=0.75 M=0.333 FC=0.5 TT=0
++KF=0 AF=1
+
+D_MD1_D2         SD VCC DIODE25 
+D_MD1_D1         IN VCC DIODE25 
+D_MD1_D4         com IN DIODE25 
+D_MD1_D5         com VCC DIODE25 
+D_MD1_D3         com SD DIODE25 
+R_MD1_R3         SD VCC 3Meg TC=0, 0
+S_MD1_Nand2_P1         MD1_Nand2_5 MD1_Inv3_1 MD1_Trig2_6 com _MD1_Nand2_P1
+RS_MD1_Nand2_P1        MD1_Trig2_6 com 1G
+.MODEL        _MD1_Nand2_P1 VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+S_MD1_Nand2_N1         MD1_Inv3_1 MD1_Nand2_4 MD1_Inv1_3 com _MD1_Nand2_N1
+RS_MD1_Nand2_N1        MD1_Inv1_3 com 1G
+.MODEL        _MD1_Nand2_N1 VSWITCH Roff=1e6 Ron=1 Voff=0V Von=5V
+S_MD1_Nand2_N2         MD1_Nand2_4 com MD1_Trig2_6 com _MD1_Nand2_N2
+RS_MD1_Nand2_N2        MD1_Trig2_6 com 1G
+.MODEL        _MD1_Nand2_N2 VSWITCH Roff=1e6 Ron=1 Voff=0V Von=5V
+S_MD1_Nand2_P2         MD1_Nand2_5 MD1_Inv3_1 MD1_Inv1_3 com _MD1_Nand2_P2
+RS_MD1_Nand2_P2        MD1_Inv1_3 com 1G
+.MODEL        _MD1_Nand2_P2 VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+V_MD1_Nand2_V         MD1_Nand2_5 com 5V
+S_MD1_Nand1_P1         MD1_Nand1_5 MD1_Inv2_1 MD1_Trig2_6 com _MD1_Nand1_P1
+RS_MD1_Nand1_P1        MD1_Trig2_6 com 1G
+.MODEL        _MD1_Nand1_P1 VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+S_MD1_Nand1_N1         MD1_Inv2_1 MD1_Nand1_4 MD1_Inv1_1 com _MD1_Nand1_N1
+RS_MD1_Nand1_N1        MD1_Inv1_1 com 1G
+.MODEL        _MD1_Nand1_N1 VSWITCH Roff=1e6 Ron=1 Voff=0V Von=5V
+S_MD1_Nand1_N2         MD1_Nand1_4 com MD1_Trig2_6 com _MD1_Nand1_N2
+RS_MD1_Nand1_N2        MD1_Trig2_6 com 1G
+.MODEL        _MD1_Nand1_N2 VSWITCH Roff=1e6 Ron=1 Voff=0V Von=5V
+S_MD1_Nand1_P2         MD1_Nand1_5 MD1_Inv2_1 MD1_Inv1_1 com _MD1_Nand1_P2
+RS_MD1_Nand1_P2        MD1_Inv1_1 com 1G
+.MODEL        _MD1_Nand1_P2 VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+V_MD1_Nand1_V         MD1_Nand1_5 com 5V
+S_MD1_Inv3_P         MD1_Inv3_2 MD1_Inv3_3 MD1_Inv3_1 com _MD1_Inv3_P
+RS_MD1_Inv3_P        MD1_Inv3_1 com 1G
+.MODEL        _MD1_Inv3_P VSWITCH Roff=1e8 Ron=1 Voff=5V Von=0V
+S_MD1_Inv3_N         MD1_Inv3_3 com MD1_Inv3_1 com _MD1_Inv3_N
+RS_MD1_Inv3_N        MD1_Inv3_1 com 1G
+.MODEL        _MD1_Inv3_N VSWITCH Roff=1e8 Ron=1 Voff=0V Von=5V
+C_MD1_Inv3_C         com MD1_Inv3_3  1p  
+V_MD1_Inv3_V         MD1_Inv3_2 com 5V
+S_MD1_Inv2_P         MD1_Inv2_2 MD1_Inv2_3 MD1_Inv2_1 com _MD1_Inv2_P
+RS_MD1_Inv2_P        MD1_Inv2_1 com 1G
+.MODEL        _MD1_Inv2_P VSWITCH Roff=1e8 Ron=1 Voff=5V Von=0V
+S_MD1_Inv2_N         MD1_Inv2_3 com MD1_Inv2_1 com _MD1_Inv2_N
+RS_MD1_Inv2_N        MD1_Inv2_1 com 1G
+.MODEL        _MD1_Inv2_N VSWITCH Roff=1e8 Ron=1 Voff=0V Von=5V
+C_MD1_Inv2_C         com MD1_Inv2_3  1p  
+V_MD1_Inv2_V         MD1_Inv2_2 com 5V
+R_MD1_R2         com IN 1Meg TC=0, 0
+R_MD1_R1         com VCC 15K TC=0, 0
+
+X_MD1_Trig1_Comp1         IN MD1_Trig1_3 MD1_Inv1_1 com COMP
+C_MD1_Trig1_C         com MD1_Inv1_1  10p  
+S_MD1_Trig1_P         MD1_Trig1_4 com MD1_Inv1_1 com _MD1_Trig1_P
+RS_MD1_Trig1_P        MD1_Inv1_1 com 1G
+.MODEL        _MD1_Trig1_P VSWITCH Roff=5e9 Ron=1 Voff=0.01 Von=4.99
+R_MD1_Trig1_R2         MD1_Trig1_4 MD1_Trig1_3  5.63Meg  
+R_MD1_Trig1_R3         com MD1_Trig1_4  16.3Meg  
+R_MD1_Trig1_R1         MD1_Trig1_3 MD1_Trig1_7  100Meg  
+E_MD1_Trig1_ABM18         MD1_Trig1_7 0 VALUE { V(VCC) * 0.0+15V+V(com)    }
+X_MD1_Trig2_Comp1         SD MD1_Trig2_3 MD1_Trig2_6 com COMP
+C_MD1_Trig2_C         com MD1_Trig2_6  10p  
+S_MD1_Trig2_P         MD1_Trig2_4 com MD1_Trig2_6 com _MD1_Trig2_P
+RS_MD1_Trig2_P        MD1_Trig2_6 com 1G
+.MODEL        _MD1_Trig2_P VSWITCH Roff=5e9 Ron=1 Voff=0.01 Von=4.99
+R_MD1_Trig2_R2         MD1_Trig2_4 MD1_Trig2_3  5.63Meg  
+R_MD1_Trig2_R3         com MD1_Trig2_4  16.3Meg  
+R_MD1_Trig2_R1         MD1_Trig2_3 MD1_Trig2_7  100Meg  
+E_MD1_Trig2_ABM18         MD1_Trig2_7 0 VALUE { V(VCC) * 0.0+15V+V(com)    }
+
+S_MD1_Inv1_P         MD1_Inv1_2 MD1_Inv1_3 MD1_Inv1_1 com _MD1_Inv1_P
+RS_MD1_Inv1_P        MD1_Inv1_1 com 1G
+.MODEL        _MD1_Inv1_P VSWITCH Roff=1e8 Ron=1 Voff=5V Von=0V
+S_MD1_Inv1_N         MD1_Inv1_3 com MD1_Inv1_1 com _MD1_Inv1_N
+RS_MD1_Inv1_N        MD1_Inv1_1 com 1G
+.MODEL        _MD1_Inv1_N VSWITCH Roff=1e8 Ron=1 Voff=0V Von=5V
+C_MD1_Inv1_C         com MD1_Inv1_3  1p  
+V_MD1_Inv1_V         MD1_Inv1_2 com 5V
+
+S_MD2_Inv1_P         MD2_Inv1_2 MD2_Nor1_1 MD1_Inv2_3 com _MD2_Inv1_P
+RS_MD2_Inv1_P        MD1_Inv2_3 com 1G
+.MODEL        _MD2_Inv1_P VSWITCH Roff=1e8 Ron=1 Voff=5V Von=0V
+S_MD2_Inv1_N         MD2_Nor1_1 com MD1_Inv2_3 com _MD2_Inv1_N
+RS_MD2_Inv1_N        MD1_Inv2_3 com 1G
+.MODEL        _MD2_Inv1_N VSWITCH Roff=1e8 Ron=1 Voff=0V Von=5V
+C_MD2_Inv1_C         com MD2_Nor1_1  1p  
+V_MD2_Inv1_V         MD2_Inv1_2 com 5V
+S_MD2_Nor2_P1         MD2_Nor2_3 MD2_Nor2_4 MD2_Fall1_7 com _MD2_Nor2_P1
+RS_MD2_Nor2_P1        MD2_Fall1_7 com 1G
+.MODEL        _MD2_Nor2_P1 VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+S_MD2_Nor2_P2         MD2_Nor2_4 MD3_Nand2_2 MD2_Inv2_3 com _MD2_Nor2_P2
+RS_MD2_Nor2_P2        MD2_Inv2_3 com 1G
+.MODEL        _MD2_Nor2_P2 VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+S_MD2_Nor2_N1         MD3_Nand2_2 com MD2_Inv2_3 com _MD2_Nor2_N1
+RS_MD2_Nor2_N1        MD2_Inv2_3 com 1G
+.MODEL        _MD2_Nor2_N1 VSWITCH Roff=1e6 Ron=1 Voff=0V Von=5V
+S_MD2_Nor2_N2         MD3_Nand2_2 com MD2_Fall1_7 com _MD2_Nor2_N2
+RS_MD2_Nor2_N2        MD2_Fall1_7 com 1G
+.MODEL        _MD2_Nor2_N2 VSWITCH Roff=1e6 Ron=1 Voff=0V Von=5V
+V_MD2_Nor2_V         MD2_Nor2_3 com 5V
+S_MD2_Nor1_P1         MD2_Nor1_3 MD2_Nor1_4 MD2_Nor1_1 com _MD2_Nor1_P1
+RS_MD2_Nor1_P1        MD2_Nor1_1 com 1G
+.MODEL        _MD2_Nor1_P1 VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+S_MD2_Nor1_P2         MD2_Nor1_4 MD3_Nand1_2 MD2_Fall2_7 com _MD2_Nor1_P2
+RS_MD2_Nor1_P2        MD2_Fall2_7 com 1G
+.MODEL        _MD2_Nor1_P2 VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+S_MD2_Nor1_N1         MD3_Nand1_2 com MD2_Fall2_7 com _MD2_Nor1_N1
+RS_MD2_Nor1_N1        MD2_Fall2_7 com 1G
+.MODEL        _MD2_Nor1_N1 VSWITCH Roff=1e6 Ron=1 Voff=0V Von=5V
+S_MD2_Nor1_N2         MD3_Nand1_2 com MD2_Nor1_1 com _MD2_Nor1_N2
+RS_MD2_Nor1_N2        MD2_Nor1_1 com 1G
+.MODEL        _MD2_Nor1_N2 VSWITCH Roff=1e6 Ron=1 Voff=0V Von=5V
+V_MD2_Nor1_V         MD2_Nor1_3 com 5V
+V_MD2_Fall1_V         MD2_Fall1_2 com 5V
+E_MD2_Fall1_ABM12         MD2_Fall1_6 com VALUE { (5-5*EXP(-V(MD2_Fall1_5)/
++ {Rdelay}/{Cdelay}))    }
+C_MD2_Fall1_C6         com MD2_Fall1_7  100p  
+E_MD2_Fall1_ABM13         MD2_Fall1_5 com VALUE { (V(MD2_Fall2_4))*1.4866u+0.54u 
++    }
+X_MD2_Fall1_U9         MD2_Fall1_6 MD2_Fall1_3 MD2_Fall1_7 com COMP
+S_MD2_Fall1_P         MD2_Fall1_2 MD2_Fall1_3 MD1_Inv2_3 com _MD2_Fall1_P
+RS_MD2_Fall1_P        MD1_Inv2_3 com 1G
+.MODEL        _MD2_Fall1_P VSWITCH Roff=1e6 Ron={Rdelay} Voff=4.99 Von=0.01
+S_MD2_Fall1_N         MD2_Fall1_3 com MD1_Inv2_3 com _MD2_Fall1_N
+RS_MD2_Fall1_N        MD1_Inv2_3 com 1G
+.MODEL        _MD2_Fall1_N VSWITCH Roff=1e8 Ron=1m Voff=0.01 Von=4.99
+C_MD2_Fall1_C         com MD2_Fall1_3  {Cdelay}  
+V_MD2_Fall2_V         MD2_Fall2_2 com 5V
+E_MD2_Fall2_ABM12         MD2_Fall2_6 com VALUE { (5-5*EXP(-V(MD2_Fall2_5)/
++ {Rdelay}/{Cdelay}))    }
+C_MD2_Fall2_C6         com MD2_Fall2_7  100p  
+E_MD2_Fall2_ABM13         MD2_Fall2_5 com VALUE { (V(MD2_Fall2_4))*1.4866u+0.54u 
++    }
+X_MD2_Fall2_U9         MD2_Fall2_6 MD2_Fall2_3 MD2_Fall2_7 com COMP
+S_MD2_Fall2_P         MD2_Fall2_2 MD2_Fall2_3 MD1_Inv3_3 com _MD2_Fall2_P
+RS_MD2_Fall2_P        MD1_Inv3_3 com 1G
+.MODEL        _MD2_Fall2_P VSWITCH Roff=1e6 Ron={Rdelay} Voff=4.99 Von=0.01
+S_MD2_Fall2_N         MD2_Fall2_3 com MD1_Inv3_3 com _MD2_Fall2_N
+RS_MD2_Fall2_N        MD1_Inv3_3 com 1G
+.MODEL        _MD2_Fall2_N VSWITCH Roff=1e8 Ron=1m Voff=0.01 Von=4.99
+C_MD2_Fall2_C         com MD2_Fall2_3  {Cdelay}  
+S_MD2_Inv2_P         MD2_Inv2_2 MD2_Inv2_3 MD1_Inv3_3 com _MD2_Inv2_P
+RS_MD2_Inv2_P        MD1_Inv3_3 com 1G
+.MODEL        _MD2_Inv2_P VSWITCH Roff=1e8 Ron=1 Voff=5V Von=0V
+S_MD2_Inv2_N         MD2_Inv2_3 com MD1_Inv3_3 com _MD2_Inv2_N
+RS_MD2_Inv2_N        MD1_Inv3_3 com 1G
+.MODEL        _MD2_Inv2_N VSWITCH Roff=1e8 Ron=1 Voff=0V Von=5V
+C_MD2_Inv2_C         com MD2_Inv2_3  1p  
+V_MD2_Inv2_V         MD2_Inv2_2 com 5V
+*R_MD2_R3         DT MD2_Fall2_4  1.2  
+ R_MD2_R3         com  MD2_Fall2_4  1.2  
+
+R_MD2_R1         MD2_Fall2_4 VCC  600k  
+R_MD2_R2         com MD2_Fall2_4  600k  
+C_MD2_C1         com MD3_Nand1_2  10p  
+C_MD2_C2         com MD3_Nand2_2  10p  
+E_ABM11         MD4_DlyHS_2 com VALUE { V(MD3_Inv1_3)    }
+E_ABM12         MD4_DlyLS_2 com VALUE { V(MD3_Inv2_3)     }
+C_MD3_c4         com MD3_Inv2_3  10p  
+C_MD3_Uvcc_c1         MD3_Uvcc_2 MD3_Uvcc_3  10n  
+C_MD3_Uvcc_c2         MD3_Uvcc_4 MD3_Uvcc_2  10n  
+S_MD3_Uvcc_P         MD3_Uvcc_3 MD3_Uvcc_2 MD3_Nand2_1 com _MD3_Uvcc_P
+RS_MD3_Uvcc_P        MD3_Nand2_1 com 1G
+.MODEL        _MD3_Uvcc_P VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+S_MD3_Uvcc_N         MD3_Uvcc_2 MD3_Uvcc_4 MD3_Nand2_1 com _MD3_Uvcc_N
+RS_MD3_Uvcc_N        MD3_Nand2_1 com 1G
+.MODEL        _MD3_Uvcc_N VSWITCH Roff=1e6 Ron=1 Voff=0V Von=5V
+X_MD3_Uvcc_Comp         VCC MD3_Uvcc_2 MD3_Nand2_1 com COMP
+E_MD3_Uvcc_ABM2         MD3_Uvcc_3 com VALUE { 8.9    }
+E_MD3_Uvcc_ABM3         MD3_Uvcc_4 com VALUE { 8.2    }
+C_MD3_Uvcc_c3         com MD3_Nand2_1  10p  
+S_MD3_Nand1_P1         MD3_Nand1_5 MD3_Inv1_1 MD3_Nand1_2 com _MD3_Nand1_P1
+RS_MD3_Nand1_P1        MD3_Nand1_2 com 1G
+.MODEL        _MD3_Nand1_P1 VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+S_MD3_Nand1_N1         MD3_Inv1_1 MD3_Nand1_4 MD3_Nand2_1 com _MD3_Nand1_N1
+RS_MD3_Nand1_N1        MD3_Nand2_1 com 1G
+.MODEL        _MD3_Nand1_N1 VSWITCH Roff=1e6 Ron=1 Voff=0V Von=5V
+S_MD3_Nand1_N2         MD3_Nand1_4 com MD3_Nand1_2 com _MD3_Nand1_N2
+RS_MD3_Nand1_N2        MD3_Nand1_2 com 1G
+.MODEL        _MD3_Nand1_N2 VSWITCH Roff=1e6 Ron=1 Voff=0V Von=5V
+S_MD3_Nand1_P2         MD3_Nand1_5 MD3_Inv1_1 MD3_Nand2_1 com _MD3_Nand1_P2
+RS_MD3_Nand1_P2        MD3_Nand2_1 com 1G
+.MODEL        _MD3_Nand1_P2 VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+V_MD3_Nand1_V         MD3_Nand1_5 com 5V
+S_MD3_Nand2_P1         MD3_Nand2_5 MD3_Inv2_1 MD3_Nand2_2 com _MD3_Nand2_P1
+RS_MD3_Nand2_P1        MD3_Nand2_2 com 1G
+.MODEL        _MD3_Nand2_P1 VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+S_MD3_Nand2_N1         MD3_Inv2_1 MD3_Nand2_4 MD3_Nand2_1 com _MD3_Nand2_N1
+RS_MD3_Nand2_N1        MD3_Nand2_1 com 1G
+.MODEL        _MD3_Nand2_N1 VSWITCH Roff=1e6 Ron=1 Voff=0V Von=5V
+S_MD3_Nand2_N2         MD3_Nand2_4 com MD3_Nand2_2 com _MD3_Nand2_N2
+RS_MD3_Nand2_N2        MD3_Nand2_2 com 1G
+.MODEL        _MD3_Nand2_N2 VSWITCH Roff=1e6 Ron=1 Voff=0V Von=5V
+S_MD3_Nand2_P2         MD3_Nand2_5 MD3_Inv2_1 MD3_Nand2_1 com _MD3_Nand2_P2
+RS_MD3_Nand2_P2        MD3_Nand2_1 com 1G
+.MODEL        _MD3_Nand2_P2 VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+V_MD3_Nand2_V         MD3_Nand2_5 com 5V
+S_MD3_Inv1_P         MD3_Inv1_2 MD3_Inv1_3 MD3_Inv1_1 com _MD3_Inv1_P
+RS_MD3_Inv1_P        MD3_Inv1_1 com 1G
+.MODEL        _MD3_Inv1_P VSWITCH Roff=1e8 Ron=1 Voff=5V Von=0V
+S_MD3_Inv1_N         MD3_Inv1_3 com MD3_Inv1_1 com _MD3_Inv1_N
+RS_MD3_Inv1_N        MD3_Inv1_1 com 1G
+.MODEL        _MD3_Inv1_N VSWITCH Roff=1e8 Ron=1 Voff=0V Von=5V
+C_MD3_Inv1_C         com MD3_Inv1_3  1p  
+V_MD3_Inv1_V         MD3_Inv1_2 com 5V
+S_MD3_Inv2_P         MD3_Inv2_2 MD3_Inv2_3 MD3_Inv2_1 com _MD3_Inv2_P
+RS_MD3_Inv2_P        MD3_Inv2_1 com 1G
+.MODEL        _MD3_Inv2_P VSWITCH Roff=1e8 Ron=1 Voff=5V Von=0V
+S_MD3_Inv2_N         MD3_Inv2_3 com MD3_Inv2_1 com _MD3_Inv2_N
+RS_MD3_Inv2_N        MD3_Inv2_1 com 1G
+.MODEL        _MD3_Inv2_N VSWITCH Roff=1e8 Ron=1 Voff=0V Von=5V
+C_MD3_Inv2_C         com MD3_Inv2_3  1p  
+V_MD3_Inv2_V         MD3_Inv2_2 com 5V
+C_MD3_c1         com MD3_Inv1_1  10p  
+C_MD3_c2         com MD3_Inv1_3  10p  
+C_MD3_c3         com MD3_Inv2_1  10p  
+C_MD4_C1         com MD5_RS_2  10p  
+C_MD4_C2         com MD6_Inv_1  10p  
+E_MD4_DlyHS_Turn_On_Vth         MD4_DlyHS_3 com VALUE { (5* EXP(-( {tonT1}+(
++ {tonT3}-{tonT1})/({T3}-{T1})*(TEMP-{T1})) /10/ 10n))/(5* EXP(-( {tonT1}+(
++ {tonT3}-{tonT1})/({T3}-{T1})*({T2}-{T1})) /10/ 10n))*5*EXP(-{tonT2}/10/10n)*
++  (EXP(-({tonV1}+({tonV3}-{tonV1})/({V3}-{V1})*(V(VCC)-{V1}))/10/10n))/((EXP(-( 
++ {tonV1}+({tonV3}-{tonV1})/({V3}-{V1})*({V2}-{V1}))/10/10n)))    }
+E_MD4_DlyHS_Turn_Off_Vth         MD4_DlyHS_5 com VALUE { (5-5* EXP(-( {toffT1}+(
++ {toffT3}-{toffT1})/({T3}-{T1})*(TEMP-{T1}))/10/10n))/(5-5* EXP(-( {toffT1}+(
++ {toffT3}-{toffT1})/({T3}-{T1})*({T2}-{T1}))/10/10n))*(5-5*EXP(-
++ {toffT2}/10/10n))*(1-EXP(-( {toffV1}+({toffV3}-{toffV1})/({V3}-{V1})*(V(VCC)-
++ {V1})) /10/ 10n))/(1-EXP(-( {toffV1}+({toffV3}-{toffV1})/({V3}-{V1})*({V2}-
++ {V1})) /10/ 10n))    }
+C_MD4_DlyHS_C         com MD4_DlyHS_4  10n  
+S_MD4_DlyHS_P1         MD4_DlyHS_11 MD4_DlyHS_12 MD4_DlyHS_7 com _MD4_DlyHS_P1
+RS_MD4_DlyHS_P1        MD4_DlyHS_7 com 1G
+.MODEL        _MD4_DlyHS_P1 VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+S_MD4_DlyHS_P2         MD4_DlyHS_12 MD4_DlyHS_10 MD5_RS_2 com _MD4_DlyHS_P2
+RS_MD4_DlyHS_P2        MD5_RS_2 com 1G
+.MODEL        _MD4_DlyHS_P2 VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+S_MD4_DlyHS_N1         MD4_DlyHS_10 com MD5_RS_2 com _MD4_DlyHS_N1
+RS_MD4_DlyHS_N1        MD5_RS_2 com 1G
+.MODEL        _MD4_DlyHS_N1 VSWITCH Roff=1e6 Ron=1 Voff=0V Von=5V
+S_MD4_DlyHS_MN1         MD5_RS_2 com MD4_DlyHS_8 com _MD4_DlyHS_MN1
+RS_MD4_DlyHS_MN1        MD4_DlyHS_8 com 1G
+.MODEL        _MD4_DlyHS_MN1 VSWITCH Roff=1e6 Ron=1 Voff=0V Von=5V
+S_MD4_DlyHS_MP2         MD4_DlyHS_14 MD5_RS_2 MD4_DlyHS_8 com _MD4_DlyHS_MP2
+RS_MD4_DlyHS_MP2        MD4_DlyHS_8 com 1G
+.MODEL        _MD4_DlyHS_MP2 VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+S_MD4_DlyHS_MP1         MD4_DlyHS_13 MD4_DlyHS_14 MD4_DlyHS_10 com
++  _MD4_DlyHS_MP1
+RS_MD4_DlyHS_MP1        MD4_DlyHS_10 com 1G
+.MODEL        _MD4_DlyHS_MP1 VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+S_MD4_DlyHS_delay_P         MD4_DlyHS_6 MD4_DlyHS_4 MD4_DlyHS_2 com
++  _MD4_DlyHS_delay_P
+RS_MD4_DlyHS_delay_P        MD4_DlyHS_2 com 1G
+.MODEL        _MD4_DlyHS_delay_P VSWITCH Roff=1e6 Ron=10 Voff=5V Von=0V
+S_MD4_DlyHS_delay_N         MD4_DlyHS_4 com MD4_DlyHS_2 com _MD4_DlyHS_delay_N
+RS_MD4_DlyHS_delay_N        MD4_DlyHS_2 com 1G
+.MODEL        _MD4_DlyHS_delay_N VSWITCH Roff=1e6 Ron=10 Voff=0V Von=5V
+X_MD4_DlyHS_Comp2         MD4_DlyHS_4 MD4_DlyHS_5 MD4_DlyHS_8 com COMP
+X_MD4_DlyHS_Comp1         MD4_DlyHS_3 MD4_DlyHS_4 MD4_DlyHS_7 com COMP
+S_MD4_DlyHS_N2         MD4_DlyHS_10 com MD4_DlyHS_7 com _MD4_DlyHS_N2
+RS_MD4_DlyHS_N2        MD4_DlyHS_7 com 1G
+.MODEL        _MD4_DlyHS_N2 VSWITCH Roff=1e6 Ron=1 Voff=0V Von=5V
+S_MD4_DlyHS_MN2         MD5_RS_2 com MD4_DlyHS_10 com _MD4_DlyHS_MN2
+RS_MD4_DlyHS_MN2        MD4_DlyHS_10 com 1G
+.MODEL        _MD4_DlyHS_MN2 VSWITCH Roff=1e6 Ron=1 Voff=0V Von=5V
+V_MD4_DlyHS_V0         MD4_DlyHS_6 com 5V
+C_MD4_DlyHS_C3         com MD4_DlyHS_7  10p  
+V_MD4_DlyHS_V1         MD4_DlyHS_11 com 5V
+C_MD4_DlyHS_C6         com MD4_DlyHS_10  10p IC=-5V 
+V_MD4_DlyHS_V2         MD4_DlyHS_13 com 5V
+C_MD4_DlyHS_C4         com MD4_DlyHS_8  10p  
+C_MD4_DlyHS_C5         com MD5_RS_2  10p IC=0V 
+E_MD4_DlyLS_Turn_On_Vth         MD4_DlyLS_3 com VALUE { (5* EXP(-( {tonT1}+(
++ {tonT3}-{tonT1})/({T3}-{T1})*(TEMP-{T1})) /10/ 10n))/(5* EXP(-( {tonT1}+(
++ {tonT3}-{tonT1})/({T3}-{T1})*({T2}-{T1})) /10/ 10n))*5*EXP(-{tonT2}/10/10n)*
++  (EXP(-({tonV1}+({tonV3}-{tonV1})/({V3}-{V1})*(V(VCC)-{V1}))/10/10n))/((EXP(-( 
++ {tonV1}+({tonV3}-{tonV1})/({V3}-{V1})*({V2}-{V1}))/10/10n)))    }
+E_MD4_DlyLS_Turn_Off_Vth         MD4_DlyLS_5 com VALUE { (5-5* EXP(-( {toffT1}+(
++ {toffT3}-{toffT1})/({T3}-{T1})*(TEMP-{T1}))/10/10n))/(5-5* EXP(-( {toffT1}+(
++ {toffT3}-{toffT1})/({T3}-{T1})*({T2}-{T1}))/10/10n))*(5-5*EXP(-
++ {toffT2}/10/10n))*(1-EXP(-( {toffV1}+({toffV3}-{toffV1})/({V3}-{V1})*(V(VCC)-
++ {V1})) /10/ 10n))/(1-EXP(-( {toffV1}+({toffV3}-{toffV1})/({V3}-{V1})*({V2}-
++ {V1})) /10/ 10n))    }
+C_MD4_DlyLS_C         com MD4_DlyLS_4  10n  
+S_MD4_DlyLS_P1         MD4_DlyLS_11 MD4_DlyLS_12 MD4_DlyLS_7 com _MD4_DlyLS_P1
+RS_MD4_DlyLS_P1        MD4_DlyLS_7 com 1G
+.MODEL        _MD4_DlyLS_P1 VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+S_MD4_DlyLS_P2         MD4_DlyLS_12 MD4_DlyLS_10 MD6_Inv_1 com _MD4_DlyLS_P2
+RS_MD4_DlyLS_P2        MD6_Inv_1 com 1G
+.MODEL        _MD4_DlyLS_P2 VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+S_MD4_DlyLS_N1         MD4_DlyLS_10 com MD6_Inv_1 com _MD4_DlyLS_N1
+RS_MD4_DlyLS_N1        MD6_Inv_1 com 1G
+.MODEL        _MD4_DlyLS_N1 VSWITCH Roff=1e6 Ron=1 Voff=0V Von=5V
+S_MD4_DlyLS_MN1         MD6_Inv_1 com MD4_DlyLS_8 com _MD4_DlyLS_MN1
+RS_MD4_DlyLS_MN1        MD4_DlyLS_8 com 1G
+.MODEL        _MD4_DlyLS_MN1 VSWITCH Roff=1e6 Ron=1 Voff=0V Von=5V
+S_MD4_DlyLS_MP2         MD4_DlyLS_14 MD6_Inv_1 MD4_DlyLS_8 com _MD4_DlyLS_MP2
+RS_MD4_DlyLS_MP2        MD4_DlyLS_8 com 1G
+.MODEL        _MD4_DlyLS_MP2 VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+S_MD4_DlyLS_MP1         MD4_DlyLS_13 MD4_DlyLS_14 MD4_DlyLS_10 com
++  _MD4_DlyLS_MP1
+RS_MD4_DlyLS_MP1        MD4_DlyLS_10 com 1G
+.MODEL        _MD4_DlyLS_MP1 VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+S_MD4_DlyLS_delay_P         MD4_DlyLS_6 MD4_DlyLS_4 MD4_DlyLS_2 com
++  _MD4_DlyLS_delay_P
+RS_MD4_DlyLS_delay_P        MD4_DlyLS_2 com 1G
+.MODEL        _MD4_DlyLS_delay_P VSWITCH Roff=1e6 Ron=10 Voff=5V Von=0V
+S_MD4_DlyLS_delay_N         MD4_DlyLS_4 com MD4_DlyLS_2 com _MD4_DlyLS_delay_N
+RS_MD4_DlyLS_delay_N        MD4_DlyLS_2 com 1G
+.MODEL        _MD4_DlyLS_delay_N VSWITCH Roff=1e6 Ron=10 Voff=0V Von=5V
+X_MD4_DlyLS_Comp2         MD4_DlyLS_4 MD4_DlyLS_5 MD4_DlyLS_8 com COMP
+X_MD4_DlyLS_Comp1         MD4_DlyLS_3 MD4_DlyLS_4 MD4_DlyLS_7 com COMP
+S_MD4_DlyLS_N2         MD4_DlyLS_10 com MD4_DlyLS_7 com _MD4_DlyLS_N2
+RS_MD4_DlyLS_N2        MD4_DlyLS_7 com 1G
+.MODEL        _MD4_DlyLS_N2 VSWITCH Roff=1e6 Ron=1 Voff=0V Von=5V
+S_MD4_DlyLS_MN2         MD6_Inv_1 com MD4_DlyLS_10 com _MD4_DlyLS_MN2
+RS_MD4_DlyLS_MN2        MD4_DlyLS_10 com 1G
+.MODEL        _MD4_DlyLS_MN2 VSWITCH Roff=1e6 Ron=1 Voff=0V Von=5V
+V_MD4_DlyLS_V0         MD4_DlyLS_6 com 5V
+C_MD4_DlyLS_C3         com MD4_DlyLS_7  10p  
+V_MD4_DlyLS_V1         MD4_DlyLS_11 com 5V
+C_MD4_DlyLS_C6         com MD4_DlyLS_10  10p IC=-5V 
+V_MD4_DlyLS_V2         MD4_DlyLS_13 com 5V
+C_MD4_DlyLS_C4         com MD4_DlyLS_8  10p  
+C_MD4_DlyLS_C5         com MD6_Inv_1  10p IC=0V 
+R_MD5_R         VS VB 250k TC=0, 0
+C_MD5_C3         VS HO  10p IC=0 
+D_MD5_D1         VS HO DIODE25 
+D_MD5_D5         com VS DIODE625 
+D_MD5_D4         com VB DIODE625 
+D_MD5_D2         HO VB DIODE25 
+D_MD5_D3         VS VB DIODE25 
+S_MD5_Inv1_P         MD5_Inv1_2 MD5_Nor_1 MD5_RS_2 com _MD5_Inv1_P
+RS_MD5_Inv1_P        MD5_RS_2 com 1G
+.MODEL        _MD5_Inv1_P VSWITCH Roff=1e8 Ron=1 Voff=5V Von=0V
+S_MD5_Inv1_N         MD5_Nor_1 com MD5_RS_2 com _MD5_Inv1_N
+RS_MD5_Inv1_N        MD5_RS_2 com 1G
+.MODEL        _MD5_Inv1_N VSWITCH Roff=1e8 Ron=1 Voff=0V Von=5V
+C_MD5_Inv1_C         com MD5_Nor_1  1p  
+V_MD5_Inv1_V         MD5_Inv1_2 com 5V
+S_MD5_Inv2_P         MD5_Inv2_2 MD5_Nor_2 MD5_Uvbs_3 com _MD5_Inv2_P
+RS_MD5_Inv2_P        MD5_Uvbs_3 com 1G
+.MODEL        _MD5_Inv2_P VSWITCH Roff=1e8 Ron=1 Voff=5V Von=0V
+S_MD5_Inv2_N         MD5_Nor_2 com MD5_Uvbs_3 com _MD5_Inv2_N
+RS_MD5_Inv2_N        MD5_Uvbs_3 com 1G
+.MODEL        _MD5_Inv2_N VSWITCH Roff=1e8 Ron=1 Voff=0V Von=5V
+C_MD5_Inv2_C         com MD5_Nor_2  1p  
+V_MD5_Inv2_V         MD5_Inv2_2 com 5V
+S_MD5_Nor_P1         MD5_Nor_3 MD5_Nor_4 MD5_Nor_1 com _MD5_Nor_P1
+RS_MD5_Nor_P1        MD5_Nor_1 com 1G
+.MODEL        _MD5_Nor_P1 VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+S_MD5_Nor_P2         MD5_Nor_4 MD5_Inv3_1 MD5_Nor_2 com _MD5_Nor_P2
+RS_MD5_Nor_P2        MD5_Nor_2 com 1G
+.MODEL        _MD5_Nor_P2 VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+S_MD5_Nor_N1         MD5_Inv3_1 com MD5_Nor_2 com _MD5_Nor_N1
+RS_MD5_Nor_N1        MD5_Nor_2 com 1G
+.MODEL        _MD5_Nor_N1 VSWITCH Roff=1e6 Ron=1 Voff=0V Von=5V
+S_MD5_Nor_N2         MD5_Inv3_1 com MD5_Nor_1 com _MD5_Nor_N2
+RS_MD5_Nor_N2        MD5_Nor_1 com 1G
+.MODEL        _MD5_Nor_N2 VSWITCH Roff=1e6 Ron=1 Voff=0V Von=5V
+V_MD5_Nor_V         MD5_Nor_3 com 5V
+S_MD5_Inv3_P         MD5_Inv3_2 MD5_RS_1 MD5_Inv3_1 com _MD5_Inv3_P
+RS_MD5_Inv3_P        MD5_Inv3_1 com 1G
+.MODEL        _MD5_Inv3_P VSWITCH Roff=1e8 Ron=1 Voff=5V Von=0V
+S_MD5_Inv3_N         MD5_RS_1 com MD5_Inv3_1 com _MD5_Inv3_N
+RS_MD5_Inv3_N        MD5_Inv3_1 com 1G
+.MODEL        _MD5_Inv3_N VSWITCH Roff=1e8 Ron=1 Voff=0V Von=5V
+C_MD5_Inv3_C         com MD5_RS_1  1p  
+V_MD5_Inv3_V         MD5_Inv3_2 com 5V
+C_MD5_Uvbs_c1         MD5_Uvbs_4 MD5_Uvbs_5  10n  
+C_MD5_Uvbs_c2         MD5_Uvbs_6 MD5_Uvbs_4  10n  
+X_MD5_Uvbs_Comp         VB MD5_Uvbs_4 MD5_Uvbs_3 com COMP
+S_MD5_Uvbs_P         MD5_Uvbs_5 MD5_Uvbs_4 MD5_Uvbs_3 com _MD5_Uvbs_P
+RS_MD5_Uvbs_P        MD5_Uvbs_3 com 1G
+.MODEL        _MD5_Uvbs_P VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+S_MD5_Uvbs_N         MD5_Uvbs_4 MD5_Uvbs_6 MD5_Uvbs_3 com _MD5_Uvbs_N
+RS_MD5_Uvbs_N        MD5_Uvbs_3 com 1G
+.MODEL        _MD5_Uvbs_N VSWITCH Roff=1e6 Ron=1 Voff=0V Von=5V
+E_MD5_Uvbs_ABM18         MD5_Uvbs_5 com VALUE { V(VS)+8.9    }
+E_MD5_Uvbs_ABM19         MD5_Uvbs_6 com VALUE { V(VS)+8.2    }
+C_MD5_Uvbs_c3         com MD5_Uvbs_3  10p  
+S_MD5_RS_P1         MD5_RS_5 MD5_RS_6 MD5_RS_1 com _MD5_RS_P1
+RS_MD5_RS_P1        MD5_RS_1 com 1G
+.MODEL        _MD5_RS_P1 VSWITCH Roff=1e6 Ron=1m Voff=5V Von=0V
+S_MD5_RS_P2         MD5_RS_6 MD5_Inv4_1 MD5_RS_3 com _MD5_RS_P2
+RS_MD5_RS_P2        MD5_RS_3 com 1G
+.MODEL        _MD5_RS_P2 VSWITCH Roff=1e6 Ron=1m Voff=5V Von=0V
+S_MD5_RS_N1         MD5_Inv4_1 com MD5_RS_3 com _MD5_RS_N1
+RS_MD5_RS_N1        MD5_RS_3 com 1G
+.MODEL        _MD5_RS_N1 VSWITCH Roff=1e8 Ron=1m Voff=0V Von=5V
+S_MD5_RS_N2         MD5_Inv4_1 com MD5_RS_1 com _MD5_RS_N2
+RS_MD5_RS_N2        MD5_RS_1 com 1G
+.MODEL        _MD5_RS_N2 VSWITCH Roff=1e8 Ron=1m Voff=0V Von=5V
+S_MD5_RS_N3         MD5_RS_3 com MD5_RS_2 com _MD5_RS_N3
+RS_MD5_RS_N3        MD5_RS_2 com 1G
+.MODEL        _MD5_RS_N3 VSWITCH Roff=1e8 Ron=1m Voff=0V Von=5V
+S_MD5_RS_N4         MD5_RS_3 com MD5_Inv4_1 com _MD5_RS_N4
+RS_MD5_RS_N4        MD5_Inv4_1 com 1G
+.MODEL        _MD5_RS_N4 VSWITCH Roff=1e8 Ron=1m Voff=0V Von=5V
+C_MD5_RS_C7         MD5_RS_6 MD5_RS_5  10p  
+S_MD5_RS_P4         MD5_RS_7 MD5_RS_3 MD5_Inv4_1 com _MD5_RS_P4
+RS_MD5_RS_P4        MD5_Inv4_1 com 1G
+.MODEL        _MD5_RS_P4 VSWITCH Roff=1e6 Ron=1m Voff=5V Von=0V
+S_MD5_RS_P3         MD5_RS_5 MD5_RS_7 MD5_RS_2 com _MD5_RS_P3
+RS_MD5_RS_P3        MD5_RS_2 com 1G
+.MODEL        _MD5_RS_P3 VSWITCH Roff=1e6 Ron=1m Voff=5V Von=0V
+C_MD5_RS_C2         com MD5_RS_1  10p IC=0 
+C_MD5_RS_C3         com MD5_RS_2  10p IC=0 
+C_MD5_RS_C10         MD5_RS_7 MD5_RS_5  10p  
+C_MD5_RS_C11         MD5_RS_3 MD5_RS_7  10p  
+C_MD5_RS_C12         com MD5_RS_3  10p  
+C_MD5_RS_C9         com MD5_Inv4_1  10p  
+C_MD5_RS_C8         MD5_Inv4_1 MD5_RS_6  10p  
+C_MD5_RS_C1         com MD5_Inv4_1  10p IC=0 
+V_MD5_RS_V1         MD5_RS_5 com 5V
+S_MD5_OHS_P         VB MD5_OHS_2 MD5_Inv4_3 com _MD5_OHS_P
+RS_MD5_OHS_P        MD5_Inv4_3 com 1G
+.MODEL        _MD5_OHS_P VSWITCH Roff=1e9 Ron=1m Voff=5V Von=0V
+S_MD5_OHS_N         MD5_OHS_3 VS MD5_Inv4_3 com _MD5_OHS_N
+RS_MD5_OHS_N        MD5_Inv4_3 com 1G
+.MODEL        _MD5_OHS_N VSWITCH Roff=1e9 Ron=1m Voff=0V Von=5V
+R_MD5_OHS_R1         HO MD5_OHS_2 18.3 TC=0, 0
+R_MD5_OHS_R2         MD5_OHS_3 HO 9.13 TC=0, 0
+S_MD5_Inv4_P         MD5_Inv4_2 MD5_Inv4_3 MD5_Inv4_1 com _MD5_Inv4_P
+RS_MD5_Inv4_P        MD5_Inv4_1 com 1G
+.MODEL        _MD5_Inv4_P VSWITCH Roff=1e8 Ron=1 Voff=5V Von=0V
+S_MD5_Inv4_N         MD5_Inv4_3 com MD5_Inv4_1 com _MD5_Inv4_N
+RS_MD5_Inv4_N        MD5_Inv4_1 com 1G
+.MODEL        _MD5_Inv4_N VSWITCH Roff=1e8 Ron=1 Voff=0V Von=5V
+C_MD5_Inv4_C         com MD5_Inv4_3  1p  
+V_MD5_Inv4_V         MD5_Inv4_2 com 5V
+D_MD6_D3         com LO DIODE25 
+D_MD6_D2         LO VCC DIODE25 
+D_MD6_D1         com VCC DIODE25 
+C_MD6_C         com LO  10p  
+S_MD6_Inv_P         MD6_Inv_2 MD6_OLS_1 MD6_Inv_1 com _MD6_Inv_P
+RS_MD6_Inv_P        MD6_Inv_1 com 1G
+.MODEL        _MD6_Inv_P VSWITCH Roff=1e8 Ron=1 Voff=5V Von=0V
+S_MD6_Inv_N         MD6_OLS_1 com MD6_Inv_1 com _MD6_Inv_N
+RS_MD6_Inv_N        MD6_Inv_1 com 1G
+.MODEL        _MD6_Inv_N VSWITCH Roff=1e8 Ron=1 Voff=0V Von=5V
+C_MD6_Inv_C         com MD6_OLS_1  1p  
+V_MD6_Inv_V         MD6_Inv_2 com 5V
+S_MD6_OLS_P         VCC MD6_OLS_2 MD6_OLS_1 com _MD6_OLS_P
+RS_MD6_OLS_P        MD6_OLS_1 com 1G
+.MODEL        _MD6_OLS_P VSWITCH Roff=1e9 Ron=1m Voff=5V Von=0V
+S_MD6_OLS_N         MD6_OLS_3 com MD6_OLS_1 com _MD6_OLS_N
+RS_MD6_OLS_N        MD6_OLS_1 com 1G
+.MODEL        _MD6_OLS_N VSWITCH Roff=1e9 Ron=1m Voff=0V Von=5V
+R_MD6_OLS_R1         LO MD6_OLS_2 18.3 TC=0, 0
+R_MD6_OLS_R2         MD6_OLS_3 LO 9.13 TC=0, 0
+
+.ENDS IR2184
+
+.SUBCKT COMP 1 2 3 4
+E1 5 4 VALUE={IF((V(1)>V(2)), V(4)+5V, V(4))}
+R1 5 3 1
+C1 3 4 10P
+.ENDS

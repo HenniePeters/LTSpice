@@ -1,0 +1,187 @@
+.SUBCKT TC4431 1 2 3 4 5
+*              | | | | |
+*              | | | | UV_Lockout_Disable_Low
+*              | | | Negative Supply
+*              | | Positive Supply
+*              | Output
+*              Input
+*
+********************************************************************************
+* Software License Agreement                                                   *
+*                                                                              *
+* The software supplied herewith by Microchip Technology Incorporated (the     *
+* 'Company') is intended and supplied to you, the Company's customer, for use  *
+* soley and exclusively on Microchip products.                                 *
+*                                                                              *
+* The software is owned by the Company and/or its supplier, and is protected   *
+* under applicable copyright laws. All rights are reserved. Any use in         *
+* violation of the foregoing restrictions may subject the user to criminal     *
+* sanctions under applicable laws, as well as to civil liability for the       *
+* breach of the terms and conditions of this license.                          *
+*                                                                              *
+* THIS SOFTWARE IS PROVIDED IN AN 'AS IS' CONDITION. NO WARRANTIES, WHETHER    *
+* EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, IMPLIED        *
+* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE APPLY TO  *
+* THIS SOFTWARE. THE COMPANY SHALL NOT, IN ANY CIRCUMSTANCES, BE LIABLE FOR    *
+* SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES, FOR ANY REASON WHATSOEVER.     *
+********************************************************************************
+*
+* The following MOSFET drivers are covered by this model:
+*      TC4431
+*
+* Polarity: Inverting
+*
+* Date of model creation: 8/25/2008
+* Level of Model Creator: B
+*
+* Revision History:
+*      12/06/07 HNV Created by edit of TC4431_I2D_B
+*      8/25/08  RAW Modified upper Mosfet into an NPN
+*
+* Recommendations:
+*      Use PSPICE (or SPICE 2G6; other simulators may require translation)
+*      For a quick, effective design, use a combination of: data sheet
+*            specs, bench testing, and simulations with this macromodel
+*      For high impedance circuits, set GMIN=100F in the .OPTIONS statement
+*
+* Supported:
+*      Typical performance for temperature range (-40 to 125) degrees Celsius
+*      DC, AC, Transient, and Noise analyses.
+*      Most specs, including: propgation delays, rise times, fall times, max sink/source current,
+*            input thresholds, voltage ranges, supply current, ... , etc.
+*      Temperature effects for Ibias, Iquiescent, output current, output 
+*            resistance,....,etc.
+*
+* Not Supported:
+*      Lockout Disable is not supported
+*      Output is modelled as a single pin.  Can be separated into two with a pair of
+*      diodes if desired.  As is, model is drop in compatible with other driver models
+*      Some Variation in specs vs. Power Supply Voltage
+*      Vos distribution, Ib distribution for Monte Carlo
+*      Some Temperature analysis
+*      Process variation
+*      Behavior outside normal operating region
+*
+* Known Discrepancies in Model vs. Datasheet:
+*      Supply current due to shoot-through when switching is a little high.
+*      Use data from datasheet for more accurate estimates. 
+*
+*
+* Input Impedance/Clamp
+R1  4  1    20MEG
+C1  4  1    10P
+G3  3  1    TABLE {V(3,1)}((-770M,-1.00)(-700M,-10.0M)(-630M,-10N)(0,0)(30.0,10N))
+G4  1  4    TABLE {V(1,4)}((-5.94,-1.00)(-5.4,-10.0M)(-4.86,-10N)
++                 (0,0)(12,0.3U)(18,100U)(26,14m)(30,50m)(35,1))
+* Threshold
+G11 30 0    TABLE {V(112,11)}((-1,10n)(0,0)(0.88,-.1)
++ (1.5,-0.9)(2.2,-1)(4,-1.1)(6,-1.3))
+G12 30 0    TABLE {V(112,12)}((-6,1.3)(-4,1.1)(-2.3,1)
++ (-1.8,.9)(-0.7,.1)(0,0)(1,-10n))
+R21 0 11 1 TC .57m 1.7u  
+G21 0 11 TABLE { V(3,4) } 
++ ((0,0)(4.5,1.83)(12,1.97)(18,2.095)(25,2.11)(30,2.12))
+R22 0 12  1 TC .16m 2.2U  
+G22 0 12 TABLE { V(3,4) } 
++ ((0,0)(4.5,1.49)(12,1.55)(18,1.59)(25,1.718)(30,1.70))
+C30 30  0    1n  
+* HL Circuit
+*G31 0   31   TABLE { V(3, 4) } ((0,100)(4.5,63)(6,68)(7.5,38)(12,26)(18,22)(30,18))
+G31 0   31   TABLE { V(3, 4) } ((0,170)(4.5,143)(6,78)(7.5,48)(12,36)(18,40)(30,38))
+R31 31  0    1 TC 2.5M
+G33 0   30   TABLE { V(31, 30) } ( (-1m,-5)(0,0)(1m,1n)(1,10n) )
+S31 31  30 31 30 SS31
+* LH Circuit
+*G32 32  0    TABLE { V(3, 4) } ((0,200)(4.5,180)(6,80)(7.8,70)(30,60))
+G32 32  0    TABLE { V(3, 4) } ((0,200)(4.5,160)(6,90)(7.8,80)(30,70))
+R32 0   32   1 TC 2.5M 5U
+G34 30  0    TABLE { V(30, 32) } ((-1m,-5)(0,0)(1m,1n)(1,10n))
+R30 32  30   1MEG  
+* DRIVE
+G51  0 50 TABLE {V(0,30)}((-5,-1n)(-3,-1n)(0,0)(5,1.3)(30,1.5))
+G52 50  0 TABLE {V(30,0)}((-5,-1n)(-3,-1n)(0,0)(5,0.7)(30,1.0))
+R53  0 50 1 TC -7m 32u
+G50 51 60 VALUE {V(50,0)*10/(9+(30/V(3,4))^3+1m)}
+R51 51  0 1
+G53  3  0 TABLE {V(51,0)} ((-10,10)(0,0)(1,1n))
+G54  0  4 TABLE {V(0,51)} ((-10,10)(0,0)(1,1n))
+R60 0   60   100MEG  
+H67 0   69   V67 1
+V67 60  59   0V
+*C59 0   59   150P
+*C60 0   60   250P
+*R59 59  2   1m
+C60 561  60   250p
+R59 59   2    0.5
+L59 59   2    10N
+* Shoot-through adjustment
+VC60 56 0 0V
+RC60 56 561 1m
+H60 58 0 VC60 1
+G60P 0 3 TABLE { V(58, 0) } ((-1,-1u)(0,0)(0.25,0)(0.3,0))
+G60N 4 0 TABLE { V(0, 58) } ((-1,-1u)(0,0)(0.25,0)(0.3,0))
+
+
+* Source Output
+*E67 67   0    TABLE {V(69, 0)}((-40,-40)(0,0)(40,150))
+E67 67   0    TABLE {V(69, 0)}((-100,-0.622)(-1e-4,-0.6199)(0,0)(100u,2)(10m,2.2)(1,3.3)
+*G63 0   63   POLY(1) 3 4 19.2 -0.951 15.4M
+G63 0   63   TABLE {V(3, 4)}((-1,-1)(0,0)(4.5,1)(18,1.081)(25,1.0968)(30,1.0968)
+R63 0    63   1 TC -2.5M -10u
+E61 61   65   VALUE {V(67,0)*V(63,0)}
+*V63 65   3    10M
+V63 65   3    100u
+*G61 61   60   TABLE {V(61,60)}((-12.0M,-200.0)(-11.0M,-60)(-10.0M,-6)(0,0)(.1,5N)(50,10N))
+G61 61   60   TABLE {V(61,60)}((-12.0M,-200.0)(-11.0M,-60)(-10.0M,-6)(0,0)(.1,50N)(50,100N))
+D61 59 3 Dbreak
+* Sink Output
+E68 68   0    TABLE {V(69,0)}((-150,-40)(0,0)(40,40))
+*E68 68   0    TABLE {V(69,0)}((-150,-40)(0,0)(100u,2)(10m,2.2)(1,3.3))
+G64 0   64   POLY(1) 3 4 10.77 -358M 6.3M
+R64 0    64   1 TC 3M 6U
+E62 62   66   VALUE {V(68,0)*V(64,0)}
+V64 66   4    10.0M
+G62 60   62   TABLE {V(60,62)}(-12.0M,-200.0)(-11.0M,-60)(-10.0M,-6)(0,0)(.1,5N)(10,10N))
+*G62 60   62   TABLE {V(60,62)}(-12.0M,-200.0)(-11.0M,-60)(-10.0M,-1e-6)(0,0)(.1,5N)(10,10N))
+D62 4 59 Dbreak
+* Bias Current
+G55 0    55   TABLE {V(3,4)}((0,0)(4,532U)(12,976U)(18,1.276M)(25,1.484M)(30,1.52M)
+G56 3    4    55 0 1
+R55 55   0    1 TC  5.1M
+G57 0    57   TABLE {V(3,4)}((0,0)(4.5,100U)(12,113U)(18,133U)(25,177U)(30,190U)
+G58 3    4    57 0 1
+R57 57   0    1 TC  1.25M 13.1U
+S59 55   0    112 0 SS59
+* UV Lockout
+* source DRIVERS
+* debug... comment out all, add passthrough on switch
+X119 3 118 117 119 TC4431_COMP_HYS
+R112 3 112  200MEG 
+C112 0 112 1p
+S112  1 112 113 0 SS112
+RS112 113 0 1G
+S113  4 112 113 0 SS113
+X112  115 5 111 114 TC4431_COMP_HYS
+V118  118 4 8.05
+V115  115 4 1.2
+V120  111 4 0.4
+I111  0 5 DC 10uAdc  
+V117  117 4 0.7
+E113  113 0 VALUE { IF( V(119)>0.5 | V(114)>0.5,1,0) }
+R111  0 5  1MEG  
+* Models
+.MODEL SS59 VSWITCH Roff=100MEG Ron=1m Voff=1.5V Von=1.2V
+.MODEL SS31 VSWITCH Roff=100MEG Ron=300 Voff=0.2V Von=0.1V
+.MODEL SS112 VSWITCH Roff=100MEG Ron=1m Voff=0.6V Von=0.7V
+.MODEL SS113 VSWITCH Roff=100MEG Ron=100 Voff=0.4V Von=0.3V
+.model Dbreak D Is=1e-14 Cjo=.1pF Rs=.1
+.ENDS TC4431_I2D_B
+*
+.SUBCKT TC4431_COMP_HYS INP INM HYS OUT 
+EIN INP1 INM1 INP INM 1 
+EHYS INP1 INP2 VALUE { IF( V(1)>0.5,-V(HYS)/2,V(HYS)/2) }
+EOUT OUT 0 VALUE { IF( V(INP2)>V(INM1),1,0) }
+R1 OUT 1 1
+C1 1 0 1n 
+RINP1 INP1 0 1K
+.ends TC4431_COMP_HYS
