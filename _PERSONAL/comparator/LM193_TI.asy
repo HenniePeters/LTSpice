@@ -11,9 +11,13 @@ LINE Normal 0 32 0 16
 LINE Normal 4 -20 12 -20
 LINE Normal 8 -24 8 -16
 LINE Normal 4 20 12 20
+WINDOW 0 16 -32 Left 2
+WINDOW 3 16 32 Left 2
+SYMATTR Value LM193/TI
 SYMATTR Prefix X
-SYMATTR SpiceModel rhr801
-SYMATTR ModelFile ..\sym\_PERSONAL\comparator\RHR801.sub
+SYMATTR SpiceModel ..\sym\_PERSONAL\comparator\ti_models.lib
+SYMATTR Value2 LM193/TI
+SYMATTR Description LM193/TI
 PIN -32 16 NONE 0
 PINATTR PinName In+
 PINATTR SpiceOrder 1

@@ -11,9 +11,13 @@ LINE Normal 0 32 0 16
 LINE Normal 4 -20 12 -20
 LINE Normal 8 -24 8 -16
 LINE Normal 4 20 12 20
+WINDOW 0 16 -32 Left 2
+WINDOW 3 16 32 Left 2
+SYMATTR Value LM139/UK
 SYMATTR Prefix X
-SYMATTR SpiceModel rhr801
-SYMATTR ModelFile ..\sym\_PERSONAL\comparator\RHR801.sub
+SYMATTR SpiceModel ..\sym\_PERSONAL\comparator\unknown.lib
+SYMATTR Value2 LM139/UK
+SYMATTR Description LM139
 PIN -32 16 NONE 0
 PINATTR PinName In+
 PINATTR SpiceOrder 1

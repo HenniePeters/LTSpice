@@ -12,8 +12,9 @@ LINE Normal 4 -20 12 -20
 LINE Normal 8 -24 8 -16
 LINE Normal 4 20 12 20
 SYMATTR Prefix X
-SYMATTR SpiceModel rhr801
-SYMATTR ModelFile ..\sym\_PERSONAL\comparator\RHR801.sub
+SYMATTR SpiceModel lmc6772b
+SYMATTR ModelFile ..\sym\_PERSONAL\comparator\Sborka.lib
+SYMATTR Description dual, OD, 2.7-15V, 20uA, 5uS
 PIN -32 16 NONE 0
 PINATTR PinName In+
 PINATTR SpiceOrder 1
@@ -22,10 +23,10 @@ PINATTR PinName In-
 PINATTR SpiceOrder 2
 PIN 0 -32 NONE 0
 PINATTR PinName V+
-PINATTR SpiceOrder 3
+PINATTR SpiceOrder 4
 PIN 0 32 NONE 0
 PINATTR PinName V-
-PINATTR SpiceOrder 4
+PINATTR SpiceOrder 5
 PIN 32 0 NONE 0
 PINATTR PinName OUT
-PINATTR SpiceOrder 5
+PINATTR SpiceOrder 3

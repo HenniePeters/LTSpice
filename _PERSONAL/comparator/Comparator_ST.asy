@@ -12,20 +12,20 @@ LINE Normal 4 -20 12 -20
 LINE Normal 8 -24 8 -16
 LINE Normal 4 20 12 20
 SYMATTR Prefix X
-SYMATTR SpiceModel rhr801
-SYMATTR ModelFile ..\sym\_PERSONAL\comparator\RHR801.sub
+SYMATTR SpiceModel TS391
+SYMATTR ModelFile ..\sym\_PERSONAL\comparator\Comparator_ST.lib
 PIN -32 16 NONE 0
 PINATTR PinName In+
-PINATTR SpiceOrder 1
+PINATTR SpiceOrder 2
 PIN -32 -16 NONE 0
 PINATTR PinName In-
-PINATTR SpiceOrder 2
-PIN 0 -32 NONE 0
-PINATTR PinName V+
-PINATTR SpiceOrder 3
-PIN 0 32 NONE 0
-PINATTR PinName V-
-PINATTR SpiceOrder 4
+PINATTR SpiceOrder 1
 PIN 32 0 NONE 0
 PINATTR PinName OUT
+PINATTR SpiceOrder 3
+PIN 0 -32 NONE 0
+PINATTR PinName V+
+PINATTR SpiceOrder 4
+PIN 0 32 NONE 0
+PINATTR PinName V-
 PINATTR SpiceOrder 5

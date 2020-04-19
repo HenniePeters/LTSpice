@@ -12,8 +12,9 @@ LINE Normal 4 -20 12 -20
 LINE Normal 8 -24 8 -16
 LINE Normal 4 20 12 20
 SYMATTR Prefix X
-SYMATTR SpiceModel rhr801
-SYMATTR ModelFile ..\sym\_PERSONAL\comparator\RHR801.sub
+SYMATTR SpiceModel MCP6541
+SYMATTR ModelFile ..\sym\_PERSONAL\comparator\Sborka.lib
+SYMATTR Description 1.6-5.5V, 0.6uA, 4uS
 PIN -32 16 NONE 0
 PINATTR PinName In+
 PINATTR SpiceOrder 1
