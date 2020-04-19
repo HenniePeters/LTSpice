@@ -1,0 +1,59 @@
+*$
+**************** Power Discrete MOSFET Electrical Circuit Model *****************
+** Product Name: FQP30N06
+** 60V, 30A N-Channel MOSFET and TO-220
+** Model Type: BSIM3V3
+**-------------------------------------------------------------------------------
+.SUBCKT FQP30N06 2 1 3    
+*Nom Temp=25 deg C
+Dbody 7 5    DbodyMOD
+Dbreak 5 11  DbreakMOD
+Ebreak 11 7 17 7 66
+Lgate 1 9    1.125e-9
+Ldrain 2 5   1.125e-9
+Lsource 3 7  8.431e-10
+RLgate 1 9   11.25
+RLdrain 2 5  11.25
+RLsource 3 7 8.431
+Rgate 9 6    0.5
+It 7 17      1
+Rbreak 17 7  RbreakMOD 1
+.MODEL RbreakMOD RES (TC1=1.08e-3 TC2=-1.25e-6)
+.MODEL DbodyMOD D (IS=1.45e-12 N=1       RS=2.62e-3   TRS1=1.02e-3   TRS2=1e-6 
++ CJO=1.25e-9      M=0.36      VJ=0.38   TT=4.05e-8   XTI=3          EG=1.17)
+.MODEL DbreakMOD D (RS=100e-3 TRS1=1e-3 TRS2=1.0e-6)
+Rdrain 5 16 RdrainMOD 0.031
+.MODEL RdrainMOD RES (TC1=7.85e-3 TC2=3.06e-6)
+M_BSIM3 16 6 7 7 Bsim3 W=1.35 L=2.0e-6 NRS=1
+.MODEL Bsim3 NMOS (LEVEL=7 VERSION=3.1 MOBMOD=3 CAPMOD=2 PARAMCHK=1 NQSMOD=0
++ TOX=780e-10      XJ=1.4e-6      NCH=1.63e17
++ U0=700           VSAT=1.0e5     DROUT=1.0
++ DELTA=0.10       PSCBE2=0       RSH=3.02e-4
++ VTH0=3.65        VOFF=-0.1      NFACTOR=1.1
++ LINT=3.88e-7     DLC=3.88e-7    
++ CGSO=1.2e-15     CGSL=0         CGDO=1.0e-14
++ CGDL=6.06e-10    CJ=0           CF=0   
++ CKAPPA=0.2       KT1=-1.58      KT2=0
++ UA1=-1.08e-9     NJ=10)
+.ENDS
+*$
+*************** Power Discrete MOSFET Thermal Model ********************
+** Package: TO-220
+**----------------------------------------------------------------------
+.SUBCKT FQP30N06_THERMAL TH TL
+CTHERM1 TH 6 1.04e-5
+CTHERM2 6 5  1.84e-3
+CTHERM3 5 4  8.52e-3
+CTHERM4 4 3  3.04e-2
+CTHERM5 3 2  7.22e-2
+CTHERM6 2 TL 2.42e-1
+RTHERM1 TH 6 1.08e-2
+RTHERM2 6 5  4.91e-2
+RTHERM3 5 4  8.25e-2
+RTHERM4 4 3  3.28e-1
+RTHERM5 3 2  4.95e-1
+RTHERM6 2 TL 9.27e-1
+.ENDS FQP30N06_THERMAL
+**---------------------------------------------------------------------
+** Creation: Dec.-04-2015   Rev: 1.0
+** Fairchild Semiconductor
