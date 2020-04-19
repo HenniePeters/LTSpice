@@ -1,5 +1,5 @@
 # LTSpice
-My personal LTSpice components
+My personal collection of LTSpice components
 
 Unpack the files to %USERPROFILE%\My Documents\LTspiceXVII\lib\sym\_PERSONAL\...
 
