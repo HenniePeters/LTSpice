@@ -1,7 +1,10 @@
-# LTSpice
-My personal collection of LTSpice components
+# My personal collection of LTSpice components
 
-Unpack the files to %USERPROFILE%\My Documents\LTspiceXVII\lib\sym\\_PERSONAL\\
+
+Download the zip file and unpack the directory _PERSONAL and the files it contains to %USERPROFILE%\My Documents\LTspiceXVII\lib\sym\\_PERSONAL\\
+Unfortunatly, github adds a directory LTSpice-master to the zip file.
 
 The "_PERSONAL" directory is required because there are references to
 ..\sym\\_PERSONAL\ in the .ASY files
+
+
