@@ -1,0 +1,204 @@
+* OPA355
+*****************************************************************************
+* (C) Copyright 2011 Texas Instruments Incorporated. All rights reserved.                                            
+*****************************************************************************
+** This model is designed as an aid for customers of Texas Instruments.
+** TI and its licensors and suppliers make no warranties, either expressed
+** or implied, with respect to this model, including the warranties of 
+** merchantability or fitness for a particular purpose.  The model is
+** provided solely on an "as is" basis.  The entire risk as to its quality
+** and performance is with the customer.
+*****************************************************************************
+*
+* This model is subject to change without notice. Texas Instruments
+* Incorporated is not responsible for updating this model.
+*
+*****************************************************************************
+*
+** Released by: Analog eLab Design Center, Texas Instruments Inc.
+* Part: OPA355
+* Date: 01JUL2011
+* Model Type: ALL IN ONE
+* Simulator: PSPICE
+* Simulator Version: 16.0.0.p001
+* EVM Order Number: N/A
+* EVM Users Guide: N/A
+* Datasheet: SBOS195D MARCH 2001 REVISED JANUARY 2004
+*
+* Model Version: 1.0
+*
+*****************************************************************************
+*
+* Updates:
+*
+* Version 1.0 : 
+* Release to Web
+*
+*****************************************************************************
+* This Model is applicable to OPA355, OPA2355 & OPA3355
+* FEATURES MODELED ARE
+* OPEN LOOP GAIN AND PHASE
+* INPUT VOLTAGE NOISE W 1/F
+* INPUT CURRENT NOISE W 1/F
+* INPUT CURRENT NOISE W F^2
+* INPUT BIAS CURRENT
+* INPUT CAPACITANCE
+* CMRR WITH FREQUENCY EFFECTS
+* + PSRR WITH FREQUENCY EFFECTS
+* - PSRR WITH FREQUENCY EFFECTS
+* SLEW RATE
+* QUIESCENT CURRENT
+* QUIESCENT CURRENT VS VOLTAGE
+* SHUTDOWN
+* OUTPUT CURRENT THROUGH SUPPLIES
+* INPUT CLAMPS TO RAILS
+* OUTPUT CLAMPS TO RAILS
+* OUTPUT CURRENT LIMITING
+* OUTPUT SWING VS OUTPUT CURRENT
+* OUTPUT IMPEDANCE
+* END OF FEATURES
+*
+* BEGIN MODEL OPA355
+* PINOUT ORDER  1   2  3   4   5  6
+* PINOUT       OUT -V +IN -IN EN +V
+*****************************************************************************
+.SUBCKT OPA355 1 2 3 4 5 6
+
+* R3 AND R4 SYNTAX FOR PSPICE, HSPICE,
+* AND BERKELEY 2G.6
+R3 10 11 200 TC=-0.005
+R4 12 11 200 TC=-0.005
+
+*R3 AND R4 SYNTAX FOR BERKELEY 3X.X
+*R3 10 11 200 R1M
+*R4 12 11 200 R1M
+*.MODEL R1M R TC1=-0.005
+
+Q20 7 8 9 QN
+R10 8 13 100
+R11 14 15 100
+R12 15 6 0.3
+R13 2 13 6
+R16 16 17 5
+R17 18 19 0.3
+R18 9 20 6
+D5 1 6 DD
+D6 2 1 DD
+D7 21 0 DIN
+D8 22 0 DIN
+I8 0 21 0.1E-3
+I9 0 22 0.1E-3
+E2 9 0 2 0 1
+E3 19 0 6 0 1
+D9 23 0 DVN
+D10 24 0 DVN
+I10 0 23 0.1E-3
+I11 0 24 0.1E-3
+E4 25 4 23 24 1
+G2 26 4 21 22 5.3E-8
+I12 6 27 3.78E-3
+R22 27 6 1087
+E5 28 0 19 0 1
+E6 29 0 9 0 1
+E7 30 0 31 0 1
+R30 28 32 1E6
+R31 29 33 1E6
+R32 30 34 1E6
+R33 0 32 100
+R34 0 33 100
+R35 0 34 100
+E10 35 3 34 0 1
+R36 36 31 1E3
+R37 31 37 1E3
+C6 28 32 0.2E-12
+C7 29 33 0.2E-12
+C8 30 34 2E-12
+E11 38 35 33 0 0.2
+E12 26 38 32 0 1
+E14 39 9 19 9 0.5
+D11 16 19 DD
+D12 9 16 DD
+R41 47 48 125
+R42 49 48 125
+R43 51 41 100
+R44 52 40 100
+E15 42 51 16 39 -1
+E16 52 50 16 39 1
+G3 16 39 45 43 0.4E-3
+R45 39 16 1.69E6
+C12 17 1 2.2E-12
+R46 53 43 5E3
+R47 53 45 5E3
+C13 43 45 0.018E-12
+C14 26 0 1.5E-12
+C15 25 0 1.5E-12
+C16 1 0 1E-12
+D13 40 7 DD
+D14 54 41 DD
+G4 51 52 55 0 600E-6
+G5 46 9 55 0 400E-6
+Q15 54 14 19 QP
+E17 58 16 55 0 2
+E18 59 39 55 0 -2
+V13 57 59 1
+V14 56 58 -1
+V15 60 61 -1
+E19 61 2 55 0 2
+I13 6 2 3.4E-6
+D15 62 19 DD
+D16 9 62 DD
+R52 5 62 33E3
+C17 5 63 1E-12
+C18 62 63 1E-12
+V16 65 9 2.8
+E20 55 0 66 9 0.3571
+V17 63 9 1.4
+V18 26 44 0
+G6 26 9 55 0 3E-12
+G7 25 9 55 0 3E-12
+R53 58 0 1E9
+R54 59 0 1E9
+R55 0 39 1E9
+R56 55 0 1E9
+R57 65 0 1E9
+R58 9 63 1E9
+R59 38 26 1E9
+R60 35 38 1E9
+R61 3 35 1E9
+E21 36 0 4 0 1
+E22 37 0 26 0 1
+V19 19 48 0.6
+V20 53 9 -0.5
+C19 64 9 4E-12
+J1 26 9 26 J
+J2 25 9 25 J
+J3 19 26 19 J
+J4 19 25 19 J
+M1 1 40 13 13 NOUT L=1.5U W=2000U
+M2 1 41 15 15 POUT L=1.5U W=2000U
+M3 42 42 18 18 POUT L=1.5U W=2000U
+M4 43 44 10 10 PIN L=6U W=500U
+M5 45 25 12 12 PIN L=6U W=500U
+M6 11 46 47 47 PIN L=6U W=100U
+M7 46 46 49 49 PIN L=6U W=100U
+M8 50 50 20 20 NOUT L=1.5U W=2000U
+M9 39 56 16 16 PSW L=1.5U W=15U
+M10 16 57 39 39 NSW L=1.5U W=15U
+M11 27 60 2 2 NSW L=1.5U W=1500U
+M12 64 62 65 65 PSW L=1.5U W=15U
+M13 64 62 9 9 NSW L=1.5U W=1.5U
+M14 66 64 65 65 PSW L=1.5U W=15U
+M15 66 64 9 9 NSW L=1.5U W=15U
+.MODEL DD D
+.MODEL QN NPN
+.MODEL QP PNP
+.MODEL DVN D KF=5E-13
+.MODEL DIN D
+.MODEL J NJF
+.MODEL POUT PMOS KP=230U VTO=-0.7 LAMBDA=0.01
+.MODEL NOUT NMOS KP=170U VTO=0.7 LAMBDA=0.01
+.MODEL PIN PMOS KP=200U VTO=-0.7
+.MODEL PSW PMOS KP=200U VTO=-0.5 IS=1E-18
+.MODEL NSW NMOS KP=200U VTO=0.5 IS=1E-18
+.ENDS
+* END MODEL OPA355

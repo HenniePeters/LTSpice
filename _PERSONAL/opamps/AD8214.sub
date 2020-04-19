@@ -1,0 +1,93 @@
+* AD8214 PSPICE netlist of the AD8214 detector model.
+* Description: Amplifier
+* Generic Desc: XF65, CS Comparator, 65V, 200ns
+* Developed by: 
+* Revision History: 08/10/2012 - Updated to new header style
+* 
+* Copyright 2012 by Analog Devices, Inc.
+*
+* Refer to http://www.analog.com/Analog_Root/static/techSupport/designTools/spiceModels/license/spice_general.html for License Statement. Use of this model 
+* indicates your acceptance of the terms and provisions in the License Statement.
+*
+* BEGIN Notes:
+*
+* Not Modeled:
+*    
+* Parameters modeled include: 
+*
+* END Notes
+*
+* Node assignments
+*                positive supply
+*                |  non-inverting input
+*                |  |    inverting input
+*                |  |     |    Regulator Reference
+*                |  |     |    |    Ground
+*                |  |     |    |    |   Output
+*                |  |     |    |    |    |
+.SUBCKT AD8214  VS VNINV VINV VREG GND VOUT
+X1 HOUT1 HOUT UTD
+EB4 NDL GND VALUE = { IF (V(HOUT1) > V(VS)/2 , 1M , 100N) }
+D1 VNINV VINTS D1
+.MODEL D1 D
+D2 VREG VNINV D1
+D3 VINV VINTS _D3_MOD
+.MODEL _D3_MOD D IS=10E-14
+D4 VREG VINV D1
+EB6 VINTS GND VALUE = { V(VS) }
+ROP HOUT GND 1G
+IBIAS 0 VINV DC=12.18N
+EB5 DL GND VALUE = { IF (V(HOUT) > V(VS)/2 , 1M , 100N) }
+CRFT VOUT 0 20P
+GB1 GND VS VALUE = { IF (I(V4) > 200U | V(VOUT) > 3.1 , 1.232M , 272U) }
+V4 18 VOUT
+X2 10 7 VINTS GND HOUT1 AEICOM 
+GB2 GND 18 VALUE = { IF (V(VINV) < 2 , 1m , IF ( V(VINV) > V(VNINV) , V(DL) , V(NDL))) } 
+R3 VNINV 10 2MEG
+R4 VINV 7 2MEG
+EB3 VINTS VREG VALUE = { IF (V(VS) > 2.43 , 2.43 , 0) }
+.ENDS
+*$
+.SUBCKT UTD 1 2
+RIN 1 0 1E15
+E1 3 0 1 0 1.0000 
+T1 3 0 2 0 Z0=1 TD=85.000N
+R1 2 0 1
+.ENDS
+*$
+.SUBCKT AEICOM 13 15 12 16 14
+VOS 15 8 DC 1.5E-3
+EC 9 0  14 0  1
+C1 6 7 40E-15
+RP 16 12 10.35E3
+GB 11 0  3 0  1.67E3
+RD1 6 16 16E3
+RD2 7 16 16E3
+ISS 12 1 DC 100E-6
+CCI 3 11 2.2E-18
+GCM 0 3  0 1  1.76E-9
+GA 3 0  7 6  780E-6
+RE 1 0 2.5E6
+RGM 3 0 10.1E2
+VC 12 2 DC 2.8
+VE 10 16 DC 3.1
+RO1 11 14 50
+CE 1 0 2E-18
+RO2 0 11 50
+RS1 1 4 5.77E3
+RS2 1 5 5.77E3
+J1 6 13 4 FET
+J2 7 8 5 FET
+DC 14 2 DIODE
+DE 10 14 DIODE
+DP 16 12 DIODE
+D1 9 11 DIODE
+D2 11 9 DIODE
+IOS 15 13 12.5E-12
+.MODEL DIODE D
+.MODEL FET PJF(VTO=-1 BETA=1E-3 IS=50E-12)
+.ENDS
+
+
+
+

@@ -1,0 +1,30 @@
+Version 4
+SymbolType CELL
+RECTANGLE Normal -112 -64 112 64
+TEXT 64 56 Bottom 2 GND
+TEXT -116 -18 Right 2 1
+TEXT 5 -75 Left 2 4
+TEXT 69 76 Left 2 5
+TEXT 117 -18 Left 2 2
+TEXT -59 76 Left 2 3
+WINDOW 0 112 -64 Bottom 2
+WINDOW 3 0 0 Center 2
+SYMATTR Value LM2596_ADJ
+SYMATTR Prefix X
+SYMATTR Description SIMPLE SWITCHER Power Converter 150 KHz 3A Step-Down Voltage Regulator
+PIN -64 64 BOTTOM 8
+PINATTR PinName _ON/OFF
+PINATTR SpiceOrder 1
+PIN 0 -64 TOP 8
+PINATTR PinName FB
+PINATTR SpiceOrder 2
+PIN -112 -32 LEFT 8
+PINATTR PinName IN
+PINATTR SpiceOrder 3
+PIN 112 -32 RIGHT 8
+PINATTR PinName OUT
+PINATTR SpiceOrder 4
+PIN 64 64 NONE 8
+PINATTR PinName VGND
+PINATTR SpiceOrder 5
+SYMATTR SpiceModel ..\sym\_PERSONAL\regulators\LM2596.sub

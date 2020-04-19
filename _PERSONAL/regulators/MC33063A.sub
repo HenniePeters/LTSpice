@@ -1,0 +1,45 @@
+* Rev 2 - May 2013
+.SUBCKT MC33063A SwC SwE Osc Com Inv Vcc Ipk DrC ; Rev.2
+.param tdt=10n
+C1 Vcc COM 20p
+I1 Vcc ref TBL(0 0 2.5 2m8 3.5 3m1 40 3m4)
+D1 COM ref 1V25
+E1 C 0 ref COM 1
+A1 ref Inv 0 0 0 0 B 0 SCHMITT Vt=0 Vh=1m tripdt={tdt}
+A2 COM Osc 0 0 0 2 A 0 SCHMITT Vt=-0.9 Vh=0.35 trise=50n tfall=0u9 tripdt={tdt}
+A3 2 0 0 0 0 0 R 0 BUF ref=0.1 tau=20n tripdt={tdt}
+A4 A 0 B 0 C 0 S 0 AND ref=0.9 td=0u2 tripdt={tdt}
+A5 S R 0 0 0 0 Q 0 SRFLOP tau=0u1 tripdt={tdt} ic=0
+I2 S R pulse(5 0 0 1n 1n 1Meg 2Meg) ; force f/f reset at startup
+G1 COM 3 ref COM 0m5
+R1 COM 3 10k
+C2 Osc 3 12p
+cc3 3 com 1p
+S1 COM 3 R 0 bump
+S2 COM Osc R 0 sink
+I3 Vcc Osc TBL(2 0 3 35u)
+R2 1 Vcc 10k
+C3 1 Ipk 10p
+S3 Osc Vcc 1 Ipk comp
+C4 DrC COM 10p
+S4 DrB Vcc Q 0 drive
+cs4 drb com 1p
+cswe swe com 20p ;my
+rpar1 swe dre 1Meg ;my
+cpar2 drb com 1p rpar=10meg ;my
+cpar3 drb dre 1p rpar=10meg ;my
+R3 DrE SwE 100
+Q1 SwC DrE SwE 0 sw
+D2 COM Osc Dsub
+R4 COM 1 1e7
+Q2 DrC DrB DrE 0 sw2 m=85m
+.model Dsub d Ron=1 Vfwd=0.6 Epsilon=0.2
+.model 1V25 d Ron=1 Roff=466 Vrev=1.25 revEpsilon=10m
+.model comp sw level 2 Vt=290m Vh=-100m Ron=300 Roff=1e7 Ilimit=15m
+.model sink sw level 2 Vt=0.1 Vh=-1m Ron=1k Roff=1e7 Ilimit=255u Vser=0.1
+.model bump sw level 2 Vt=0.1 Vh=-1m Ron=1e7 Roff=1k
+.model drive sw level 2 Vt=300m Vh=-10m Ron=200 Roff=1e8 Ilimit=0m7
+.model sw npn Is=50f Bf=130 Br=10 Ikf=1.5 Rb=1 Re=30m Rc=0.4 Cje=100p Cjc=20p
+.model sw2 npn Is=50f Bf=130 Br=10 Rb=1 Rc=0.4 Cje=100p Cjc=20p
+.ENDS MC33063A
+

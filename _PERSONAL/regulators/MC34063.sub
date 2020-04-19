@@ -1,0 +1,80 @@
+*			SPICE model for MC34063
+*  This uses vanilla SPICE3 syntax and will work with ngspice.
+*
+ ***************************************************************************
+ *   Copyright (C) 2007 by Ken Sarkies                                     *
+ *   ksarkies@trinity.asn.au                                               *
+ *                                                                         *
+ *   This is free software; you can redistribute it and/or modify          *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This file is distributed in the hope that it will be useful,          *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with V if not, write to the Free Software Foundation, Inc.,     *
+ *   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.             *
+ ***************************************************************************
+
+.SUBCKT mc34063 csw esw ct comm fb vcc ipk cdr
+
+* csw = switch BJT collector, esw = switch BJT emitter ct = timing capacitor, comm = common
+* fb = feedback control, vcc = power in, ipk = peak limiting, cdr = driver BJT collector
+* pin numbers match order of inputs above.
+
+* Voltage Sources
+Vlogic vp5v comm DC 5V
+
+* Reference and feedback comparator
+* The reference is at 1.25V but decreases linearly to zero for Vcc < 3.75V
+Breference ref comm V=(V(vcc,comm)-1.25)*u(V(vcc,comm)-1.25)-(V(vcc,comm)-2.5)*u(V(vcc,comm)-3.75)
+B1 1 comm V=u(V(ref,fb))
+R6 1 cinvcontrol 10K
+C6 cinvcontrol comm 10pF
+
+* Oscillator
+* Hysteresis switch to drive current into timing capacitor
+R1 vp5v osc 10k
+S1 osc comm ct comm swmod
+.MODEL swmod SW (SW VT = 1 VH = 0.25)
+* Current source to drive charge/discharge currents for the timing capacitor
+Bcurrent ct comm I=-35uA+255uA*u(2.5-V(osc,comm))
+* Current limiting circuit increases the charge rate of the timing capacitor
+Qlimit ct ipk vcc limitQ 
+.model limitQ PNP(IS=1E-12 VAF=100 BF=200 IKF=0.1 XTB=1.5 BR=4
++  CJC=4.5E-12 CJE=10E-12 RB=20 RC=0.1 RE=0.1 TR=250E-9 TF=350E-12 ITF=1 VTF=2 XTF=3)
+
+* Differentiator to provide delays to overcome latch race conditions
+Ctrigger osc delay  1pF  
+Rtrigger delay comm 100K  
+
+* Delay pulse squaring comparators plus Delay gating logic.
+* inverse of positive delay transition anded with the oscillator to delay the start of
+* the next high part. This is then nanded with the feedback gating signal.
+Bsetgate set comm V=(1-(1-u(V(delay,comm)-1))*u(V(osc,comm)-2.5)*u(V(cinvcontrol,comm)-0.5))
+* Reset is just the negative delay transition anded with the oscillator and inverted.
+Bminus reset comm V=(1-u(V(delay,comm)+1)*(1-u(V(osc,comm)-2.5)))
+
+* SR Latch
+Blatch1 4 comm V=(1-V(reset,comm)*u(V(3,comm)-0.5))
+R4 4 2 10K
+C4 2 comm 1pF IC=1V
+Blatch2 gate comm V=(1-V(set,comm)*u(V(2,comm)-0.5))
+R5 gate 3 10K
+C5 3 comm 1pF
+
+* Output switch gating and drive
+Bcurrentdrive currentdrive comm I=10mA-20mA*V(gate,comm)*u(V(cinvcontrol,comm)-0.5)
+Qdrive cdr currentdrive swbase driverQ 
+.model driverQ NPN(Bf=300 CJC=4pF CJE=8pF RB=20 RC=0.1 RE=0.1)
+D2 comm currentdrive 1N914 
+D1 currentdrive vcc 1N914 
+.MODEL 1N914 D(Is=2.52n Rs=0.568 N=1.752 Cjo=4p M=.4 Tt=20n)
+Rde swbase esw 100  
+Qswitch csw swbase esw switchQ
+.MODEL switchQ npn (BF=75 RB=10 RE=0.25 RC=0.25 CJE=10pF CJC=10pF)
+.ends
