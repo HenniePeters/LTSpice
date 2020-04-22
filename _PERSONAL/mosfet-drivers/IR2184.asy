@@ -8,7 +8,7 @@ ARC Normal -20 -124 4 -100 -20 -112 -8 -100
 ARC Normal -4 -124 20 -100 8 -100 20 -112
 TEXT -80 -95 Left 2 VCC
 TEXT -79 -31 Left 2 IN
-TEXT -79 33 Left 2 SD
+TEXT -79 33 Left 2 _SD
 TEXT -80 97 Left 2 COM
 TEXT 84 -32 Right 2 HO
 TEXT 81 -97 Right 2 VB

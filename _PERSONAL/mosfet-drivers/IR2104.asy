@@ -8,7 +8,7 @@ ARC Normal -20 -124 4 -100 -20 -112 -8 -100
 ARC Normal -4 -124 20 -100 8 -100 20 -112
 TEXT -80 -95 Left 2 VCC
 TEXT -79 -31 Left 2 IN
-TEXT -79 33 Left 2 SD
+TEXT -79 33 Left 2 _SD
 TEXT -80 97 Left 2 Com
 TEXT 84 -32 Right 2 HO
 TEXT 81 -97 Right 2 Vb
@@ -16,9 +16,9 @@ TEXT 81 33 Right 2 Vs
 TEXT 81 96 Right 2 LO
 WINDOW 0 0 -144 Center 2
 WINDOW 3 1 71 Center 2
+SYMATTR Value IR2104
 SYMATTR ModelFile ..\sym\_PERSONAL\mosfet-drivers\IR2104.sub
 SYMATTR SpiceModel IR2104
-SYMATTR Value IR2104
 SYMATTR Prefix X
 SYMATTR Description IR2104 is a high voltage, high speed power MOSFET driver with independent high and low side referenced output channels. Vmax = 600V, Io = +200 mA -350 mA, Vcc = 20V
 PIN -112 -96 LEFT 8
