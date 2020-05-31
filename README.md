@@ -3,7 +3,7 @@
 
 Download the zip file and unpack the directory _PERSONAL and the files it contains to:
 
-%USERPROFILE%\My Documents\LTspiceXVII\lib\sym\\_PERSONAL\\
+%USERPROFILE%\My Documents\LTspiceXVII\lib\sym\\
 
 Unfortunately, github adds a directory named "LTSpice-master" to the zip file.
 
