@@ -52,9 +52,9 @@ TEXT -4 25 Center 2 ckt
 WINDOW 38 0 70 Center 2
 WINDOW 0 0 -71 Center 2
 SYMATTR ModelFile ..\sym\_PERSONAL\opto\MOC304x.sub
-SYMATTR SpiceModel MOC3043
-SYMATTR Value MOC3043
-SYMATTR Value2 MOC3043
+SYMATTR SpiceModel MOC3043M
+SYMATTR Value MOC3043M
+SYMATTR Value2 MOC3043M
 SYMATTR Prefix X
 SYMATTR Description ZERO crossing OPTO-TRIAC trigger current 5mA, holding current 100uA
 PIN -80 -48 RIGHT 8

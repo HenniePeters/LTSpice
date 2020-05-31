@@ -17,7 +17,7 @@ SYMATTR Value Rt=10k set=.5
 SYMATTR Prefix X
 SYMATTR SpiceModel potentiometer
 SYMATTR Description Resistor Potentiometer
-SYMATTR ModelFile pote.lib
+SYMATTR ModelFile ../sym/_PERSONAL/potentiometer.sub
 PIN 16 96 NONE 0
 PINATTR PinName H
 PINATTR SpiceOrder 1

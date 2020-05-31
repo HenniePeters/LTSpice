@@ -1,0 +1,469 @@
+**********************************************************************
+*
+*  Copyright (c) International Rectifier
+*
+*  IR2011: High and Low Side Driver
+*   
+*  Ports 
+*    HIN: Logic Input for High Side Gate Driver Output (HO), in phase
+*    LIN: Logic Input for Low Side Gate Driver Output (LO), in phase
+*    VB:  High Side Floating Supply 
+*    HO:  High Side Gate Drive Output
+*    VS:  High Side Floating Supply Return
+*    VCC: Low Side Supply
+*    LO:  Low Side Gate Drive Output
+*    COM: Low Side Return
+*
+*  Created by Pspice Version 8 
+*
+*  Date Created: 07/2003
+*
+***********************************************************************
+*
+*  This behavioral model was developed in compliance with preliminary 
+*  Data Sheet-B noted below: 
+*  (1) There is no frequency effect on temperature.
+*  (2) The power dissipation is different. 
+*  (3) The values of output high/low short circuit current are adjusted 
+*      for the proper modeling of turn-on rise/turn-off fall time.
+*  (4) The "Low side return (COM)" pin must be grounded.
+*
+***********************************************************************
+
+.SUBCKT IR2011  HIN LIN com LO VS HO VB VCC
++PARAMS:  
++     T1=-40 T2=25 T3=125
++     V1=10 V2=15 V3=20
++     tonT1=65n  tonT2=95n  tonT3=150n
++     tonV1=115n tonV2=95n  tonV3=85n
++     toffT1=55n toffT2=65n toffT3=95n
++     toffV1=80n toffV2=65n toffV3=60n
++     Rrise=5    Rfall=5
+
+.MODEL diode25 d
++IS=1.0e-14 RS=0.01 N=1 EG=1.11
++XTI=3 BV=25 IBV=0.0001 CJO=0
++VJ=0.75 M=0.333 FC=0.5 TT=0
++KF=0 AF=1
+
+.MODEL diode625 d
++IS=1.0e-14 RS=0.01 N=1 EG=1.11
++XTI=3 BV=625 IBV=0.0001 CJO=0
++VJ=0.75 M=0.333 FC=0.5 TT=0
++KF=0 AF=1
+
+D_2011_MD3_D2         HO VB diode25 
+D_2011_MD3_D1         VS VB diode25 
+D_2011_MD3_D4         com VB diode625 
+D_2011_MD3_D5         com VS diode625 
+D_2011_MD3_D3         VS HO diode25 
+C_2011_MD3_C3         VS HO  10p IC=0 
+C_2011_MD3_Uvbs_c3         com 2011_MD3_Inv4_1  10p  
+E_2011_MD3_Uvbs_ABM18         2011_MD3_Uvbs_4 com VALUE {
++  V(VS)+8.4+(8.9-8.4)/(125+40)*(TEMP+40)     }
+E_2011_MD3_Uvbs_ABM19         2011_MD3_Uvbs_5 com VALUE {
++  V(VS)+8.0+(8.45-8.0)/(125+40)*(TEMP+40)    }
+X_2011_MD3_Uvbs_Comp         VB 2011_MD3_Uvbs_2 2011_MD3_Inv4_1 com COMP
+S_2011_MD3_Uvbs_P         2011_MD3_Uvbs_4 2011_MD3_Uvbs_2 2011_MD3_Inv4_1 com
++  _2011_MD3_Uvbs_P
+RS_2011_MD3_Uvbs_P        2011_MD3_Inv4_1 com 1G
+.MODEL        _2011_MD3_Uvbs_P VSWITCH Roff=1e6 Ron=1 Voff=4.99 Von=0.01
+S_2011_MD3_Uvbs_N         2011_MD3_Uvbs_2 2011_MD3_Uvbs_5 2011_MD3_Inv4_1 com
++  _2011_MD3_Uvbs_N
+RS_2011_MD3_Uvbs_N        2011_MD3_Inv4_1 com 1G
+.MODEL        _2011_MD3_Uvbs_N VSWITCH Roff=1e6 Ron=1 Voff=0.01 Von=4.99
+C_2011_MD3_Uvbs_c1         2011_MD3_Uvbs_2 2011_MD3_Uvbs_4  10p  
+C_2011_MD3_Uvbs_c2         2011_MD3_Uvbs_5 2011_MD3_Uvbs_2  10p  
+R_2011_MD3_R1         VS VB 214k TC=-0.00554779, 9.32401e-06
+S_2011_MD3_Inv1_P         2011_MD3_Inv1_2 2011_MD3_Nor1_1 2011_MD4_Nand1_2 com
++  _2011_MD3_Inv1_P
+RS_2011_MD3_Inv1_P        2011_MD4_Nand1_2 com 1G
+.MODEL        _2011_MD3_Inv1_P VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+S_2011_MD3_Inv1_N         2011_MD3_Nor1_1 com 2011_MD4_Nand1_2 com
++  _2011_MD3_Inv1_N
+RS_2011_MD3_Inv1_N        2011_MD4_Nand1_2 com 1G
+.MODEL        _2011_MD3_Inv1_N VSWITCH Roff=1e8 Ron=3 Voff=0V Von=5V
+C_2011_MD3_Inv1_C         com 2011_MD3_Nor1_1  1p  
+V_2011_MD3_Inv1_V         2011_MD3_Inv1_2 com 5V
+S_2011_MD3_Inv2_P         2011_MD3_Inv2_2 2011_MD3_Nor2_2 2011_MD3_Nor1_5 com
++  _2011_MD3_Inv2_P
+RS_2011_MD3_Inv2_P        2011_MD3_Nor1_5 com 1G
+.MODEL        _2011_MD3_Inv2_P VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+S_2011_MD3_Inv2_N         2011_MD3_Nor2_2 com 2011_MD3_Nor1_5 com
++  _2011_MD3_Inv2_N
+RS_2011_MD3_Inv2_N        2011_MD3_Nor1_5 com 1G
+.MODEL        _2011_MD3_Inv2_N VSWITCH Roff=1e8 Ron=3 Voff=0V Von=5V
+C_2011_MD3_Inv2_C         com 2011_MD3_Nor2_2  1p  
+V_2011_MD3_Inv2_V         2011_MD3_Inv2_2 com 5V
+S_2011_MD3_Inv3_P         2011_MD3_Inv3_2 2011_MD3_Latch_1 2011_MD3_Nor2_5 com
++  _2011_MD3_Inv3_P
+RS_2011_MD3_Inv3_P        2011_MD3_Nor2_5 com 1G
+.MODEL        _2011_MD3_Inv3_P VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+S_2011_MD3_Inv3_N         2011_MD3_Latch_1 com 2011_MD3_Nor2_5 com
++  _2011_MD3_Inv3_N
+RS_2011_MD3_Inv3_N        2011_MD3_Nor2_5 com 1G
+.MODEL        _2011_MD3_Inv3_N VSWITCH Roff=1e8 Ron=3 Voff=0V Von=5V
+C_2011_MD3_Inv3_C         com 2011_MD3_Latch_1  1p  
+V_2011_MD3_Inv3_V         2011_MD3_Inv3_2 com 5V
+S_2011_MD3_Inv4_P         2011_MD3_Inv4_2 2011_MD3_Nor1_2 2011_MD3_Inv4_1 com
++  _2011_MD3_Inv4_P
+RS_2011_MD3_Inv4_P        2011_MD3_Inv4_1 com 1G
+.MODEL        _2011_MD3_Inv4_P VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+S_2011_MD3_Inv4_N         2011_MD3_Nor1_2 com 2011_MD3_Inv4_1 com
++  _2011_MD3_Inv4_N
+RS_2011_MD3_Inv4_N        2011_MD3_Inv4_1 com 1G
+.MODEL        _2011_MD3_Inv4_N VSWITCH Roff=1e8 Ron=3 Voff=0V Von=5V
+C_2011_MD3_Inv4_C         com 2011_MD3_Nor1_2  1p  
+V_2011_MD3_Inv4_V         2011_MD3_Inv4_2 com 5V
+V_2011_MD3_Nor1_V         2011_MD3_Nor1_3 com 5V
+S_2011_MD3_Nor1_P1         2011_MD3_Nor1_3 2011_MD3_Nor1_4 2011_MD3_Nor1_1 com
++  _2011_MD3_Nor1_P1
+RS_2011_MD3_Nor1_P1        2011_MD3_Nor1_1 com 1G
+.MODEL        _2011_MD3_Nor1_P1 VSWITCH Roff=1e6 Ron=1 Voff=5 Von=0V
+S_2011_MD3_Nor1_P2         2011_MD3_Nor1_4 2011_MD3_Nor1_5 2011_MD3_Nor1_2 com
++  _2011_MD3_Nor1_P2
+RS_2011_MD3_Nor1_P2        2011_MD3_Nor1_2 com 1G
+.MODEL        _2011_MD3_Nor1_P2 VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+S_2011_MD3_Nor1_N1         2011_MD3_Nor1_5 com 2011_MD3_Nor1_2 com
++  _2011_MD3_Nor1_N1
+RS_2011_MD3_Nor1_N1        2011_MD3_Nor1_2 com 1G
+.MODEL        _2011_MD3_Nor1_N1 VSWITCH Roff=1e6 Ron=1 Voff=0V Von=5V
+S_2011_MD3_Nor1_N2         2011_MD3_Nor1_5 com 2011_MD3_Nor1_1 com
++  _2011_MD3_Nor1_N2
+RS_2011_MD3_Nor1_N2        2011_MD3_Nor1_1 com 1G
+.MODEL        _2011_MD3_Nor1_N2 VSWITCH Roff=1e6 Ron=1 Voff=0V Von=5V
+V_2011_MD3_Nor2_V         2011_MD3_Nor2_3 com 5V
+S_2011_MD3_Nor2_P1         2011_MD3_Nor2_3 2011_MD3_Nor2_4 2011_MD3_Inv5_3 com
++  _2011_MD3_Nor2_P1
+RS_2011_MD3_Nor2_P1        2011_MD3_Inv5_3 com 1G
+.MODEL        _2011_MD3_Nor2_P1 VSWITCH Roff=1e6 Ron=1 Voff=5 Von=0V
+S_2011_MD3_Nor2_P2         2011_MD3_Nor2_4 2011_MD3_Nor2_5 2011_MD3_Nor2_2 com
++  _2011_MD3_Nor2_P2
+RS_2011_MD3_Nor2_P2        2011_MD3_Nor2_2 com 1G
+.MODEL        _2011_MD3_Nor2_P2 VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+S_2011_MD3_Nor2_N1         2011_MD3_Nor2_5 com 2011_MD3_Nor2_2 com
++  _2011_MD3_Nor2_N1
+RS_2011_MD3_Nor2_N1        2011_MD3_Nor2_2 com 1G
+.MODEL        _2011_MD3_Nor2_N1 VSWITCH Roff=1e6 Ron=1 Voff=0V Von=5V
+S_2011_MD3_Nor2_N2         2011_MD3_Nor2_5 com 2011_MD3_Inv5_3 com
++  _2011_MD3_Nor2_N2
+RS_2011_MD3_Nor2_N2        2011_MD3_Inv5_3 com 1G
+.MODEL        _2011_MD3_Nor2_N2 VSWITCH Roff=1e6 Ron=1 Voff=0V Von=5V
+S_2011_MD3_Inv5_P         2011_MD3_Inv5_2 2011_MD3_Inv5_3 2011_MD2_DlyHS_13 com
++  _2011_MD3_Inv5_P
+RS_2011_MD3_Inv5_P        2011_MD2_DlyHS_13 com 1G
+.MODEL        _2011_MD3_Inv5_P VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+S_2011_MD3_Inv5_N         2011_MD3_Inv5_3 com 2011_MD2_DlyHS_13 com
++  _2011_MD3_Inv5_N
+RS_2011_MD3_Inv5_N        2011_MD2_DlyHS_13 com 1G
+.MODEL        _2011_MD3_Inv5_N VSWITCH Roff=1e8 Ron=3 Voff=0V Von=5V
+C_2011_MD3_Inv5_C         com 2011_MD3_Inv5_3  1p  
+V_2011_MD3_Inv5_V         2011_MD3_Inv5_2 com 5V
+S_2011_MD3_Latch_P1         2011_MD3_Latch_3 2011_MD3_Latch_4 2011_MD3_Latch_1
++  com _2011_MD3_Latch_P1
+RS_2011_MD3_Latch_P1        2011_MD3_Latch_1 com 1G
+.MODEL        _2011_MD3_Latch_P1 VSWITCH Roff=1e6 Ron=1m Voff=5V Von=0V
+S_2011_MD3_Latch_P2         2011_MD3_Latch_4 2011_MD3_Inv6_1 2011_MD3_Latch_7
++  com _2011_MD3_Latch_P2
+RS_2011_MD3_Latch_P2        2011_MD3_Latch_7 com 1G
+.MODEL        _2011_MD3_Latch_P2 VSWITCH Roff=1e6 Ron=1m Voff=5V Von=0V
+S_2011_MD3_Latch_N1         2011_MD3_Inv6_1 com 2011_MD3_Latch_7 com
++  _2011_MD3_Latch_N1
+RS_2011_MD3_Latch_N1        2011_MD3_Latch_7 com 1G
+.MODEL        _2011_MD3_Latch_N1 VSWITCH Roff=1e8 Ron=1m Voff=0V Von=5V
+S_2011_MD3_Latch_N2         2011_MD3_Inv6_1 com 2011_MD3_Latch_1 com
++  _2011_MD3_Latch_N2
+RS_2011_MD3_Latch_N2        2011_MD3_Latch_1 com 1G
+.MODEL        _2011_MD3_Latch_N2 VSWITCH Roff=1e8 Ron=1m Voff=0V Von=5V
+S_2011_MD3_Latch_N3         2011_MD3_Latch_7 com 2011_MD2_DlyHS_13 com
++  _2011_MD3_Latch_N3
+RS_2011_MD3_Latch_N3        2011_MD2_DlyHS_13 com 1G
+.MODEL        _2011_MD3_Latch_N3 VSWITCH Roff=1e8 Ron=1m Voff=0V Von=5V
+S_2011_MD3_Latch_N4         2011_MD3_Latch_7 com 2011_MD3_Inv6_1 com
++  _2011_MD3_Latch_N4
+RS_2011_MD3_Latch_N4        2011_MD3_Inv6_1 com 1G
+.MODEL        _2011_MD3_Latch_N4 VSWITCH Roff=1e8 Ron=1m Voff=0V Von=5V
+C_2011_MD3_Latch_C7         2011_MD3_Latch_4 2011_MD3_Latch_3  10p  
+S_2011_MD3_Latch_P4         2011_MD3_Latch_6 2011_MD3_Latch_7 2011_MD3_Inv6_1
++  com _2011_MD3_Latch_P4
+RS_2011_MD3_Latch_P4        2011_MD3_Inv6_1 com 1G
+.MODEL        _2011_MD3_Latch_P4 VSWITCH Roff=1e6 Ron=1m Voff=5V Von=0V
+S_2011_MD3_Latch_P3         2011_MD3_Latch_3 2011_MD3_Latch_6 2011_MD2_DlyHS_13
++  com _2011_MD3_Latch_P3
+RS_2011_MD3_Latch_P3        2011_MD2_DlyHS_13 com 1G
+.MODEL        _2011_MD3_Latch_P3 VSWITCH Roff=1e6 Ron=1m Voff=5V Von=0V
+C_2011_MD3_Latch_C2         com 2011_MD3_Latch_1  10p IC=0 
+C_2011_MD3_Latch_C3         com 2011_MD2_DlyHS_13  10p IC=0 
+C_2011_MD3_Latch_C10         2011_MD3_Latch_6 2011_MD3_Latch_3  10p  
+C_2011_MD3_Latch_C11         2011_MD3_Latch_7 2011_MD3_Latch_6  10p  
+C_2011_MD3_Latch_C12         com 2011_MD3_Latch_7  10p  
+C_2011_MD3_Latch_C9         com 2011_MD3_Inv6_1  10p  
+C_2011_MD3_Latch_C8         2011_MD3_Inv6_1 2011_MD3_Latch_4  10p  
+C_2011_MD3_Latch_C1         com 2011_MD3_Inv6_1  10p IC=0 
+V_2011_MD3_Latch_V1         2011_MD3_Latch_3 com 5V
+S_2011_MD3_Inv6_P         2011_MD3_Inv6_2 2011_MD3_OHS_1 2011_MD3_Inv6_1 com
++  _2011_MD3_Inv6_P
+RS_2011_MD3_Inv6_P        2011_MD3_Inv6_1 com 1G
+.MODEL        _2011_MD3_Inv6_P VSWITCH Roff=1e6 Ron=1 Voff=5V Von=0V
+S_2011_MD3_Inv6_N         2011_MD3_OHS_1 com 2011_MD3_Inv6_1 com
++  _2011_MD3_Inv6_N
+RS_2011_MD3_Inv6_N        2011_MD3_Inv6_1 com 1G
+.MODEL        _2011_MD3_Inv6_N VSWITCH Roff=1e8 Ron=3 Voff=0V Von=5V
+C_2011_MD3_Inv6_C         com 2011_MD3_OHS_1  1p  
+V_2011_MD3_Inv6_V         2011_MD3_Inv6_2 com 5V
+S_2011_MD3_OHS_P         VB 2011_MD3_OHS_2 2011_MD3_OHS_1 com _2011_MD3_OHS_P
+RS_2011_MD3_OHS_P        2011_MD3_OHS_1 com 1G
+.MODEL        _2011_MD3_OHS_P VSWITCH Roff=1e9 Ron=1m Voff=5 Von=0
+S_2011_MD3_OHS_N         2011_MD3_OHS_3 VS 2011_MD3_OHS_1 com _2011_MD3_OHS_N
+RS_2011_MD3_OHS_N        2011_MD3_OHS_1 com 1G
+.MODEL        _2011_MD3_OHS_N VSWITCH Roff=1e9 Ron=1m Voff=0 Von=5
+R_2011_MD3_OHS_R7         2011_MD3_OHS_3 HO 4.56 TC=0.0043007, 6.99301e-06
+R_2011_MD3_OHS_R6         HO 2011_MD3_OHS_2 6.85 TC=0.00265268, -6.52681e-06
+D_2011_MD4_D2         com LO diode25 
+C_2011_MD4_C         com LO  10p  
+C_2011_MD4_Uvcc_c3         com 2011_MD4_Nand1_2  10p  
+E_2011_MD4_Uvcc_ABM2         2011_MD4_Uvcc_3 com VALUE {
++  8.3+(8.8-8.3)/(125+40)*(TEMP+40)    }
+E_2011_MD4_Uvcc_ABM3         2011_MD4_Uvcc_4 com VALUE {
++  8.0+(8.5-8.0)/(125+40)*(TEMP+40)    }
+X_2011_MD4_Uvcc_Comp         VCC 2011_MD4_Uvcc_2 2011_MD4_Nand1_2 com COMP
+S_2011_MD4_Uvcc_P         2011_MD4_Uvcc_3 2011_MD4_Uvcc_2 2011_MD4_Nand1_2 com
++  _2011_MD4_Uvcc_P
+RS_2011_MD4_Uvcc_P        2011_MD4_Nand1_2 com 1G
+.MODEL        _2011_MD4_Uvcc_P VSWITCH Roff=1e6 Ron=1 Voff=4.99 Von=0.01
+S_2011_MD4_Uvcc_N         2011_MD4_Uvcc_2 2011_MD4_Uvcc_4 2011_MD4_Nand1_2 com
++  _2011_MD4_Uvcc_N
+RS_2011_MD4_Uvcc_N        2011_MD4_Nand1_2 com 1G
+.MODEL        _2011_MD4_Uvcc_N VSWITCH Roff=1e6 Ron=1 Voff=0.01 Von=4.99
+C_2011_MD4_Uvcc_c1         2011_MD4_Uvcc_2 2011_MD4_Uvcc_3  10p  
+C_2011_MD4_Uvcc_c2         2011_MD4_Uvcc_4 2011_MD4_Uvcc_2  10p  
+D_2011_MD4_D1         LO VCC diode25 
+D_2011_MD4_D3         com VCC diode25 
+V_2011_MD4_Nand1_V         2011_MD4_Nand1_5 com 5V
+S_2011_MD4_Nand1_P2         2011_MD4_Nand1_5 2011_MD4_OLS_1 2011_MD2_DlyLS_13
++  com _2011_MD4_Nand1_P2
+RS_2011_MD4_Nand1_P2        2011_MD2_DlyLS_13 com 1G
+.MODEL        _2011_MD4_Nand1_P2 VSWITCH Roff=1e6 Ron=1 Voff=5 Von=0
+S_2011_MD4_Nand1_P1         2011_MD4_Nand1_5 2011_MD4_OLS_1 2011_MD4_Nand1_2
++  com _2011_MD4_Nand1_P1
+RS_2011_MD4_Nand1_P1        2011_MD4_Nand1_2 com 1G
+.MODEL        _2011_MD4_Nand1_P1 VSWITCH Roff=1e6 Ron=1 Voff=5 Von=0
+S_2011_MD4_Nand1_N1         2011_MD4_OLS_1 2011_MD4_Nand1_4 2011_MD2_DlyLS_13
++  com _2011_MD4_Nand1_N1
+RS_2011_MD4_Nand1_N1        2011_MD2_DlyLS_13 com 1G
+.MODEL        _2011_MD4_Nand1_N1 VSWITCH Roff=1e6 Ron=1 Voff=0 Von=5
+S_2011_MD4_Nand1_N2         2011_MD4_Nand1_4 com 2011_MD4_Nand1_2 com
++  _2011_MD4_Nand1_N2
+RS_2011_MD4_Nand1_N2        2011_MD4_Nand1_2 com 1G
+.MODEL        _2011_MD4_Nand1_N2 VSWITCH Roff=1e6 Ron=1 Voff=0 Von=5
+S_2011_MD4_OLS_P         VCC 2011_MD4_OLS_2 2011_MD4_OLS_1 com _2011_MD4_OLS_P
+RS_2011_MD4_OLS_P        2011_MD4_OLS_1 com 1G
+.MODEL        _2011_MD4_OLS_P VSWITCH Roff=1e9 Ron=1m Voff=5 Von=0
+S_2011_MD4_OLS_N         2011_MD4_OLS_3 com 2011_MD4_OLS_1 com _2011_MD4_OLS_N
+RS_2011_MD4_OLS_N        2011_MD4_OLS_1 com 1G
+.MODEL        _2011_MD4_OLS_N VSWITCH Roff=1e9 Ron=1m Voff=0 Von=5
+R_2011_MD4_OLS_R7         2011_MD4_OLS_3 LO 4.56 TC=0.0043007, 6.99301e-06
+R_2011_MD4_OLS_R6         LO 2011_MD4_OLS_2 6.85 TC=0.00265268, -6.52681e-06
+C_2011_MD1_C1         com 2011_MD2_DlyHS_2  10p  
+C_2011_MD1_C3         com 2011_MD2_DlyLS_2  10p  
+D_2011_MD1_D7         com VCC diode25 
+D_2011_MD1_D6         com LIN diode25 
+D_2011_MD1_D5         LIN VCC diode25 
+D_2011_MD1_D1         HIN VCC diode25 
+D_2011_MD1_D2         com HIN diode25 
+C_2011_MD1_Trig1_CTrig         com 2011_MD2_DlyHS_2  10p  
+S_2011_MD1_Trig1_PTrig         2011_MD1_Trig1_4 com 2011_MD2_DlyHS_2 com
++  _2011_MD1_Trig1_PTrig
+RS_2011_MD1_Trig1_PTrig        2011_MD2_DlyHS_2 com 1G
+.MODEL        _2011_MD1_Trig1_PTrig VSWITCH Roff=1e10 Ron=1 Voff=0 Von=5
+R_2011_MD1_Trig1_R1Trig         2011_MD1_Trig1_3 2011_MD1_Trig1_2  100Meg  
+R_2011_MD1_Trig1_R2Trig         2011_MD1_Trig1_4 2011_MD1_Trig1_3  8.7Meg  
+R_2011_MD1_Trig1_R3Trig         com 2011_MD1_Trig1_4  8.5Meg  
+X_2011_MD1_Trig1_Comp         HIN 2011_MD1_Trig1_3 2011_MD2_DlyHS_2 com COMP
+V_2011_MD1_Trig1_VDD         2011_MD1_Trig1_2 com 15V
+C_2011_MD1_Trig2_CTrig         com 2011_MD2_DlyLS_2  10p  
+S_2011_MD1_Trig2_PTrig         2011_MD1_Trig2_4 com 2011_MD2_DlyLS_2 com
++  _2011_MD1_Trig2_PTrig
+RS_2011_MD1_Trig2_PTrig        2011_MD2_DlyLS_2 com 1G
+.MODEL        _2011_MD1_Trig2_PTrig VSWITCH Roff=1e10 Ron=1 Voff=0 Von=5
+R_2011_MD1_Trig2_R1Trig         2011_MD1_Trig2_3 2011_MD1_Trig2_2  100Meg  
+R_2011_MD1_Trig2_R2Trig         2011_MD1_Trig2_4 2011_MD1_Trig2_3  8.7Meg  
+R_2011_MD1_Trig2_R3Trig         com 2011_MD1_Trig2_4  8.5Meg  
+X_2011_MD1_Trig2_Comp         LIN 2011_MD1_Trig2_3 2011_MD2_DlyLS_2 com COMP
+V_2011_MD1_Trig2_VDD         2011_MD1_Trig2_2 com 15V
+R_2011_MD1_R1         com HIN 165K TC=-0.0134595, 0.000082214
+R_2011_MD1_R2         com LIN 165K TC=-0.0134595, 0.000082214
+R_2011_MD1_R3         com VCC 200K TC=-0.00578755, 0.000029304
+E_2011_MD2_ABM21         2011_MD2_DlyHS_1 com VALUE { ( V(VB)  
++ -V(VS) )   }
+C_2011_MD2_C1         com 2011_MD2_DlyHS_13  10p  
+C_2011_MD2_C2         com 2011_MD2_DlyLS_13  10p  
+S_2011_MD2_DlyHS_P1         2011_MD2_DlyHS_15 2011_MD2_DlyHS_16
++  2011_MD2_DlyHS_11 com _2011_MD2_DlyHS_P1
+RS_2011_MD2_DlyHS_P1        2011_MD2_DlyHS_11 com 1G
+.MODEL        _2011_MD2_DlyHS_P1 VSWITCH Roff=1e6 Ron=1 Voff=4.9V Von=0.1V
+S_2011_MD2_DlyHS_P2         2011_MD2_DlyHS_16 2011_MD2_DlyHS_14
++  2011_MD2_DlyHS_13 com _2011_MD2_DlyHS_P2
+RS_2011_MD2_DlyHS_P2        2011_MD2_DlyHS_13 com 1G
+.MODEL        _2011_MD2_DlyHS_P2 VSWITCH Roff=1e6 Ron=1 Voff=4.9V Von=0.1V
+S_2011_MD2_DlyHS_N1         2011_MD2_DlyHS_14 com 2011_MD2_DlyHS_13 com
++  _2011_MD2_DlyHS_N1
+RS_2011_MD2_DlyHS_N1        2011_MD2_DlyHS_13 com 1G
+.MODEL        _2011_MD2_DlyHS_N1 VSWITCH Roff=1e6 Ron=1 Voff=0.1V Von=4.9V
+S_2011_MD2_DlyHS_MP1         2011_MD2_DlyHS_17 2011_MD2_DlyHS_18
++  2011_MD2_DlyHS_14 com _2011_MD2_DlyHS_MP1
+RS_2011_MD2_DlyHS_MP1        2011_MD2_DlyHS_14 com 1G
+.MODEL        _2011_MD2_DlyHS_MP1 VSWITCH Roff=1e6 Ron=1 Voff=4.9V Von=0.1V
+S_2011_MD2_DlyHS_MP2         2011_MD2_DlyHS_18 2011_MD2_DlyHS_13
++  2011_MD2_DlyHS_12 com _2011_MD2_DlyHS_MP2
+RS_2011_MD2_DlyHS_MP2        2011_MD2_DlyHS_12 com 1G
+.MODEL        _2011_MD2_DlyHS_MP2 VSWITCH Roff=1e6 Ron=1 Voff=4.9 Von=0.1
+S_2011_MD2_DlyHS_MN1         2011_MD2_DlyHS_13 com 2011_MD2_DlyHS_12 com
++  _2011_MD2_DlyHS_MN1
+RS_2011_MD2_DlyHS_MN1        2011_MD2_DlyHS_12 com 1G
+.MODEL        _2011_MD2_DlyHS_MN1 VSWITCH Roff=1e6 Ron=1 Voff=0.1 Von=4.9
+S_2011_MD2_DlyHS_MN2         2011_MD2_DlyHS_13 com 2011_MD2_DlyHS_14 com
++  _2011_MD2_DlyHS_MN2
+RS_2011_MD2_DlyHS_MN2        2011_MD2_DlyHS_14 com 1G
+.MODEL        _2011_MD2_DlyHS_MN2 VSWITCH Roff=1e6 Ron=1 Voff=0.1 Von=4.9
+V_2011_MD2_DlyHS_VCC1         2011_MD2_DlyHS_15 com 5V
+C_2011_MD2_DlyHS_C6         com 2011_MD2_DlyHS_14  10p IC=-5V 
+C_2011_MD2_DlyHS_C5         com 2011_MD2_DlyHS_13  10p IC=0V 
+V_2011_MD2_DlyHS_VCC2         2011_MD2_DlyHS_17 com 5V
+S_2011_MD2_DlyHS_N2         2011_MD2_DlyHS_14 com 2011_MD2_DlyHS_11 com
++  _2011_MD2_DlyHS_N2
+RS_2011_MD2_DlyHS_N2        2011_MD2_DlyHS_11 com 1G
+.MODEL        _2011_MD2_DlyHS_N2 VSWITCH Roff=1e6 Ron=1 Voff=0.1V Von=4.9V
+C_2011_MD2_DlyHS_C4         com 2011_MD2_DlyHS_12  10p  
+E_2011_MD2_DlyHS_ABM26         2011_MD2_DlyHS_10 com VALUE { (
++  V(2011_MD2_DlyHS_7)  
++ *V(2011_MD2_DlyHS_8) )   }
+V_2011_MD2_DlyHS_V_delay         2011_MD2_DlyHS_5 com 5V
+C_2011_MD2_DlyHS_C         com 2011_MD2_DlyHS_6  10n  
+E_2011_MD2_DlyHS_ABM27         2011_MD2_DlyHS_9 com VALUE { ( V(2011_MD2_DlyHS_3)
++   
++ *V(2011_MD2_DlyHS_4) )   }
+C_2011_MD2_DlyHS_C3         com 2011_MD2_DlyHS_11  10p  
+E_2011_MD2_DlyHS_ABM19         2011_MD2_DlyHS_4 com VALUE { (EXP(-( {tonV1}+(
++ {tonV3}-{tonV1})/({V3}-{V1})*((V(2011_MD2_DlyHS_1))-{V1}))/{Rrise}/ 10n))  
++ /(EXP(-( {tonV1}+({tonV3}-{tonV1})/({V3}-{V1})*({V2}  -{V1}))/{Rrise}/ 10n))
++    }
+S_2011_MD2_DlyHS_delay_N         2011_MD2_DlyHS_6 com 2011_MD2_DlyHS_2 com
++  _2011_MD2_DlyHS_delay_N
+RS_2011_MD2_DlyHS_delay_N        2011_MD2_DlyHS_2 com 1G
+.MODEL        _2011_MD2_DlyHS_delay_N VSWITCH Roff=1e6 Ron={Rrise} Voff=0.01V
++  Von=4.99V
+E_2011_MD2_DlyHS_ABM5         2011_MD2_DlyHS_7 com VALUE { (5-5*EXP(-{toffT2}/
++ {Rfall}/10n))  
++ *(5-5* EXP(-( {toffT1}+({toffT3}-{toffT1})/({T3}-{T1})*(TEMP-{T1}))/
++ {Rfall}/10n))  
++ /(5-5* EXP(-( {toffT1}+({toffT3}-{toffT1})/({T3}-{T1})*({T2}-{T1}))/
++ {Rfall}/10n))  }
+E_2011_MD2_DlyHS_ABM13         2011_MD2_DlyHS_8 com VALUE { (1-EXP(-( {toffV1}+(
++ {toffV3}-{toffV1})/({V3}-{V1})*((V(2011_MD2_DlyHS_1))-{V1}))/{Rfall}/ 10n))/  
++ (1-EXP(-( {toffV1}+({toffV3}-{toffV1})/({V3}-{V1})*({V2}  -{V1}))/{Rfall}/
++  10n))   }
+S_2011_MD2_DlyHS_delay_P         2011_MD2_DlyHS_5 2011_MD2_DlyHS_6
++  2011_MD2_DlyHS_2 com _2011_MD2_DlyHS_delay_P
+RS_2011_MD2_DlyHS_delay_P        2011_MD2_DlyHS_2 com 1G
+.MODEL        _2011_MD2_DlyHS_delay_P VSWITCH Roff=1e6 Ron={Rfall} Voff=4.99V
++  Von=0.01V
+E_2011_MD2_DlyHS_ABM6         2011_MD2_DlyHS_3 com VALUE { (5*EXP(-{tonT2}/
++ {Rrise}/10n))  
++ *(5* EXP(-( {tonT1}+({tonT3}-{tonT1})/({T3}-{T1})*(TEMP-{T1}))/{Rrise}/10n))
++   
++ /(5* EXP(-( {tonT1}+({tonT3}-{tonT1})/({T3}-{T1})*({T2}-{T1}))/{Rrise}/10n))
++   }
+X_2011_MD2_DlyHS_Comp2         2011_MD2_DlyHS_9 2011_MD2_DlyHS_6
++  2011_MD2_DlyHS_11 com COMP
+X_2011_MD2_DlyHS_Comp1         2011_MD2_DlyHS_6 2011_MD2_DlyHS_10
++  2011_MD2_DlyHS_12 com COMP
+S_2011_MD2_DlyLS_P1         2011_MD2_DlyLS_15 2011_MD2_DlyLS_16
++  2011_MD2_DlyLS_11 com _2011_MD2_DlyLS_P1
+RS_2011_MD2_DlyLS_P1        2011_MD2_DlyLS_11 com 1G
+.MODEL        _2011_MD2_DlyLS_P1 VSWITCH Roff=1e6 Ron=1 Voff=4.9V Von=0.1V
+S_2011_MD2_DlyLS_P2         2011_MD2_DlyLS_16 2011_MD2_DlyLS_14
++  2011_MD2_DlyLS_13 com _2011_MD2_DlyLS_P2
+RS_2011_MD2_DlyLS_P2        2011_MD2_DlyLS_13 com 1G
+.MODEL        _2011_MD2_DlyLS_P2 VSWITCH Roff=1e6 Ron=1 Voff=4.9V Von=0.1V
+S_2011_MD2_DlyLS_N1         2011_MD2_DlyLS_14 com 2011_MD2_DlyLS_13 com
++  _2011_MD2_DlyLS_N1
+RS_2011_MD2_DlyLS_N1        2011_MD2_DlyLS_13 com 1G
+.MODEL        _2011_MD2_DlyLS_N1 VSWITCH Roff=1e6 Ron=1 Voff=0.1V Von=4.9V
+S_2011_MD2_DlyLS_MP1         2011_MD2_DlyLS_17 2011_MD2_DlyLS_18
++  2011_MD2_DlyLS_14 com _2011_MD2_DlyLS_MP1
+RS_2011_MD2_DlyLS_MP1        2011_MD2_DlyLS_14 com 1G
+.MODEL        _2011_MD2_DlyLS_MP1 VSWITCH Roff=1e6 Ron=1 Voff=4.9V Von=0.1V
+S_2011_MD2_DlyLS_MP2         2011_MD2_DlyLS_18 2011_MD2_DlyLS_13
++  2011_MD2_DlyLS_12 com _2011_MD2_DlyLS_MP2
+RS_2011_MD2_DlyLS_MP2        2011_MD2_DlyLS_12 com 1G
+.MODEL        _2011_MD2_DlyLS_MP2 VSWITCH Roff=1e6 Ron=1 Voff=4.9 Von=0.1
+S_2011_MD2_DlyLS_MN1         2011_MD2_DlyLS_13 com 2011_MD2_DlyLS_12 com
++  _2011_MD2_DlyLS_MN1
+RS_2011_MD2_DlyLS_MN1        2011_MD2_DlyLS_12 com 1G
+.MODEL        _2011_MD2_DlyLS_MN1 VSWITCH Roff=1e6 Ron=1 Voff=0.1 Von=4.9
+S_2011_MD2_DlyLS_MN2         2011_MD2_DlyLS_13 com 2011_MD2_DlyLS_14 com
++  _2011_MD2_DlyLS_MN2
+RS_2011_MD2_DlyLS_MN2        2011_MD2_DlyLS_14 com 1G
+.MODEL        _2011_MD2_DlyLS_MN2 VSWITCH Roff=1e6 Ron=1 Voff=0.1 Von=4.9
+V_2011_MD2_DlyLS_VCC1         2011_MD2_DlyLS_15 com 5V
+C_2011_MD2_DlyLS_C6         com 2011_MD2_DlyLS_14  10p IC=-5V 
+C_2011_MD2_DlyLS_C5         com 2011_MD2_DlyLS_13  10p IC=0V 
+V_2011_MD2_DlyLS_VCC2         2011_MD2_DlyLS_17 com 5V
+S_2011_MD2_DlyLS_N2         2011_MD2_DlyLS_14 com 2011_MD2_DlyLS_11 com
++  _2011_MD2_DlyLS_N2
+RS_2011_MD2_DlyLS_N2        2011_MD2_DlyLS_11 com 1G
+.MODEL        _2011_MD2_DlyLS_N2 VSWITCH Roff=1e6 Ron=1 Voff=0.1V Von=4.9V
+C_2011_MD2_DlyLS_C4         com 2011_MD2_DlyLS_12  10p  
+E_2011_MD2_DlyLS_ABM26         2011_MD2_DlyLS_10 com VALUE { (
++  V(2011_MD2_DlyLS_7)  
++ *V(2011_MD2_DlyLS_8) )   }
+V_2011_MD2_DlyLS_V_delay         2011_MD2_DlyLS_5 com 5V
+C_2011_MD2_DlyLS_C         com 2011_MD2_DlyLS_6  10n  
+E_2011_MD2_DlyLS_ABM27         2011_MD2_DlyLS_9 com VALUE { ( V(2011_MD2_DlyLS_3)
++   
++ *V(2011_MD2_DlyLS_4) )   }
+C_2011_MD2_DlyLS_C3         com 2011_MD2_DlyLS_11  10p  
+E_2011_MD2_DlyLS_ABM19         2011_MD2_DlyLS_4 com VALUE { (EXP(-( {tonV1}+(
++ {tonV3}-{tonV1})/({V3}-{V1})*((V(VCC))-{V1}))/{Rrise}/ 10n))  
++ /(EXP(-( {tonV1}+({tonV3}-{tonV1})/({V3}-{V1})*({V2}  -{V1}))/{Rrise}/ 10n))
++    }
+S_2011_MD2_DlyLS_delay_N         2011_MD2_DlyLS_6 com 2011_MD2_DlyLS_2 com
++  _2011_MD2_DlyLS_delay_N
+RS_2011_MD2_DlyLS_delay_N        2011_MD2_DlyLS_2 com 1G
+.MODEL        _2011_MD2_DlyLS_delay_N VSWITCH Roff=1e6 Ron={Rrise} Voff=0.01V
++  Von=4.99V
+E_2011_MD2_DlyLS_ABM5         2011_MD2_DlyLS_7 com VALUE { (5-5*EXP(-{toffT2}/
++ {Rfall}/10n))  
++ *(5-5* EXP(-( {toffT1}+({toffT3}-{toffT1})/({T3}-{T1})*(TEMP-{T1}))/
++ {Rfall}/10n))  
++ /(5-5* EXP(-( {toffT1}+({toffT3}-{toffT1})/({T3}-{T1})*({T2}-{T1}))/
++ {Rfall}/10n))  }
+E_2011_MD2_DlyLS_ABM13         2011_MD2_DlyLS_8 com VALUE { (1-EXP(-( {toffV1}+(
++ {toffV3}-{toffV1})/({V3}-{V1})*((V(VCC))-{V1}))/{Rfall}/ 10n))/  
++ (1-EXP(-( {toffV1}+({toffV3}-{toffV1})/({V3}-{V1})*({V2}  -{V1}))/{Rfall}/
++  10n))   }
+S_2011_MD2_DlyLS_delay_P         2011_MD2_DlyLS_5 2011_MD2_DlyLS_6
++  2011_MD2_DlyLS_2 com _2011_MD2_DlyLS_delay_P
+RS_2011_MD2_DlyLS_delay_P        2011_MD2_DlyLS_2 com 1G
+.MODEL        _2011_MD2_DlyLS_delay_P VSWITCH Roff=1e6 Ron={Rfall} Voff=4.99V
++  Von=0.01V
+E_2011_MD2_DlyLS_ABM6         2011_MD2_DlyLS_3 com VALUE { (5*EXP(-{tonT2}/
++ {Rrise}/10n))  
++ *(5* EXP(-( {tonT1}+({tonT3}-{tonT1})/({T3}-{T1})*(TEMP-{T1}))/{Rrise}/10n))
++   
++ /(5* EXP(-( {tonT1}+({tonT3}-{tonT1})/({T3}-{T1})*({T2}-{T1}))/{Rrise}/10n))
++   }
+X_2011_MD2_DlyLS_Comp2         2011_MD2_DlyLS_9 2011_MD2_DlyLS_6
++  2011_MD2_DlyLS_11 com COMP
+X_2011_MD2_DlyLS_Comp1         2011_MD2_DlyLS_6 2011_MD2_DlyLS_10
++  2011_MD2_DlyLS_12 com COMP
+
+.ENDS    IR2011
+
+
+.SUBCKT COMP 1 2 3 4
+E1 5 4 VALUE={IF((V(1)>V(2)), V(4)+5V, V(4))}
+R1 5 3 1
+C1 3 4 10P
+.ENDS 
