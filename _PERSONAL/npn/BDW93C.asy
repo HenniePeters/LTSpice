@@ -11,7 +11,7 @@ WINDOW 0 56 32 Left 2
 WINDOW 3 56 68 Left 2
 SYMATTR Value BDW93C
 SYMATTR Prefix X
-SYMATTR Description Bipolar NPN transistor
+SYMATTR Description Bipolar NPN transistor 12A, 100V
 SYMATTR ModelFile ..\sym\_PERSONAL\npn\BDW93C.sub
 PIN 64 0 NONE 0
 PINATTR PinName C

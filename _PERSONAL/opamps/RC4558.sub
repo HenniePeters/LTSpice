@@ -1,0 +1,204 @@
+*******************************************************************************
+* EASYEDA FUNCTIONS
+*******************************************************************************
+
+.param pi = 3.141593
+.func LIMIT(x, y, z) {min(max(x, min(y, z)), max(z, y))}
+.func PWR(x,a) {(MAX(ABS(x), 1e-313))**a}
+.func PWRS(x,a) {sgn(x) * PWR(x,a)}
+.func stp(x) {u(x)}
+.func log10(x) {ln(x)/ln(10)}
+.func SQRT(x) {(MAX(x, 1e-313))**0.5}
+.func INT(x) {sgn(x)*floor(ABS(x))}
+.func URAMP(x) {max(x,0)}
+.func POW(x,a) 
++ {(((a-(int(a)))==0)||(sgn(x)>=0))*( max(exp(ln(uramp(x))*a),0) + 
++ (2*(0.5-ABS((int(a))-2*int(a/2))))*max(exp(ln(uramp(-1*x))*a),0) )}
+
+
+*******************************************************************************
+* EASYEDA PARAMETERIZED 5-PIN OPAMP
+*******************************************************************************
+
+.subckt RC4558 inp inn vp vn out
+**
+* EasyEDA 5 pin generic opamp macromodel
+**
+* Last edited 140610
+**
+* By editing the Datasheet Parameters below, this model can
+* be configured to represent a wide range of 5 pin opamps.
+**
+* Developed for EasyEDA by signality.co.uk
+**
+* Note that this model does not simulate asymmetric 
+* positive and negative slew rates.
+**
+* This model is for an opamp which does not exhibit output 
+* polarity inversion for inputs beyond the common mode range.
+** 
+*************************************************************
+* Datasheet parameters
+**
+**** Except for inhi and inlo, all parameters ****
+**** MUST be entered as positive numbers!     ****
+*************************************************************
+**
+.param
++ Vabsmax=22 ; V. Absolute Maximum value of (vp-vn) 36
++ Vmin=3  ; V. Minimum supply voltage 3
++ Rin=2Meg ; Ohms. Input resistance
++ Cin=3p ; F. Input capacitance (assumed differential, i.e. across inputs)
++ ibias=30n ; A. Input bias current
++ Avol=1Meg ; open loop gain in V/V
++ Gbw=1Meg ; gain bandwidth product
++ iq=200u ; A. Device quiescent supply current 200u
++ Rout=75 ; Ohms. Output resistance. 
++ slewrate=2.2 ; slew rate in V/us
++ isc=30m ; A. Output short circuit current
++ inhi=2 ; V. How close the input common mode voltage can approach Vp
++ inlo=2 ; V. How close the input common mode voltage can approach Vn
++ outhi=1 ; V. How close the unloaded output voltage can approach Vp
++ outlo=1 ; V. How close the unloaded output voltage can approach Vn
+**
+**********************
+* End of datasheet parameters.
+* Do not edit below this line.
+**********************
+**
+* Internal parameters
+*********************
+*
++ ios=0n ; A. Input bias offset current.
++ vos=0m ; V. Input offset voltage.
++ fhfpole=1G ; Hz. High frequency pole.
++ isrc={isc} ; A. High level output short circuit current
++ isnk={isrc} ; A. Low level output short circuit current
++ inmax=0.3 ; V. Abs max voltage above Vp that the inputs can go
++ inmin=0.3 ; V. Abs min voltage below Vn that the inputs can go
++ outmax=0.3 ; V. Abs max voltage above Vp that the output can go
++ outmin=0.3 ; V. Abs min voltage below Vn that the output can go
++ cmrr_dB=120 ; low frequency value of common mode rejection ratio (cmrr).
++ fcmrr=1G ; Hz. High pass corner frequency (at which cmsrr begins to reduce).
++ psrr_dB=120 ; Low frequency value of power supply rejection ratio (psrr).
++ fpsrr=1G ; High pass corner frequency (at which psrr begins to reduce).
++ Rser = 100 ; slope resistance of uramp shunt clamps.
++ oooclmphi={1.0*isrc*Rout} ; high level output current limit & stage1 voltage overshoot clamp.
++ oooclmplo={1.0*isnk*Rout} ; low level output current limit & stage1 voltage overshoot clamp.
++ Rbuffout=10k
++ beta=10k
++ betasc=10k
++ cmrr={10**(-1*cmrr_dB/20)}
++ psrr={10**(-1*psrr_dB/20)}
++ pi=3.14159 ; necessary for ngspice.
++ sel=1 ; select current limiting scheme.
+* sel = 0 => "conventional" output transistor type current limit.
+*  Symmetrical output current limit defined by isrc only.
+* sel = 1 => stage1 voltage swing clamp based on output over current.
+*  Output current limits defined independently by isrc and isnk.
+* sel = 1 is the default method.
+**
+* Circuit calculations
+**********************
+**
+.param
++ slew=slewrate*1Meg
++ Islew=100u
++ Cdom={Islew/slew}
++ Rstg1={Avol/(2*pi*Gbw*Cdom)}
++ Kg={Avol/(Islew*Rstg1)}
++ Rstg2=1
++ Chfpole={1/(2*pi*fhfpole*Rstg2)}
+**
+* The circuit
+*************
+**
+* Vmin check
+**
+Brailcheck1 0 supply_ok I=ngLIMIT(V(vp,vn), 0, Vmin)/Vmin
+Rrailcheck1 supply_ok 0 1
+Crailcheck1 supply_ok 0 1p
+**
+* Quiescent and load currents through output stage
+**
+Biquiescent1 vp vn I=iq*V(supply_ok)
+Cxrail1 vp vn 1p
+Rxrail1 vp vn 1G
+Birout1 vp 0 I=max(I(Vmon1),0)+min(I(Vmon2),0)
+Birout2 vn 0 I=min(I(Vmon1),0)-max(I(Vmon2),0)
+**
+* Input resistance, capacitance, bias currents and overrail clamping
+**
+Rin1 inn inp {rin}
+Cin1 inn inp {Cin}
+Bipbias1 inp isum I=(ibias+ios)*V(supply_ok)
++ + ( uramp(V(inp)-(V(vp)+inmax)) - uramp(-V(inp)+(V(vn)-inmin)) )/Rser
+Bipbias2 inn isum I=ibias*V(supply_ok)
++ + ( uramp(V(inn)-(V(vp)+inmax)) - uramp(-V(inn)+(V(vn)-inmin)) )/Rser
+Vmon2 0 isum 0
+**
+* Input stage cm range input limiting & output polarity reversal and cmrr/psrr summing
+**
+Bindiff1 0 indiff I=ngLIMIT((V(inp)+vos), V(vn)+inlo, V(vp)-inhi)
++ - ngLIMIT(V(inn), V(vn)+inlo, V(vp)-inhi)
+*+ + V(rrcm) + V(rrps) - V(rrpsdc)
+*+ - 1k*uramp(V(inp) - V(vp)+inhi) ; inp positive cm polarity reversal
+*+ + 1k*uramp(-V(inp) + V(vn)+inlo) ; inp negative cm polarity reversal
+*+ - 1k*uramp(V(inn) - V(vp)+inhi) ; inn positive cm polarity reversal
+*+ + 1k*uramp(-V(inn) + V(vn)+inlo) ; inn negative cm polarity reversal
+Cindiff1 indiff 0 1p
+Rindiff1 indiff 0 1
+**
+* Gain stages
+**
+Bstg1 0 stage1 I=Islew*tanh(V(indiff)*Kg)
++ - ( uramp(V(stage1)-(V(vp)-outhi)) - uramp(-V(stage1)+(V(vn)+outlo)) )/Rser
++ - sel*( uramp(V(stage1)-(V(out)+oooclmphi)) - uramp(-V(stage1)+(V(out)-oooclmplo)) )/Rser
+Cdom1 stage1 0 {Cdom}
+Rstg1 stage1 0 {Rstg1}
+Bstg2 0 stage2 I=V(stage1)/Rstg2
+Chfpole1 stage2 0 {Chfpole}
+Rstg2 stage2 0 {Rstg2}
+**
+* Output stage
+**
+Bbuff1 0 buffout I=( V(stage2)
++ - (1-sel)*betasc*ngLIMIT( I(Vmon1)-isrc*sgn(I(Vmon3)), -u(-I(Vmon3)), u(I(Vmon3)) ) )/Rbuffout
+Rbuff1 buffout 0 {Rbuffout}
+Cbuff1 buffout 0 {1/(2*pi*1G*Rbuffout)}
+Vbase1 buffout outi 0
+Vmon1 0 N001 0
+BQpass1 N001 outi I=beta*I(Vbase1)
+CQpass1 outi N001 1p
+RQpass1 outi N001 1G
+Rout1 outo out {rout}
+Vmon3 outi outo 0
+**
+* Output pin overvoltage clamp
+**
+Boutclmp1 out isum I=( uramp(V(out)-(V(vp)+outmax)) - uramp(-V(out)+(V(vn)-outmin)) )/Rser
+**
+* CMRR and PSRR generation
+**
+Bpsrr1 N002 0 V=V(vp,vn)
+Rpsrr1 N002 rrpsdc 1
+Rpsrr2 rrpsdc 0 {psrr/(1-psrr)}
+Cpsrr1 rrpsdc 0 1
+Rpsrr3 N002 rrps 1
+Cpsrr2 N002 rrps {1/(2*pi*fpsrr)}
+Rpsrr4 rrps 0 {psrr/(1-psrr)}
+Bcmrr1 N003 0 V=(V(inp)+V(inn))/2
+Rcmrr1 N003 rrcm 1
+Ccmrr1 N003 rrcm {1/(2*pi*fcmrr)}
+Rcmrr2 rrcm 0 {cmrr/(1-cmrr)}
+**
+* ABS MAX and reverse supply voltage breakdowns
+**
+Drail vn vp Drails
+.model Drails D Is=1e-12 N=2  tt=15n BV={Vabsmax+1} IBV={Iq/1k} Rs=1
+**
+* Missing ngspice function
+**
+.func ngLIMIT(x,a,b) {min(max(x, a), b)}
+**
+.ends

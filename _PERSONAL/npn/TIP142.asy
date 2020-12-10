@@ -9,10 +9,10 @@ LINE Normal 16 32 64 0
 LINE Normal 16 48 0 48
 WINDOW 0 56 32 Left 2
 WINDOW 3 56 68 Left 2
-SYMATTR Value BF199
+SYMATTR Value TIP142
 SYMATTR Prefix X
-SYMATTR Description Bipolar NPN transistor
-SYMATTR ModelFile ..\sym\_PERSONAL\npn\npn.lib
+SYMATTR Description Bipolar NPN transistor 10A, 100V, HFE:500, 3-Pin TO-247
+SYMATTR ModelFile ..\sym\_PERSONAL\npn\TIP142.sub
 PIN 64 0 NONE 0
 PINATTR PinName C
 PINATTR SpiceOrder 1

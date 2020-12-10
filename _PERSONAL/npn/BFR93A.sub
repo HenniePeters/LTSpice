@@ -1,0 +1,53 @@
+* BFR93A SPICE MODEL
+* PHILIPS SEMICONDUCTORS
+* Date : September 1995
+*
+* PACKAGE : SOT23 DIE MODEL : BFR91A
+* 1: COLLECTOR; 2: BASE; 3: EMITTER;
+.SUBCKT BFR93A 1 2 3
+Q1 6 5 7 7 BFR91A
+* SOT23 parasitic model
+               Lb  4 5 .4n
+               Le  7 8 .83n
+               L1  2 4 .35n
+               L2  1 6 .17n
+               L3  3 8 .35n
+              Ccb  4 6 71f
+              Cbe  4 8 2f
+              Cce  6 8 71f
+*
+* PHILIPS SEMICONDUCTORS                                     Version:   1.0
+* Filename:   BFR91A.PRM                                     Date: Feb 1992
+*
+.MODEL  BFR91A   NPN
++              IS = 1.32873E-015
++              BF = 1.02000E+002
++              NF = 1.00025E+000
++             VAF = 5.19033E+001
++             IKF = 8.15511E+000
++             ISE = 1.39029E-014
++              NE = 1.51292E+000
++              BR = 1.76953E+001
++              NR = 9.94038E-001
++             VAR = 3.28032E+000
++             IKR = 1.00000E+001
++             ISC = 1.04297E-015
++              NC = 1.18993E+000
++              RB = 1.00000E+001
++             IRB = 1.00000E-006
++             RBM = 1.00000E+001
++              RE = 7.63636E-001
++              RC = 9.00000E+000
++              EG = 1.11000E+000
++             XTI = 3.00000E+000
++             CJE = 2.03216E-012
++             VJE = 6.00000E-001
++             MJE = 2.90076E-001
++              TF = 6.55790E-012
++             XTF = 3.89752E+001
++             VTF = 1.09308E+001
++             ITF = 5.21078E-001
++             CJC = 1.00353E-012
++             VJC = 3.40808E-001
++             MJC = 1.94223E-001
+.ENDS
