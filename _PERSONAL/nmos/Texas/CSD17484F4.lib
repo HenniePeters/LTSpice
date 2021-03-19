@@ -22,7 +22,7 @@
 * Model Type:  TRANSIENT
 * Simulator: PSPICE
 * Simulator Version: 16.6.0
-* Datasheet: SLPS550C – MAY 2015 – REVISED DECEMBER 2019
+* Datasheet: SLPS550C MAY 2015 REVISED DECEMBER 2019
 *
 * Model Version: 1.1
 *
@@ -80,7 +80,10 @@ DESD1	 3  2	 DDZ
 + CGSO   = 162e-12       CGDO   = 0.1e-12       CGBO   = 1e-18  )
 *******************************************************************
 .MODEL  PMOSd   PMOS (   LEVEL  = 7		      CAPMOD = 0
-+ TNOM   = 27            VTO    = -1.0	  	NCH	 = 5e15
+*********************************************************
+** + TNOM   = 27            VTO    = -1.0	  	NCH	 = 5e15
++ TNOM   = 27            NCH	 = 5e15
+*********************************************************
 + TOX    = 1.75e-8       K1	  = 0.65		K2	 =-0.01
 + JS	   = 0
 + CJ     = 1e-18         CJSW   = 1e-18		NOFF	 = 2.0
