@@ -14,7 +14,7 @@ LINE Normal 4 86 12 86
 WINDOW 0 16 32 Left 2
 WINDOW 3 17 89 Left 2
 SYMATTR Prefix X
-SYMATTR Description Single Supply Amplifier
+SYMATTR Description Single Supply, Rail-to-Rail In/Out, Operational Amplifier
 SYMATTR ModelFile ..\sym\_PERSONAL\opamps\TLV6001.sub
 SYMATTR SpiceModel TLV6001
 SYMATTR Value TLV6001
