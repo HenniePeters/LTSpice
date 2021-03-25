@@ -1,0 +1,36 @@
+********************************
+* Copyright:                   *
+* Vishay Intertechnology, Inc. *
+********************************
+*Sep 01, 2014
+*ECN S14-1746, Rev. C
+*File Name: SUP90P06-09L_PS.txt, SUP90P06-09L_PS.lib
+*This document is intended as a SPICE modeling guideline and does not
+*constitute a commercial product datasheet. Designers should refer to the
+*appropriate datasheet of the same number for guaranteed specification
+*limits.
+.SUBCKT SUP90P06-09L 4 1 2
+M1  3 1 2 2 PMOS W=16804728u L=0.25u
+M2  2 1 2 4 NMOS W=16804728u L=0.45u
+R1  4 3     RTEMP 3.4E-3
+CGS 1 2     5800E-12
+DBD 4 2     DBD
+***************************************************************
+.MODEL  PMOS       PMOS  ( LEVEL  = 3           TOX    = 5E-8
++ RS     = 3.5E-3          RD     = 0           NSUB   = 1.5E17
++ KP     = 4E-6            UO     = 400
++ VMAX   = 0               XJ     = 5E-7        KAPPA  = 5E-2
++ ETA    = 1E-4            TPG    = -1
++ IS     = 0               LD     = 0
++ CGSO   = 0               CGDO   = 0           CGBO   = 0
++ NFS    = 0.8E12          DELTA  = 0.1)
+***************************************************************
+.MODEL  NMOS       NMOS  ( LEVEL  = 3           TOX    = 5E-8
++NSUB    = 3.5E16          NFS    = 1E12        TPG    = -1)
+***************************************************************
+.MODEL DBD D (CJO=740E-12 VJ=0.38 M=0.35
++RS=0.1 FC=0.5 IS=1E-12 TT=6E-8 N=1 BV=60.2)
+***************************************************************
+.MODEL RTEMP RES (TC1=11E-3 TC2=5.5E-6)
+***************************************************************
+.ENDS

@@ -1,0 +1,102 @@
+* CSD17484F4
+*****************************************************************************
+* (C) Copyright 2020 Texas Instruments Incorporated. All rights reserved.   
+*****************************************************************************
+** This model is designed as an aid for customers of Texas Instruments.
+** TI and its licensors and suppliers make no warranties, either expressed
+** or implied, with respect to this model, including the warranties of
+** merchantability or fitness for a particular purpose.  The model is
+** provided solely on an "as is" basis.  The entire risk as to its quality
+** and performance is with the customer
+*****************************************************************************
+*
+* This model is subject to change without notice. Texas Instruments
+* Incorporated is not responsible for updating this model.
+*
+*****************************************************************************
+**
+*
+* Released by: Texas Instruments Inc.
+* Part: CSD1484F4
+* Date: 02/13/2020
+* Model Type:  TRANSIENT
+* Simulator: PSPICE
+* Simulator Version: 16.6.0
+* Datasheet: SLPS550C – MAY 2015 – REVISED DECEMBER 2019
+*
+* Model Version: 1.1
+*
+* Update: added ESD diode
+*
+**********************************************************************
+*                                                                    *
+*   n17484 (typ)  -  PSpice Model                                    *
+*                                                                    *
+*   4/05/17, ged                                                     *
+**********************************************************************
+**********************************************************************
+* SUBCKT Definition:  1=D  2=G  3=S
+**********************************************************************
+*$
+.SUBCKT csd17484f4	1	2	3
+* PARAMETER (local) DEFINITIONS SECTION
+.PARAM  pWidth  0.1217604
+.PARAM  pLen    0.5u
+.PARAM  perim   {2.1*pWidth}
+.PARAM  ptrc1   3.00e-3		; temp co of ext Rd / Rs
+.PARAM  ptrc2   1.40e-6
+****** MODEL SUBCIRCUIT BEGINS HERE     ******************************
+M1    10 11 12 12  NMOS	W={pWidth} L={pLen} PS={perim} PD={perim}
+M2	12 11 12 10  PMOSd W={pWidth} L=0.17u  PS={perim} PD={perim}
+DBD    3  1	 DBD {1/14}
+CBD0	 3  1	 10e-12
+RBD0	 3  1	 9e9
+CGS0	 2  3	 6e-12
+DDG	10 14	 DD
+DGD	11 14	 DD
+RGG1	 2 21	 5.0
+RGG2	21 11	 20
+cgg2	21 11	 1e-8
+RSB	12  9	 RTEMP 57e-3
+RSS	 9  3  RTEMP 1.0e-3
+RDD	 1 10  36e-3
+DESD1	 3  2	 DDZ
+******************************************************************* 
+.MODEL  NMOS   NMOS (    LEVEL  = 7             Version= 3.2  
++ TNOM   = 27            LINT   = 0.050e-6      CAPMOD = 2
++ TOX    = 1.75e-8       NCH    = 1.845e17      NSUB   = 1.0e16
++ AGS    = 0.0           PVAG   = 0.0           U0     = 600
++ A0     = 1.0           A1     = 0.0           A2     = 1.0
++ UA     = 2.0e-9        UB     = 5.87e-19      VBM    = -10
++ UA1    = 2.00e-9       UB1    = -5.0e-19      UTE    = -1.50
++ KT1    = -0.57         KT2    = 0.022         KT1L   = 1.0e-15
++ DVT0   = 2.2           DVT1   = 0.53	      DVT2   = -0.033
++ ETA0   = 0.080         ETAB   = -0.07         XJ     = 4e-7
++ PDIBLC1= 0.40          PDIBLC2= 0.0086        NLX    = 1.75e-7
++ PSCBE1 = 4.24e8        PSCBE2 = 1e-6          PCLM   = 1.75
++ VOFF   = -0.19         NFACTOR= 1.20          JS     = 0
++ DROUT  = 1.3           DSUB   = 1.3           DELTA  = 0.02
++ CJ     = 1e-18         CJSW   = 1e-18         CF     = 0
++ CGSO   = 162e-12       CGDO   = 0.1e-12       CGBO   = 1e-18  )
+*******************************************************************
+.MODEL  PMOSd   PMOS (   LEVEL  = 7		      CAPMOD = 0
++ TNOM   = 27            VTO    = -1.0	  	NCH	 = 5e15
++ TOX    = 1.75e-8       K1	  = 0.65		K2	 =-0.01
++ JS	   = 0
++ CJ     = 1e-18         CJSW   = 1e-18		NOFF	 = 2.0
++ CGSO   = 1e-18         CGDO   = 1e-18         CGBO   = 1e-18  )
+*******************************************************************
+.MODEL DBD D (CJO=1.40e-9 VJ=0.87 M=0.35 TNOM=27 FC=0.5 TT=1e-09 
++ XTI=-3.0 BV=32.98 TBV1=7.3e-4 IS=4.6e-10 N=1.125
++ RS=6.44e-3 TRS1=2.0e-3 TRS2=-9.0e-6 ISR=1e-10)
+.param abc 1.1e-11
+.MODEL DD  D (CJO={abc } VJ=0.40 M=1.50 IS=1e-15 RS=1 TNOM=27)
+.MODEL DDx D (CJO={abc /10} VJ=0.6 M=0.95 IS=1e-15 RS=10 TNOM=27)
+.MODEL DDZ D (CJO=45e-12 VJ=0.6 M=0.4 IS=4.5e-16 RS=0.2 TNOM=27 
++ TBV1=1.26e-3 bv=15.0 IBVL=5e-9 IBV=1e-7)
+*******************************************************************
+.MODEL RTEMP RES (TC1={ptrc1} TC2={ptrc2})
+*******************************************************************
+.ENDS csd17484f4	
+*******************************************************************
+*$
