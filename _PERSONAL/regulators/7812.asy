@@ -1,8 +1,8 @@
 Version 4
 SymbolType CELL
-RECTANGLE Normal -80 -48 80 80
-WINDOW 0 0 -24 Center 2
-WINDOW 3 0 23 Center 2
+RECTANGLE Normal -80 -32 80 80
+WINDOW 0 64 -48 Left 2
+WINDOW 3 64 96 Left 2
 SYMATTR Value LM7812
 SYMATTR Prefix X
 SYMATTR Description Voltage regulator 7812 (+12V)
