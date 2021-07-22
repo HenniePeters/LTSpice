@@ -1,0 +1,53 @@
+************************************************
+**  enable- high, NMOS output
+**  --  6N137,VO2601/2611, VO0600/0601/0611 ---
+************************************************
+** test conditions:VCC=5V, RL=350, CL=15pF, IF=10mA
+** characteristics: VF=1.4V, ITH=5mA, VEH=2V, VEL=0.8V
+** VOL=0.6V, tpLH=TpHL=70nS, tr=22nS, tf=17nS
+**
+** Model Node - Symbol - Pin
+** 1 (DA)       A         2
+** 2 (DK)       K         3
+** 3 (GND)    GND         5
+** 4 (VO)      VO         6
+** 5 (VE)      VE         7
+** 6 (VCC)    VCC         8
+**
+*$
+.SUBCKT 6N137  DA DK GND VO VE VCC
+dD1  DA 6  DEMIT
+vV1  6  DK  DC 0
+wW1  VCC 7  vV1  I_SW1
+rR3  GND 7  1K
+xU3  7 7delay GND DELAY20n
+xU2  7delay VE 8 VCC GND AND2
+rR4  8  9 5K
+rR5  VCC VE 100K
+MQ1 VO 9 GND GND MOST1 W=9.7M L=2U  ;NMOS OUTPUT
+.MODEL    DEMIT   D
++IS=1.69341E-12 RS=2.5 N=2.4  XTI=4
++EG=1.52436 CJO=1.80001E-11 VJ=0.75 M=0.5 FC=0.5
+.MODEL MOST1 NMOS (LEVEL=3 KP=25U VTO=2 RD=45)
+.MODEL I_SW1 ISWITCH (Roff=1e6 Ron=1 IT=4.9m IH=0.1m)
+.ENDS
+*$
+
+***-------------------------------------------------------------------------
+* 2 INPUT AND GATE
+*
+.SUBCKT AND2 A B Y VCC GND
+ETHRS   THRS GND VALUE {1.5} ; Logic level threshold
+EGATE   YINT GND VALUE {IF(V(A) > V(THRS) & V(B) > V(THRS), V(VCC), V(GND))}
+RINT YINT Y 1
+CINT Y 0 10p
+.ENDS
+
+***------------------------
+* DELAY
+*
+.SUBCKT DELAY20n IN OUT GND
+E IN2 GND VALUE {V(IN)}
+Rdelay IN2 OUT 10k
+Cdelay OUT GND 2p
+.ENDS
