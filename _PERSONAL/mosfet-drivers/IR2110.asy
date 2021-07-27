@@ -1,0 +1,71 @@
+Version 4
+SymbolType CELL
+LINE Normal 20 336 20 320
+LINE Normal -20 336 -20 320
+LINE Normal 8 308 -8 308
+RECTANGLE Normal 112 336 -112 -16
+ARC Normal 20 332 -4 308 20 320 8 308
+ARC Normal 4 332 -20 308 -8 308 -20 320
+TEXT 80 208 Right 2 VCC
+TEXT -67 112 Left 2 HIN
+TEXT -67 208 Left 2 LIN
+TEXT 80 256 Right 2 Com
+TEXT 80 16 Right 2 HO
+TEXT 80 64 Right 2 Vb
+TEXT 80 112 Right 2 Vs
+TEXT 80 304 Right 2 LO
+TEXT -80 64 Left 2 VDD
+TEXT -67 160 Left 2 SD
+TEXT -79 16 Left 2 NC
+TEXT -68 304 Left 2 NC
+TEXT -68 257 Left 2 VSS
+TEXT 80 160 Right 2 NC
+WINDOW 0 1 40 Center 2
+WINDOW 3 1 281 Center 2
+SYMATTR Value IR2110
+SYMATTR ModelFile ../sym/_PERSONAL/mosfet-drivers/IR2110.sub
+SYMATTR SpiceModel IR2110
+SYMATTR Prefix X
+SYMATTR Description IR2110 is a high voltage, high speed power MOSFET driver with independent high and low side referenced output channels. Vmax = 500V, Io = 2A, Vcc 10 - 20V, Delay Matching 10 ns
+PIN 112 304 RIGHT 8
+PINATTR PinName 1
+PINATTR SpiceOrder 1
+PIN 112 256 RIGHT 8
+PINATTR PinName 2
+PINATTR SpiceOrder 2
+PIN 112 208 RIGHT 8
+PINATTR PinName 3
+PINATTR SpiceOrder 3
+PIN 112 160 RIGHT 8
+PINATTR PinName 4
+PINATTR SpiceOrder 4
+PIN -112 16 LEFT 8
+PINATTR PinName 8
+PINATTR SpiceOrder 5
+PIN 112 16 RIGHT 8
+PINATTR PinName 7
+PINATTR SpiceOrder 6
+PIN 112 64 RIGHT 8
+PINATTR PinName 6
+PINATTR SpiceOrder 7
+PIN 112 112 RIGHT 8
+PINATTR PinName 5
+PINATTR SpiceOrder 8
+PIN -112 64 LEFT 8
+PINATTR PinName 9
+PINATTR SpiceOrder 9
+PIN -112 112 LEFT 8
+PINATTR PinName 10
+PINATTR SpiceOrder 10
+PIN -112 160 LEFT 8
+PINATTR PinName 11
+PINATTR SpiceOrder 11
+PIN -112 208 LEFT 8
+PINATTR PinName 12
+PINATTR SpiceOrder 12
+PIN -112 256 LEFT 8
+PINATTR PinName 13
+PINATTR SpiceOrder 13
+PIN -112 304 LEFT 8
+PINATTR PinName 14
+PINATTR SpiceOrder 14
