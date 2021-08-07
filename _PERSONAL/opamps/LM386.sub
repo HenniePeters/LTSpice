@@ -1,0 +1,64 @@
+******************************************
+* IC pins:    1  2   3   4   5   6  7   8
+******************************************
+.subckt LM386 g1 inn inp gnd out vs byp g8
+
+* input emitter-follower buffers:
+
+q1 gnd inn 10011 ddpnp
+r1 inn gnd 50k
+q2 gnd inp 10012 ddpnp
+r2 inp gnd 50k
+
+* differential input stage, gain-setting
+* resistors, and internal feedback resistor:
+
+q3 10013 10011 10008 ddpnp
+q4 10014 10012 g1 ddpnp
+r3 vs byp 15k
+r4 byp 10008 15k
+r5 10008 g8 150
+r6 g8 g1 1.35k
+r7 g1 out 15
+
+* input stage current mirror:
+
+q5 10013 10013 gnd ddnpn
+q6 10014 10013 gnd ddnpn
+
+* voltage gain stage & rolloff cap:
+
+q7 10017 10014 gnd ddnpn
+c1 10014 10017 15pf
+
+* current mirror source for gain stage:
+
+i1 10002 vs dc 5m
+q8 10004 10002 vs ddpnp
+q9 10002 10002 vs ddpnp
+
+* Sziklai-connected push-pull output stage:
+
+q10 10018 10017 out ddpnp
+q11 10004 10004 10009 ddnpn 100
+q12 10009 10009 10017 ddnpn 100
+q13 vs 10004 out ddnpn 100
+q14 out 10018 gnd ddnpn 100
+
+* generic transistor models generated
+* with MicroSim's PARTs utility, using
+* default parameters except Bf:
+
+.model ddnpn NPN(Is=10f Xti=3 Eg=1.11 Vaf=100
++ Bf=400 Ise=0 Ne=1.5 Ikf=0 Nk=.5 Xtb=1.5 Var=100
++ Br=1 Isc=0 Nc=2 Ikr=0 Rc=0 Cjc=2p Mjc=.3333
++ Vjc=.75 Fc=.5 Cje=5p Mje=.3333 Vje=.75 Tr=10n
++ Tf=1n Itf=1 Xtf=0 Vtf=10)
+
+.model ddpnp PNP(Is=10f Xti=3 Eg=1.11 Vaf=100
++ Bf=200 Ise=0 Ne=1.5 Ikf=0 Nk=.5 Xtb=1.5 Var=100
++ Br=1 Isc=0 Nc=2 Ikr=0 Rc=0 Cjc=2p Mjc=.3333
++ Vjc=.75 Fc=.5 Cje=5p Mje=.3333 Vje=.75 Tr=10n
++ Tf=1n Itf=1 Xtf=0 Vtf=10)
+
+.ends
