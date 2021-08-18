@@ -1,0 +1,76 @@
+Version 4
+SymbolType CELL
+LINE Normal -32 -32 12 -8
+LINE Normal -32 32 12 8
+LINE Normal -32 -32 -32 32
+LINE Normal -28 -16 -20 -16
+LINE Normal -28 16 -20 16
+LINE Normal -24 -20 -24 -12
+LINE Normal 32 24 32 32
+LINE Normal 32 24 28 20
+LINE Normal 28 8 28 20
+LINE Normal -30 -10 -34 -10
+LINE Normal -30 -8 -32 -10
+LINE Normal -34 -8 -30 -8
+LINE Normal -32 -10 -34 -8
+LINE Normal -30 10 -34 10
+LINE Normal -30 8 -34 8
+LINE Normal -32 10 -34 8
+LINE Normal -30 8 -32 10
+LINE Normal 0 14 0 32
+LINE Normal 0 -14 0 -32
+LINE Normal 80 -24 0 -24
+LINE Normal 80 -20 80 -24
+LINE Normal 76 -16 80 -20
+LINE Normal 80 -12 76 -16
+LINE Normal 87 -12 80 -12
+LINE Normal 91 -16 87 -12
+LINE Normal 91 -24 91 -16
+LINE Normal 80 -24 91 -24
+LINE Normal 91 -8 87 -12
+LINE Normal 91 -8 91 -8
+LINE Normal 103 -8 91 -8
+LINE Normal 112 -16 103 -8
+LINE Normal 76 -16 64 -16
+LINE Normal 87 -8 87 -16
+LINE Normal 76 -12 76 -20
+LINE Normal 89 -11 88 -10
+LINE Normal 89 -10 89 -11
+LINE Normal 88 -10 89 -10
+LINE Normal 77 -14 78 -15
+LINE Normal 78 -14 77 -14
+LINE Normal 78 -15 78 -14
+CIRCLE Normal 32 12 8 -12
+CIRCLE Normal 48 12 24 -12
+WINDOW 0 8 -48 Left 2
+WINDOW 3 40 40 Left 2
+SYMATTR Value LM13700
+SYMATTR Prefix X
+SYMATTR ModelFile ..\sym\_PERSONAL\ota\LM13700.sub
+PIN 32 32 NONE 0
+PINATTR PinName Abias
+PINATTR SpiceOrder 1
+PIN -32 0 NONE 8
+PINATTR PinName Dbias
+PINATTR SpiceOrder 2
+PIN -32 -16 NONE 0
+PINATTR PinName PosIn
+PINATTR SpiceOrder 3
+PIN -32 16 NONE 0
+PINATTR PinName NegIn
+PINATTR SpiceOrder 4
+PIN 48 0 NONE 0
+PINATTR PinName out
+PINATTR SpiceOrder 5
+PIN 0 32 NONE 8
+PINATTR PinName V-
+PINATTR SpiceOrder 6
+PIN 64 -16 NONE 8
+PINATTR PinName Bin
+PINATTR SpiceOrder 7
+PIN 112 -16 NONE 8
+PINATTR PinName Bout
+PINATTR SpiceOrder 8
+PIN 0 -32 NONE 8
+PINATTR PinName V+
+PINATTR SpiceOrder 9
