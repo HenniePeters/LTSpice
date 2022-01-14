@@ -5,8 +5,8 @@ Download the zip file and unpack the directory _PERSONAL and the files it contai
   
 Files in the _STANDARD directory can be used to replace the components in:  
 %USERPROFILE%\My Documents\LTspiceXVII\lib\cmp\  
-standard.bjt  
-standard.dio  
+standard.bjt (1592 models)  
+standard.dio (2028 models)  
 standard.jft  
 standard.mos  
   
