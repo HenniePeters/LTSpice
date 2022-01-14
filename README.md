@@ -7,7 +7,7 @@ Files in the _STANDARD directory can be used to replace the components in:
 %USERPROFILE%\My Documents\LTspiceXVII\lib\cmp\  
 standard.bjt (1592 models)  
 standard.dio (2028 models)  
-standard.jft  
+standard.jft (1074 models)  
 standard.mos  
   
 Unfortunately, github adds a directory named "LTSpice-master" to the zip file.  
