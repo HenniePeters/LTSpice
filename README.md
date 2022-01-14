@@ -8,7 +8,7 @@ Files in the _STANDARD directory can be used to replace the components in:
 standard.bjt (1592 models)  
 standard.dio (2028 models)  
 standard.jft (1074 models)  
-standard.mos  
+standard.mos (1632 models)  
   
 Unfortunately, github adds a directory named "LTSpice-master" to the zip file.  
 The "_PERSONAL" directory is required because there are references to: "../sym/_PERSONAL/" in the .ASY files.  
