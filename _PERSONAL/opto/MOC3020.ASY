@@ -39,8 +39,8 @@ TEXT 49 -2 Left 2 nc!
 TEXT 89 0 Left 2 5
 WINDOW 38 0 70 Center 2
 WINDOW 0 0 -71 Center 2
-SYMATTR ModelFile ..\sym\_PERSONAL\opto\MOC302x.sub
 SYMATTR SpiceModel MOC3020
+SYMATTR ModelFile ..\sym\_PERSONAL\opto\MOC302x.sub
 SYMATTR Value MOC3020
 SYMATTR Value2 MOC3020
 SYMATTR Prefix X
