@@ -1,0 +1,19 @@
+*Opto-Isolators H11L1
+* author - Bordodynov
+.subckt H11L1 Anode Cathode Vcc Gnd Out params: ion=1.33m ioff=1m KT=1; kt=0.5-4
+Q1 Out n12 Gnd 0 QOPTO
+R7 n12 N001 1K
+D1 13 Cathode1 DLED0
+Vm Anode 13 0
+D2 Anode Cathode1 DLED
+Rd Cathode1 cathode 0.8
+A1 N003 0 0 0 0  outv 0 0 SCHMITT Vh={Vh0}, Vt=0.5 trise=0.1u
+B1 N002 0 V=limit(0,i(Vm)*2/({ion}+{ioff}),10)
+R1 N002 N003 1k
+C1 N003 0 {Kt*880p}
+B2 Vcc N001 V=v(outv)*v(vcc,gnd)
+.MODEL QOPTO NPN(BF=500 VAF=100 IKF=100M CJC=5P CJE=100P TR=15N TF=15N)
+.MODEL DLED0 D(N=2 is=0.5e-14)
+.MODEL DLED D(N=2 CJO=18P is=0.5e-14)
+.param Vh0=(ion-ioff)/(ion+ioff)/2
+.ends H11L1
