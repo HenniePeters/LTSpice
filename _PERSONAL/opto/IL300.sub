@@ -1,0 +1,31 @@
+* A - Anode of LED
+* C - Cathode of LED
+* A1 - Anode of photodetector 1
+* C1 - Cathode of photodetector 1
+* A2 - Anode of photodetector 2
+* C2 - Cathode of photodetector 2
+* K1 - Servo gain
+* K2 - Forward gain
+* K3 - Transfer gain
+.Subckt IL300 A C A1 C1 A2 C2 PARAMS:  K1=0.007  K2=0.007   K3=1
+* IL300 from Siemens   * RAP 5/97
+DLED A E Demit
+VE   E C 0
+E2 D1 0 TABLE  ; {Ip2 vs IF}
++ {(0.955414823*0.999409809**(1/(abs(I(VE))+0.1p))*I(VE)**0.963133681)}
++ (0,0) (1,1)
+Rdly1 D1 D2 1K
+Cdly1 D2 0 0.17N
+Rdly2 D2 D3 1K
+Cdly2 D3 0 0.17N
+Gdly1 C1 A1 VALUE {K1*V(D3)}
+D1 A1 C1 Dtect
+RD1 A1 C1 15G
+Gdly2 C2 A2 VALUE {K3*K2*V(D3)}
+D2 A2 C2 Dtect
+RD2 A2 C2 15G
+.model Demit D IS=1.51E-16 N=1.495822 RS=2.624361 BV=5 IBV=1U
++ CJO=15P VJ=1 M=0.5 EG=1.424 TT=500N
+.model Dtect D IS=0.5p N=1 RS=0.001 BV=50 IBV=1U
++ CJO=14P VJ=0.159621 M=0.344264 EG=1.11 TT=10N
+.ends
