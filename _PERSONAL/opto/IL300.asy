@@ -44,6 +44,7 @@ WINDOW 0 0 -96 Center 2
 SYMATTR Value IL300
 SYMATTR Prefix X
 SYMATTR SpiceModel IL300
+SYMATTR Description Linear Optocoupler, Wide Bandwidth > 200 kHz, I-forward. max. 60mA.
 SYMATTR ModelFile ..\sym\_PERSONAL\opto\IL300.sub
 PIN -64 -16 LEFT 8
 PINATTR PinName A
