@@ -1,0 +1,155 @@
+*$
+* OPA548
+*****************************************************************************
+* (C) Copyright 2022 Texas Instruments Incorporated. All rights reserved.
+*****************************************************************************
+** This model is designed as an aid for customers of Texas Instruments.
+** TI and its licensors and suppliers make no warranties, either expressed
+** or implied, with respect to this model, including the warranties of
+** merchantability or fitness for a particular purpose.  The model is
+** provided solely on an "as is" basis.  The entire risk as to its quality
+** and performance is with the customer
+*****************************************************************************
+*
+* This model is subject to change without notice. Texas Instruments
+* Incorporated is not responsible for updating this model.
+*
+*****************************************************************************
+*
+** Released by: Online Design Tools, Texas Instruments Inc.
+* Part: OPA548
+* Date: 07OCT2022
+* Model Type: ALL IN ONE
+* EVM Order Number: OPA548EVM
+* EVM Users Guide: SBOU132-November 2015
+* Datasheet: SBOS070D - OCTOBER 1997-REVISED DECEMBER 2019
+*
+* Model Version: Final 1.2
+*
+*****************************************************************************
+*
+* Updates:
+*
+* Final 1.2
+* Updated PSpice symbol
+* Moved all .MODEL inside main SUBCKT
+* Added .ENDS name as OPA548
+*
+* Final 1.1 :
+* Modified June 25, 2013 by Tim Green to add 1MHz Pole in Aol
+* Modified CPOLE2 4/27/2016 to match Collin Wells Lab Data for Aol Gain/Phase
+*
+* Final 1.0 :
+* Release to Web
+*
+*****************************************************************************
+* 1 = NON-INVERTING INPUT
+* 2 = INVERTING INPUT
+* 3 = CURRENT LIMIT
+* 4 = NEGATIVE RAIL
+* 5 = POSITIVE RAIL
+* 6 = OUTPUT
+* 7 = ENABLE/STATUS
+.SUBCKT OPA548 1   2   3   4   5   6   7
+*****************************************************************************
+R1       17  13    13K
+R2       17  14    13K
+RIN2     12  2     1K
+RIN5     15  4     1K
+RIN6     16  4     1K
+RBLEED   26  4     10MEG
+GAIN     26  4   260  0   1.6M
+EPOLE    160 0   16  15   1
+Rpole2   160 260 1K
+CPOLE2   260 0  400P
+IBIAS    19  30   300UA
+R3       5   20    2K
+R4       5   23    6K
+QGAIN    25  26  4    NMAX 1
+CCOMP    27  25    15P
+R5       5   24    667
+EBUF     22  5   21  5    1
+R7       7   4     250K
+QHIGH    5   48  49   NMIN 960
+QHDRV    5   45  47   NMIN 60
+R47      47  48    14
+R49      49  40    0.4
+QLDRV    5   35  37   NMIN 60
+R37      37  38    35
+R39      39  4     0.4
+GLOWER   4   31  30  25   0.5M
+CCOUT    35  36    11P
+RCOUT    36  40    1680
+RCOMP    26  27    1000
+D34      31  34   DIODE 100
+RBL      35  4     10K
+Q33      33  33  40   NMIN 5
+Q30      30  30  33   NMIN 5
+E32      32  4   30  40   1.55
+D32      32  31   DIODE 100
+Q3       19  19  20   LAT5 3
+RB45     25  45    100
+V475     28  4    DC 4.75
+RCL      3   28    13750
+RB35     34  35    100
+GLCL     42  4   39  41   .05
+D42      35  42   DIODE 100
+D43      42  43   DIODE 100
+GHCL     52  4   49  51   .05
+D52      45  52   DIODE 100
+D53      52  53   DIODE 100
+D25      6   25   DIODE 100
+DIN2     2   10   ZENERD 1
+DIN1     1   10   ZENERD 1
+HLREF    41  4    V475 -6000
+HHREF    51  40   V475 -6000
+SW2      6   40  7   4    VSM
+D7       54  7    DIODE 100
+VES      55  4    DC 3.5
+D55      54  55   DIODE 100
+SW1      21  19  7   4    VSM
+R21      5   21    100K
+C40      30  40    150P
+ELCL     43  4   37  4    1
+EHCL     53  4   47  4    1
+VCM      18  17   DC 1.3
+VCLMP    29  4    DC 1
+RIN1     1   11    1K
+QIN2     16  12  14   PSUB 1
+RSHTDWN  6   25    25K
+R48      48  40    2400
+R38      38  4     1200
+CIN1     4   1     3P
+CIN2     2   4     3P
+CIN3     2   1     2.5P
+DP       4   5    DIODE 100
+DPU1     1   5    DIODE 100
+DPL1     4   1    DIODE 100
+DPL2     4   2    DIODE 100
+DPU2     2   5    DIODE 100
+DPU3     3   5    DIODE 100
+DPL3     4   3    DIODE 100
+DPL6     4   6    DIODE 100
+DPU6     6   5    DIODE 100
+DPU7     7   5    DIODE 100
+DPL7     4   7    DIODE 100
+QIN1     15  11  13   PSUB 1
+Q4       18  22  23   LAT5 1
+Q5       25  22  24   LAT5 9
+DC6      29  6    DIODE 100
+DC26     29  26   DIODE 100
+QLOW     40  38  39   NMIN 960
+IEO      5   54   70UA
+ILEAK    6   4    3M
+.MODEL  NMIN NPN IS=6E-16 BF=150 VAF=140 CJE=5E-13 CJC=2.5E-13 TF=2.5E-10
++ RC=600
+.MODEL  NMAX NPN IS=6E-16 BF=3000 VAF=140 CJE=5E-13 CJC=2.5E-13 TF=2.5E-10
++ RC=1000
+.MODEL  ZENERD D IS=6E-16 CJO=1E-18 RS=1 BV=5.2
+.MODEL  DIODE D IS=6E-16 CJO=1E-18 RS=1 BV=80
+.MODEL  LAT5 PNP IS=4E-15 BF=80 VAF=80 CJE=1E-13 CJC=6E-13 TF=3.5E-8 RC=1200
+.MODEL  PSUB PNP IS=6E-16 BF=360 VAF=140 CJE=5E-13 CJC=2.5E-13 TF=2.5E-10
++ RC=1200
+.MODEL  VSM VSWITCH(RON=.02 ROFF=5E5 VON=2.3  VOFF=1.5)
+.ENDS OPA548
+*

@@ -1,0 +1,149 @@
+*$
+* OPA547
+*****************************************************************************
+* (C) Copyright 2022 Texas Instruments Incorporated. All rights reserved.
+*****************************************************************************
+** This model is designed as an aid for customers of Texas Instruments.
+** TI and its licensors and suppliers make no warranties, either expressed
+** or implied, with respect to this model, including the warranties of
+** merchantability or fitness for a particular purpose.  The model is
+** provided solely on an "as is" basis.  The entire risk as to its quality
+** and performance is with the customer
+*****************************************************************************
+*
+* This model is subject to change without notice. Texas Instruments
+* Incorporated is not responsible for updating this model.
+*
+*****************************************************************************
+*
+** Released by: Online Design Tools, Texas Instruments Inc.
+* Part: OPA547
+* Date: 07OCT2022
+* Model Type: ALL IN ONE
+* EVM Order Number: OPA547EVM
+* EVM Users Guide: SBOU132-November 2015
+* Datasheet: SBOS056F - JANUARY 2002 - JULY 2005
+*
+* Model Version: Final 1.1
+*
+*****************************************************************************
+*
+* Updates:
+*
+* Final 1.1
+* Updated PSpice symbol.
+*
+* Final 1.0 :
+* Release to Web
+*
+*****************************************************************************
+* CONNECTIONS:  NON-INVERTING INPUT
+*               | INVERTING INPUT
+*               | | CURRENT LIMIT ADJUST
+*               | | | NEGATIVE POWER SUPPLY
+*               | | | | POSITIVE POWER SUPPLY
+*               | | | | | OUTPUT
+*               | | | | | | ENABLE/STATUS
+*               | | | | | | |
+.SUBCKT OPA547  1 2 3 4 5 6 7
+*****************************************************************************
+Q2       18  16  14   PSUB
+R3       13  14   8.4K
+Q1       13  12  11   LAT5
+R15      40  4    .4
+Q9       5   34  35   NMIN 480
+Q4       25  26  4    NMAX 2
+HCCVSP   47  36   V475 -2000
+HCCVSN   42  4    V475 -2000
+GNEGDRV  5   37  31  36   -.00025
+R4       13  15   8.4K
+GAINBLK  26  4   18  19   .00175
+R8       19  4    1K
+R6       17  1    1K
+R5       2   16   1K
+R7       18  4    1K
+C2       37  36   11PF
+C1       26  25   31PF
+Q3       19  17  15   PSUB
+Q7       5   37  38   NMIN 24
+R17      38  4    690
+D6       32  31   DIODE 18
+D3       27  26   DIODE 1
+D5       27  37   DIODE 10
+D2       23  22   DIODE 6
+D1       10  12   DIODE 6
+VCLMP    27  4    DC .8
+VDUM     20  4    DC 0
+R9       21  20   35K
+C3       21  32   15PF
+FICOMP   37  4    VDUM 1
+D4       29  28   DIODE 1
+R13      28  4    750
+Q6       31  29  30   NMIN 2
+R14      30  4    300
+R18      39  38   100
+DCLAMP   37  36   DIODE 1
+R12      25  33   1K
+R0       32  34   25
+V475     43  4    DC 4.75
+GCLPGAIN 5   51  35  47   .00015
+Q11      33  51  36   NMIN 1
+C5       51  33   20PF
+D7       48  51   DIODE 1
+VDP      48  36   DC .65
+R21      3   43   31600
+D8       49  41   DIODE 1
+Q12      37  41  4    NMIN 1
+GCLNGAIN 5   41  40  42   .00015
+V1I459   49  4    DC .65
+C6       41  37   20PF
+DZ1      31  36   ZEN
+VCM      5   9    DC 1.4
+D9       45  46   DIODE 1
+D10      45  7    DIODE 1
+IBES     5   45   60UA
+R22      7   4    250K
+VBES     46  4    DC 3.6
+R16      34  36   2K
+R1       35  36   .4
+VTHES    44  4    DC 2.0
+DP2      4   1    DIODE 1
+DP1      1   5    DIODE 1
+DP4      4   2    DIODE 1
+DP3      2   5    DIODE 1
+DP5      3   5    DIODE 10
+DP6      4   3    DIODE 50
+DP8      4   6    DIODE 1
+DP7      6   5    DIODE 1
+DP9      7   5    DIODE 1
+DP10     4   7    DIODE 1
+SVCS1    36  6   45  44   VSM
+SVCS2    32  31  45  44   VSM2
+CS2      4   2    3PF
+CS1      4   1    3PF
+CS3      2   1    2.5PF
+Q5       25  22  24   LAT5
+R11      5   24   300
+R10      5   23   300
+I2       22  29   200UA
+Q10      36  39  40   NMIN 480
+Q8       5   33  32   NMIN 16
+I1       12  4    100UA
+R2       9   11   1K
+R19      9   10   1K
+*
+* DEVICE MODELS
+.MODEL ZEN D(IS=6E-16 CJO=1E-15 RS=1 BV=.2)
+.MODEL LAT5 PNP(IS=4E-15 BF=80 VAF=80 CJE=1E-13 CJC=6E-13  TF=3.5E-8 RC=1.2E3 )
++
+.MODEL PSUB PNP(IS=6E-16 BF=360 VAF=140 CJE=5E-13 CJC=2.5E-13 TF=2.5E-10
++ RC=1.2E3)
+.MODEL NMAX NPN(IS=6E-16 BF=1200 VAF=140 CJE=5E-13 CJC=2.5E-13 TF=2.5E-10
++ RC=1.0E3)
+.MODEL NMIN NPN(IS=6E-16 BF=300 VAF=140 CJE=5E-13 CJC=2.5E-13 TF=2.5E-10
++ RC=1.0E3)
+.MODEL DIODE D(IS=6E-16 CJO=1E-15 RS=1)
+.MODEL VSM2 VSWITCH(RON=1500 ROFF=1E7 VON=1.9 VOFF=2.1)
+.MODEL VSM VSWITCH(RON=.1 ROFF=5E5 VON=2.1 VOFF=1.9)
+.ENDS OPA547
+*

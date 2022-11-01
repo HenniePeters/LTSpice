@@ -1,0 +1,40 @@
+Version 4
+SymbolType BLOCK
+LINE Normal -32 32 -32 -32
+LINE Normal 32 0 -32 32
+LINE Normal -32 -32 32 0
+LINE Normal -21 -16 -27 -16
+LINE Normal -24 -19 -24 -13
+LINE Normal -21 16 -27 16
+LINE Normal -16 -24 -16 -48
+LINE Normal -16 -24 -16 -24
+LINE Normal -16 24 -16 48
+LINE Normal 16 -8 16 -48
+LINE Normal 16 8 16 48
+WINDOW 0 32 -24 Left 2
+WINDOW 3 32 24 Left 2
+SYMATTR Prefix X
+SYMATTR Value OPA548
+SYMATTR Description 5A, 60V OpAmp, Adjustable current limit
+SYMATTR ModelFile ..\sym\_PERSONAL\opamps\OPA548.sub
+PIN -32 16 NONE 8
+PINATTR PinName 1
+PINATTR SpiceOrder 1
+PIN -32 -16 NONE 8
+PINATTR PinName 2
+PINATTR SpiceOrder 2
+PIN 16 48 VRIGHT 8
+PINATTR PinName Ilim
+PINATTR SpiceOrder 3
+PIN -16 48 VRIGHT 8
+PINATTR PinName V-
+PINATTR SpiceOrder 4
+PIN -16 -48 VLEFT 8
+PINATTR PinName V+
+PINATTR SpiceOrder 5
+PIN 32 0 NONE 8
+PINATTR PinName out
+PINATTR SpiceOrder 6
+PIN 16 -48 VLEFT 8
+PINATTR PinName E/S
+PINATTR SpiceOrder 7
