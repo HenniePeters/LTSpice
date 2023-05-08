@@ -5,7 +5,7 @@
 *        3
 *
 .SUBCKT potentiometer 1 2 3
-.param w=limit(SET,1m,.999)
+.param w=limit(SET,0.001m,.999)
 R0 1 3 {Rt*(1-w)}
 R1 3 2 {Rt*(w)}
 .ENDS
@@ -14,7 +14,7 @@ RA 1 3 {Rt*(1-SET)+.001}
 RB 3 2 {Rt*SET+.001}
 .ENDS
 .SUBCKT pot10t 1 2 3
-.param w=limit(set,1m,9.99)
+.param w=limit(set,0.001m,9.99)
 R0 1 3 {Rt*(1-0.1*w)}
 R1 3 2 {Rt*0.1*(w)}
 .ENDS
@@ -61,7 +61,7 @@ R1 3 2 {Rt*0.1*(w)}
 *
 .SUBCKT PotLin 1 2 3
 * Parameters: Rt, set
-.param w=limit(0.01m,set,0.99999)
+.param w=limit(0.001m,set,0.99999)
 *
 R1 1 3 {Rt*(1-w)}
 R2 3 2 {Rt*(w)}
@@ -87,7 +87,7 @@ R2 3 2 {Rt*(w)}
 *
 .SUBCKT pot_pow 1 2 3
 * Parameters: Rt, set, Rtap, Tap
-.param w=limit(0.01m,set,0.99999)
+.param w=limit(0.001m,set,0.99999)
 *
 .param pwrexp=ln(RTAP/RT)/ln(TAP)
 .param ratio=w**pwrexp
@@ -109,7 +109,7 @@ R2 3 2 {Rt*(ratio)}
 *           RTAP=1k, TAP=0.5
 *  RTAP and TAP define a point of the curve resistance versus ratio.
 .SUBCKT pot_audio 1 2 3
-.param w=limit(0.01m,set,0.99999)
+.param w=limit(0.001m,set,0.99999)
 *
 .param pwrexp=ln(RTAP/RT)/ln(TAP)
 .param ratio=w**pwrexp
@@ -134,7 +134,7 @@ R2 3 2 {Rt*(ratio)}
 *
 .SUBCKT pot_plog 1 2 3
 * Parameters: Rt, Set, Rtap, Tap
-.param w=limit(0.01m,Set,0.99999)
+.param w=limit(0.001m,set,0.99999)
 *
 .param pwrexp=ln(RTAP/RT)/(1-TAP)
 .param ratio=exp(pwrexp*(1-w))
@@ -161,7 +161,7 @@ R2 3 2 {Rt*(ratio)}
 *
 .SUBCKT pot_nlog 1 2 3
 * Parameters: Rt, Set, Rtap, Tap
-.param w=limit(0.01m,Set,0.99999)
+.param w=limit(0.001m,set,0.99999)
 *
 .param pwrexp=ln(RTAP/RT)/(TAP)
 .param ratio=exp(pwrexp*(w))
@@ -183,7 +183,7 @@ R2 3 2 {Rt*(ratio)}
 *
 .SUBCKT pot_tab 1 2 3
 * Parameters: Rt, Set
-.param w=limit(0.01m,Set,0.99999)
+.param w=limit(0.001m,set,0.99999)
 *
 .param ratio=TABLE(w, 0,0.01m, 0.1, 0.001, 0.2, 0.003, 0.3, 0.01,
 + 0.4, 0.05, 0.5, 0.1, 0.6, 0.2, 0.7, 0.35,
@@ -209,7 +209,7 @@ R2 3 2 {Rt*(ratio)}
 *
 .SUBCKT pot_piher_plog 1 2 3
 * Parameters: Rt, Set
-.param w=limit(0.01m,Set,0.99999)
+.param w=limit(0.001m,set,0.99999)
 *
 .param ratio=TABLE(w, 0,0.01m, 0.05,0.01m, 0.33,0.04, 0.66,0.16,
 + 0.95,0.99, 1.0,0.99999)
@@ -235,7 +235,7 @@ R2 3 2 {Rt*(ratio)}
 *
 .SUBCKT pot_radiohm_plog 1 2 3
 * Parameters: Rt, Set
-.param w=limit(0.01m,Set,0.99999)
+.param w=limit(0.001m,set,0.99999)
 *
 .param ratio=TABLE(w, 0,0.01m, 0.1,0.01m, 0.3,0.012, 0.42,0.047,
 + 0.52,0.105, 0.64,0.25, 0.95,0.99999, 1.0,0.99999)
@@ -296,17 +296,17 @@ R2 3 2 {Rt*(ratio)}
 .SUBCKT pot_tap_pow 1 2 3 4
 * Parameters RT, SET, RTAP, TAP
 *
-.param w=limit(Set,0.01m,.99999)
-.param TAP1=limit(0.01m, TAP, 0.99999)
+.param w=limit(0.001m,set,0.99999)
+.param TAP1=limit(0.001m, TAP, 0.99999)
 .param pwrexp=ln(RTAP/RT)/ln(TAP1)
 *
 .param ratio=w**pwrexp
 .param RD=Rt*ratio
 *
-R1 1 5 {limit(0.01m, (RT-RD), (RT-RTAP-0.01m)}
-R2 5 4 {limit(0.01m, (RD-RTAP), (RT-RTAP-0.01m)}
-R3 4 6 {limit(0.01m, (RTAP-RD), (RTAP-0.01m)}
-R4 6 2 {limit(0.01m, (RD), (RTAP-0.01m)}
+R1 1 5 {limit(0.001m, (RT-RD), (RT-RTAP-0.01m)}
+R2 5 4 {limit(0.001m, (RD-RTAP), (RT-RTAP-0.01m)}
+R3 4 6 {limit(0.001m, (RTAP-RD), (RTAP-0.01m)}
+R4 6 2 {limit(0.001m, (RD), (RTAP-0.01m)}
 *
 sw5 5 3 7 0 sw1
 sw6 6 3 7 0 sw2
@@ -343,17 +343,17 @@ vsw 7 0 {w}
 .SUBCKT pot_tap_plog 1 2 3 4
 * Parameters RT, SET, RTAP, TAP
 *
-.param w=limit(Set,0.01m,.99999)
-.param TAP1=limit(0.01m, TAP, 0.99999)
+.param w=limit(0.001m,set,0.99999)
+.param w=limit(0.001m,set,0.99999)
 .param pwrexp=ln(RTAP/RT)/(1-TAP1)
 *
 .param ratio=exp(pwrexp*(1-w))
 .param RD=Rt*ratio
 *
-R1 1 5 {limit(0.01m, (RT-RD), (RT-RTAP-0.01m)}
-R2 5 4 {limit(0.01m, (RD-RTAP), (RT-RTAP-0.01m)}
-R3 4 6 {limit(0.01m, (RTAP-RD), (RTAP-0.01m)}
-R4 6 2 {limit(0.01m, (RD), (RTAP-0.01m)}
+R1 1 5 {limit(0.001m, (RT-RD), (RT-RTAP-0.01m)}
+R2 5 4 {limit(0.001m, (RD-RTAP), (RT-RTAP-0.01m)}
+R3 4 6 {limit(0.001m, (RTAP-RD), (RTAP-0.01m)}
+R4 6 2 {limit(0.001m, (RD), (RTAP-0.01m)}
 *
 sw5 5 3 7 0 sw1
 sw6 6 3 7 0 sw2
@@ -390,17 +390,17 @@ vsw 7 0 {w}
 .SUBCKT pot_tap_nlog 1 2 3 4
 * Parameters RT, SET, RTAP, TAP
 *
-.param w=limit(Set,0.01m,.99999)
-.param TAP1=limit(0.01m, TAP, 0.99999)
+.param w=limit(Set,0.001m,.99999)
+.param TAP1=limit(0.001m, TAP, 0.99999)
 .param pwrexp=ln(RTAP/RT)/(TAP1)
 *
 .param ratio=exp(pwrexp*(w))
 .param RD=Rt*ratio
 *
-R1 1 5 {limit(0.01m, (RT-RD), (RT-RTAP-0.01m)}
-R2 5 4 {limit(0.01m, (RD-RTAP), (RT-RTAP-0.01m)}
-R3 4 6 {limit(0.01m, (RTAP-RD), (RTAP-0.01m)}
-R4 6 2 {limit(0.01m, (RD), (RTAP-0.01m)}
+R1 1 5 {limit(0.001m, (RT-RD), (RT-RTAP-0.01m)}
+R2 5 4 {limit(0.001m, (RD-RTAP), (RT-RTAP-0.01m)}
+R3 4 6 {limit(0.001m, (RTAP-RD), (RTAP-0.01m)}
+R4 6 2 {limit(0.001m, (RD), (RTAP-0.01m)}
 *
 sw5 5 3 7 0 sw1
 sw6 6 3 7 0 sw2
@@ -438,15 +438,15 @@ vsw 7 0 {1-w}
 .SUBCKT pot_tap_lin 1 2 3 4
 * Parameters RT, SET, RTAP
 *
-.param ratio=limit(Set,0.01m,.99999)
+.param ratio=limit(Set,0.001m,.99999)
 *
 .param RD=Rt*ratio
-.param TAP1=limit(0.01m, (RTAP/RT), 0.99999)
+.param TAP1=limit(0.001m, (RTAP/RT), 0.99999)
 *
-R1 1 5 {limit(0.01m, (RT-RD), (RT-RTAP-0.01m)}
-R2 5 4 {limit(0.01m, (RD-RTAP), (RT-RTAP-0.01m)}
-R3 4 6 {limit(0.01m, (RTAP-RD), (RTAP-0.01m)}
-R4 6 2 {limit(0.01m, (RD), (RTAP-0.01m)}
+R1 1 5 {limit(0.001m, (RT-RD), (RT-RTAP-0.01m)}
+R2 5 4 {limit(0.001m, (RD-RTAP), (RT-RTAP-0.01m)}
+R3 4 6 {limit(0.001m, (RTAP-RD), (RTAP-0.01m)}
+R4 6 2 {limit(0.001m, (RD), (RTAP-0.01m)}
 *
 sw5 5 3 7 0 sw1
 sw6 6 3 7 0 sw2
@@ -483,8 +483,8 @@ vsw 7 0 {ratio}
 .SUBCKT pot_tap_tab 1 2 3 4
 * Parameters RT, SET, RTAP, TAP
 *
-.param w=limit(Set,0.01m,.99999)
-.param TAP1=limit(0.01m, TAP, 0.99999)
+.param w=limit(Set,0.001m,.99999)
+.param TAP1=limit(0.001m, TAP, 0.99999)
 *
 .param ratio=TABLE(w, 0,0, 0.1, 0.001, 0.2, 0.003, 0.3, 0.01,
 + 0.4, 0.05, 0.48, 0.1, 0.52, 0.1, 0.6, 0.2, 0.7, 0.35,
@@ -492,10 +492,10 @@ vsw 7 0 {ratio}
 *
 .param RD=Rt*ratio
 *
-R1 1 5 {limit(0.01m, (RT-RD), (RT-RTAP-0.01m)}
-R2 5 4 {limit(0.01m, (RD-RTAP), (RT-RTAP-0.01m)}
-R3 4 6 {limit(0.01m, (RTAP-RD), (RTAP-0.01m)}
-R4 6 2 {limit(0.01m, (RD), (RTAP-0.01m)}
+R1 1 5 {limit(0.001m, (RT-RD), (RT-RTAP-0.01m)}
+R2 5 4 {limit(0.001m, (RD-RTAP), (RT-RTAP-0.01m)}
+R3 4 6 {limit(0.001m, (RTAP-RD), (RTAP-0.01m)}
+R4 6 2 {limit(0.001m, (RD), (RTAP-0.01m)}
 *
 sw5 5 3 7 0 sw1
 sw6 6 3 7 0 sw2
@@ -526,17 +526,17 @@ vsw 7 0 {w}
 *     Rtap=R3+R4
 *
 .SUBCKT pot_tap_audio 1 2 3 4  RT={RT} SET={SET} RTAP={RTAP} TAP={TAP}
-.param w=limit(set,0.1m,.9999)
+.param w=limit(set,0.001m,.9999)
 
 .param pwrexp=ln(RTAP/RT)/ln(TAP)
 .param ratio=w**pwrexp
 
 .param RD=Rtot*ratio
 
-R1 1 5 {limit(1m, (RT-RD), (RT-RTAP-1m)}
-R2 5 4 {limit(1m, (RD-RTAP), (RT-RTAP-1m)}
-R3 4 6 {limit(1m, (RTAP-RD), (RTAP-1m)}
-R4 6 2 {limit(1m, (RD), (RTAP-1m)}
+R1 1 5 {limit(0.001m, (RT-RD), (RT-RTAP-1m)}
+R2 5 4 {limit(0.001m, (RD-RTAP), (RT-RTAP-1m)}
+R3 4 6 {limit(0.001m, (RTAP-RD), (RTAP-1m)}
+R4 6 2 {limit(0.001m, (RD), (RTAP-1m)}
 
 sw5 5 3 7 0 sw1
 sw6 6 3 7 0 sw2
@@ -568,16 +568,16 @@ vsw 7 0 {w}
 *
 .SUBCKT pot_tap_linear 1 2 3 4  RT={RT} SET={SET} RTAP={RTAP} TAP={TAP}
 * Parameter TAP has been ignored
-.param w=limit(set,0.1m,.9999)
+.param w=limit(set,0.001m,.9999)
 *
 .param ratio=w
 *
 .param RD=Rt*ratio
 *
-R1 1 5 {limit(1m, (RT-RD), (RT-RTAP-1m)}
-R2 5 4 {limit(1m, (RD-RTAP), (RT-RTAP-1m)}
-R3 4 6 {limit(1m, (RTAP-RD), (RTAP-1m)}
-R4 6 2 {limit(1m, (RD), (RTAP-1m)}
+R1 1 5 {limit(0.001m, (RT-RD), (RT-RTAP-1m)}
+R2 5 4 {limit(0.001m, (RD-RTAP), (RT-RTAP-1m)}
+R3 4 6 {limit(0.001m, (RTAP-RD), (RTAP-1m)}
+R4 6 2 {limit(0.001m, (RD), (RTAP-1m)}
 *
 sw5 5 3 7 0 sw1
 sw6 6 3 7 0 sw2
