@@ -6,7 +6,8 @@ WINDOW 3 64 96 Left 2
 SYMATTR Value LM7818
 SYMATTR Prefix X
 SYMATTR Description Voltage regulator 7818 (+18V)
-SYMATTR SpiceModel ..\sym\_PERSONAL\regulators\regulators.lib
+SYMATTR ModelFile ..\sym\_PERSONAL\regulators\regulators.lib
+SYMATTR SpiceModel LM7818
 SYMATTR Value2 LM7818
 PIN -80 0 LEFT 8
 PINATTR PinName IN

@@ -6,7 +6,8 @@ WINDOW 3 64 96 Left 2
 SYMATTR Value LM7815
 SYMATTR Prefix X
 SYMATTR Description Voltage regulator 7815 (+15V)
-SYMATTR SpiceModel ..\sym\_PERSONAL\regulators\regulators.lib
+SYMATTR ModelFile ..\sym\_PERSONAL\regulators\regulators.lib
+SYMATTR SpiceModel LM7815
 SYMATTR Value2 LM7815
 PIN -80 0 LEFT 8
 PINATTR PinName IN
