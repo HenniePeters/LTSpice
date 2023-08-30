@@ -2,19 +2,19 @@
 * I only changed one resistor to achieve the desired output voltage.
 * I don't know about the quality of the original model. H.S.
 *
-* Add the end of this file is the original uploaded LM7905 model from 
+* Add the end of this file is the original uploaded LM7905 model from
 * "regulators.lib" uploaded by "renan_poa". It delivers -5.32V.
 * I renamed this LM7905 to LM7905X to avoid equal model names in this file.
 *
 *
 * This is a copy of the LM7905 from regulators.lib.
-* R10 changed from 1k to 10  
+* R10 changed from 1k to 10
 *
-.SUBCKT LM7905  1    2    3            
-DD4           4   5   D_6V3_0 
-DD2           6   2   D_3V9_0 
-DD1           7   2   D_4V7_0 
-DD3           8   3   D_6V3_0 
+.SUBCKT LM7905  1    2    3
+DD4           4   5   D_6V3_0
+DD2           6   2   D_3V9_0
+DD1           7   2   D_4V7_0
+DD3           8   3   D_6V3_0
 C2            9  10  5P
 C1            2   9  15P
 QTU15         10   9   3   Q_PNP_0 1.000
@@ -62,7 +62,7 @@ QTU9          38  35   6   Q_PNP_0 1.000
 R4           39   1  2K
 QTU23         35  34  39   Q_NPN_1 1.000
 QTU16          1   7  35   Q_PNP_0 1.000
-JT1           7   1   1  J_2N3458_N 
+JT1           7   1   1  J_2N3458_N
 QTU14          3  17  23   Q_PNP_0 1.000
 QTU13         17  17  23   Q_PNP_0 1.000
 QTU12         17  17  25   Q_PNP_0 1.000
@@ -76,8 +76,8 @@ R21           2  40  4.29K
 R22          40   3  500
 R23          14   1  500M
 
-.MODEL J_2N3458_N NJF( VTO=-3.05 BETA=699.53U LAMBDA=6M RD=1 RS=1 
-+      CGD=2.81P CGS=2.91P M=227.1M PB=500M IS=114.41F 
+.MODEL J_2N3458_N NJF( VTO=-3.05 BETA=699.53U LAMBDA=6M RD=1 RS=1
++      CGD=2.81P CGS=2.91P M=227.1M PB=500M IS=114.41F
 +      VTOTC=-2.5M BETATCE=-500M KF=0 AF=1 )
 .MODEL D_6V3_0  D( IS=10F N=1.24 BV=6.3 IBV=1M CJ0 = 1P TT = 10p )
 .MODEL D_3V9_0  D( IS=10F N=1.24 BV=3.9 IBV=1M CJ0 = 1P TT = 10p )
@@ -96,11 +96,11 @@ R23          14   1  500M
 * This is a copy of the LM7905 from regulators.lib.
 * R22 changed from 500 -> 7500
 *
-.SUBCKT LM7912  1    2    3            
-DD4           4   5   D_6V3_0 
-DD2           6   2   D_3V9_0 
-DD1           7   2   D_4V7_0 
-DD3           8   3   D_6V3_0 
+.SUBCKT LM7912  1    2    3
+DD4           4   5   D_6V3_0
+DD2           6   2   D_3V9_0
+DD1           7   2   D_4V7_0
+DD3           8   3   D_6V3_0
 C2            9  10  5P
 C1            2   9  15P
 QTU15         10   9   3   Q_PNP_0 1.000
@@ -148,7 +148,7 @@ QTU9          38  35   6   Q_PNP_0 1.000
 R4           39   1  2K
 QTU23         35  34  39   Q_NPN_1 1.000
 QTU16          1   7  35   Q_PNP_0 1.000
-JT1           7   1   1  J_2N3458_N 
+JT1           7   1   1  J_2N3458_N
 QTU14          3  17  23   Q_PNP_0 1.000
 QTU13         17  17  23   Q_PNP_0 1.000
 QTU12         17  17  25   Q_PNP_0 1.000
@@ -162,8 +162,8 @@ R21           2  40  4.29K
 R22          40   3  7500
 R23          14   1  500M
 
-.MODEL J_2N3458_N NJF( VTO=-3.05 BETA=699.53U LAMBDA=6M RD=1 RS=1 
-+      CGD=2.81P CGS=2.91P M=227.1M PB=500M IS=114.41F 
+.MODEL J_2N3458_N NJF( VTO=-3.05 BETA=699.53U LAMBDA=6M RD=1 RS=1
++      CGD=2.81P CGS=2.91P M=227.1M PB=500M IS=114.41F
 +      VTOTC=-2.5M BETATCE=-500M KF=0 AF=1 )
 .MODEL D_6V3_0  D( IS=10F N=1.24 BV=6.3 IBV=1M CJ0 = 1P TT = 10p )
 .MODEL D_3V9_0  D( IS=10F N=1.24 BV=3.9 IBV=1M CJ0 = 1P TT = 10p )
@@ -182,11 +182,11 @@ R23          14   1  500M
 * This is a copy of the LM7905 from regulators.lib.
 * R22 changed from 500 -> 10.63k
 *
-.SUBCKT LM7915  1    2    3            
-DD4           4   5   D_6V3_0 
-DD2           6   2   D_3V9_0 
-DD1           7   2   D_4V7_0 
-DD3           8   3   D_6V3_0 
+.SUBCKT LM7915  1    2    3
+DD4           4   5   D_6V3_0
+DD2           6   2   D_3V9_0
+DD1           7   2   D_4V7_0
+DD3           8   3   D_6V3_0
 C2            9  10  5P
 C1            2   9  15P
 QTU15         10   9   3   Q_PNP_0 1.000
@@ -234,7 +234,7 @@ QTU9          38  35   6   Q_PNP_0 1.000
 R4           39   1  2K
 QTU23         35  34  39   Q_NPN_1 1.000
 QTU16          1   7  35   Q_PNP_0 1.000
-JT1           7   1   1  J_2N3458_N 
+JT1           7   1   1  J_2N3458_N
 QTU14          3  17  23   Q_PNP_0 1.000
 QTU13         17  17  23   Q_PNP_0 1.000
 QTU12         17  17  25   Q_PNP_0 1.000
@@ -248,8 +248,8 @@ R21           2  40  4.29K
 R22          40   3  10.63k
 R23          14   1  500M
 
-.MODEL J_2N3458_N NJF( VTO=-3.05 BETA=699.53U LAMBDA=6M RD=1 RS=1 
-+      CGD=2.81P CGS=2.91P M=227.1M PB=500M IS=114.41F 
+.MODEL J_2N3458_N NJF( VTO=-3.05 BETA=699.53U LAMBDA=6M RD=1 RS=1
++      CGD=2.81P CGS=2.91P M=227.1M PB=500M IS=114.41F
 +      VTOTC=-2.5M BETATCE=-500M KF=0 AF=1 )
 .MODEL D_6V3_0  D( IS=10F N=1.24 BV=6.3 IBV=1M CJ0 = 1P TT = 10p )
 .MODEL D_3V9_0  D( IS=10F N=1.24 BV=3.9 IBV=1M CJ0 = 1P TT = 10p )
@@ -268,12 +268,12 @@ R23          14   1  500M
 * The original LM7905 model from "regulators.lib" uploaded by "renan_poa".
 * I renamed it to LM7905X to avoid equal model names.
 
-.SUBCKT LM7905X  1    2    3            
+.SUBCKT LM7905X  1    2    3
 
-DD4           4   5   D_6V3_0 
-DD2           6   2   D_3V9_0 
-DD1           7   2   D_4V7_0 
-DD3           8   3   D_6V3_0 
+DD4           4   5   D_6V3_0
+DD2           6   2   D_3V9_0
+DD1           7   2   D_4V7_0
+DD3           8   3   D_6V3_0
 C2            9  10  5P
 C1            2   9  15P
 QTU15         10   9   3   Q_PNP_0 1.000
@@ -321,7 +321,7 @@ QTU9          38  35   6   Q_PNP_0 1.000
 R4           39   1  2K
 QTU23         35  34  39   Q_NPN_1 1.000
 QTU16          1   7  35   Q_PNP_0 1.000
-JT1           7   1   1  J_2N3458_N 
+JT1           7   1   1  J_2N3458_N
 QTU14          3  17  23   Q_PNP_0 1.000
 QTU13         17  17  23   Q_PNP_0 1.000
 QTU12         17  17  25   Q_PNP_0 1.000
@@ -335,8 +335,8 @@ R21           2  40  4.29K
 R22          40   3  500
 R23          14   1  500M
 
-.MODEL J_2N3458_N NJF( VTO=-3.05 BETA=699.53U LAMBDA=6M RD=1 RS=1 
-+      CGD=2.81P CGS=2.91P M=227.1M PB=500M IS=114.41F 
+.MODEL J_2N3458_N NJF( VTO=-3.05 BETA=699.53U LAMBDA=6M RD=1 RS=1
++      CGD=2.81P CGS=2.91P M=227.1M PB=500M IS=114.41F
 +      VTOTC=-2.5M BETATCE=-500M KF=0 AF=1 )
 .MODEL D_6V3_0  D( IS=10F N=1.24 BV=6.3 IBV=1M CJ0 = 1P TT = 10p )
 .MODEL D_3V9_0  D( IS=10F N=1.24 BV=3.9 IBV=1M CJ0 = 1P TT = 10p )
@@ -393,13 +393,13 @@ C2           10  23      4P
 R16          12  5       500
 R12          16  2       12.1K
 QT18         17  23  16  Q_NPN 0.1
-D1           18  19  	 D_D 
+D1           18  19    D_D
 R11          20  21      850
 R5           22  3       100
 QT14         24  18  2   Q_NPN 0.1
 R21          6   2       2.67K
 R20          3   6       640
-DZ2          25  26      D_5V1 
+DZ2          25  26      D_5V1
 R19          1   26      16K
 R18          14  3       250M
 R17          25  14      380
@@ -411,7 +411,7 @@ R14          21  24      4K
 C1           27  24      20P
 R13          19  2       4K
 QT13         24  27  18  Q_NPN 0.1
-QT12         20  25  22  Q_NPN 1 
+QT12         20  25  22  Q_NPN 1
 *OFF
 QT11         20  28  2   Q_NPN 0.1
 *OFF
@@ -432,9 +432,9 @@ R1           8   13      7K
 
 .MODEL D_5V1 D( IS=10F N=1.16 BV=5.1 IBV=0.5M CJ0 = 1P TT = 10p )
 .MODEL D_5V6 D( IS=10F N=1.16 BV=5.6 IBV=5U CJ0 = 1P TT = 10p )
-.MODEL Q_NPN NPN( IS=10F NF=1.16 NR=1.16 BF=80 CJC=1P CJE=2P  
+.MODEL Q_NPN NPN( IS=10F NF=1.16 NR=1.16 BF=80 CJC=1P CJE=2P
 +       TF=10P TR=1N )
-.MODEL Q_PNP PNP( IS=10F NF=1.16 NR=1.16 BF=80 CJC=1P CJE=2P  
+.MODEL Q_PNP PNP( IS=10F NF=1.16 NR=1.16 BF=80 CJC=1P CJE=2P
 +      TF=10P TR=1N )
 .MODEL D_D D( IS=1F N=1.16 CJ0 = 1P TT = 10p )
 
@@ -454,25 +454,25 @@ C2           10  23      4P
 R16          12  5       500
 R12          16  2       12.1K
 QT18         17  23  16  Q_NPN 0.1
-D1           18  19  	 D_D 
+D1           18  19    D_D
 R11          20  21      850
 R5           22  3       100
 QT14         24  18  2   Q_NPN 0.1
 R21          6   2       2.67K
 R20          3   6       5.22K
-DZ2          25  26      D_5V1 
+DZ2          25  26      D_5V1
 R19          1   26      16K
 R18          14  3       250M
 R17          25  14      380
 R15          25  15      1.62K
 QT16         1   20  15  Q_NPN 1
-QT15         2   24  21  Q_PNP 0.1 
+QT15         2   24  21  Q_PNP 0.1
 *OFF
 R14          21  24      4K
 C1           27  24      20P
 R13          19  2       4K
 QT13         24  27  18  Q_NPN 0.1
-QT12         20  25  22  Q_NPN 1 
+QT12         20  25  22  Q_NPN 1
 *OFF
 QT11         20  28  2   Q_NPN 0.1
 *OFF
@@ -493,9 +493,9 @@ R1           8   13      7K
 
 .MODEL D_5V1 D( IS=10F N=1.16 BV=5.1 IBV=0.5M CJ0 = 1P TT = 10p )
 .MODEL D_5V6 D( IS=10F N=1.16 BV=5.6 IBV=5U CJ0 = 1P TT = 10p )
-.MODEL Q_NPN NPN( IS=10F NF=1.16 NR=1.16 BF=80 CJC=1P CJE=2P  
+.MODEL Q_NPN NPN( IS=10F NF=1.16 NR=1.16 BF=80 CJC=1P CJE=2P
 +       TF=10P TR=1N )
-.MODEL Q_PNP PNP( IS=10F NF=1.16 NR=1.16 BF=80 CJC=1P CJE=2P  
+.MODEL Q_PNP PNP( IS=10F NF=1.16 NR=1.16 BF=80 CJC=1P CJE=2P
 +      TF=10P TR=1N )
 .MODEL D_D D( IS=1F N=1.16 CJ0 = 1P TT = 10p )
 
@@ -515,25 +515,25 @@ C2           10  23      4P
 R16          12  5       500
 R12          16  2       12.1K
 QT18         17  23  16  Q_NPN 0.1
-D1           18  19  	 D_D 
+D1           18  19    D_D
 R11          20  21      850
 R5           22  3       100
 QT14         24  18  2   Q_NPN 0.1
 R21          6   2       2.67K
 R20          3   6       7.18K
-DZ2          25  26      D_5V1 
+DZ2          25  26      D_5V1
 R19          1   26      16K
 R18          14  3       250M
 R17          25  14      380
 R15          25  15      1.62K
 QT16         1   20  15  Q_NPN 1
-QT15         2   24  21  Q_PNP 0.1 
+QT15         2   24  21  Q_PNP 0.1
 *OFF
 R14          21  24      4K
 C1           27  24      20P
 R13          19  2       4K
 QT13         24  27  18  Q_NPN 0.1
-QT12         20  25  22  Q_NPN 1 
+QT12         20  25  22  Q_NPN 1
 *OFF
 QT11         20  28  2   Q_NPN 0.1
 *OFF
@@ -554,13 +554,74 @@ R1           8   13      7K
 
 .MODEL D_5V1 D( IS=10F N=1.16 BV=5.1 IBV=0.5M CJ0 = 1P TT = 10p )
 .MODEL D_5V6 D( IS=10F N=1.16 BV=5.6 IBV=5U CJ0 = 1P TT = 10p )
-.MODEL Q_NPN NPN( IS=10F NF=1.16 NR=1.16 BF=80 CJC=1P CJE=2P  
+.MODEL Q_NPN NPN( IS=10F NF=1.16 NR=1.16 BF=80 CJC=1P CJE=2P
 +       TF=10P TR=1N )
-.MODEL Q_PNP PNP( IS=10F NF=1.16 NR=1.16 BF=80 CJC=1P CJE=2P  
+.MODEL Q_PNP PNP( IS=10F NF=1.16 NR=1.16 BF=80 CJC=1P CJE=2P
 +      TF=10P TR=1N )
 .MODEL D_D D( IS=1F N=1.16 CJ0 = 1P TT = 10p )
 
 .ENDS LM7815
+
+* Pinouts are the same as '05
+
+.SUBCKT LM7818  1    2    3
+QT6          23  10  2   Q_NPN 0.1
+QT7          5   4   10  Q_NPN 0.1
+QT5          7   6   5   Q_NPN 0.1
+QT1          1   9   8   Q_NPN 0.1
+QT3          11  8   7   Q_NPN 0.1
+QT2          11  13  12  Q_NPN 0.1
+QT17         1   15  14  Q_NPN 10
+C2           10  23      4P
+R16          12  5       500
+R12          16  2       12.1K
+QT18         17  23  16  Q_NPN 0.1
+D1           18  19    D_D
+R11          20  21      850
+R5           22  3       100
+QT14         24  18  2   Q_NPN 0.1
+R21          6   2       2.67K
+R20          3   6       9.142K
+DZ2          25  26      D_5V1
+R19          1   26      16K
+R18          14  3       250M
+R17          25  14      380
+R15          25  15      1.62K
+QT16         1   20  15  Q_NPN 1
+QT15         2   24  21  Q_PNP 0.1
+*OFF
+R14          21  24      4K
+C1           27  24      20P
+R13          19  2       4K
+QT13         24  27  18  Q_NPN 0.1
+QT12         20  25  22  Q_NPN 1
+*OFF
+QT11         20  28  2   Q_NPN 0.1
+*OFF
+QT10         20  11  1   Q_PNP 0.1
+R10          17  27      16.5K
+R9           5   4       1.9K
+R8           4   23      26
+R7           10  2       1.2K
+R6           29  2       1K
+QT9          11  11  1   Q_PNP 0.1
+QT8          27  16  29  Q_NPN 0.1
+QT4          15  6   17  Q_NPN 0.1
+DZ1          2   9       D_5V6
+R4           1   9       80K
+R3           28  2       830
+R2           13  28      4.97K
+R1           8   13      7K
+
+.MODEL D_5V1 D( IS=10F N=1.16 BV=5.1 IBV=0.5M CJ0 = 1P TT = 10p )
+.MODEL D_5V6 D( IS=10F N=1.16 BV=5.6 IBV=5U CJ0 = 1P TT = 10p )
+.MODEL Q_NPN NPN( IS=10F NF=1.16 NR=1.16 BF=80 CJC=1P CJE=2P
++       TF=10P TR=1N )
+.MODEL Q_PNP PNP( IS=10F NF=1.16 NR=1.16 BF=80 CJC=1P CJE=2P
++      TF=10P TR=1N )
+.MODEL D_D D( IS=1F N=1.16 CJ0 = 1P TT = 10p )
+
+.ENDS LM7818
 
 .SUBCKT LM317    1    2    3
 D4            4   3  D_Z6V0
