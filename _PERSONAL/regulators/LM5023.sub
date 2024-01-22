@@ -1,0 +1,282 @@
+*****************************************************************************
+* PSpice Model Editor - Version 16.2.0
+*$
+* LM5023
+*****************************************************************************
+*  (C) Copyright 2013 Texas Instruments Incorporated. All rights reserved.
+*****************************************************************************
+** This model is designed as an aid for customers of Texas Instruments.
+** TI and its licensors and suppliers make no warranties, either expressed
+** or implied, with respect to this model, including the warranties of
+** merchantability or fitness for a particular purpose.  The model is
+** provided solely on an "as is" basis.  The entire risk as to its quality
+** and performance is with the customer
+*****************************************************************************
+*
+** Released by: WEBENCH Design Center, Texas Instruments Inc.
+* Part: LM5023
+* Date: 28MAY2013
+* Model Type: Transient
+* Simulator: PSPICE
+* Simulator Version: 16.2.0.p001
+* EVM Order Number:
+* EVM Users Guide:
+* Datasheet: SNVS961 –FEBRUARY 2013
+*
+* Model Version: Final 1.00
+*
+* Updates:
+*
+* Final 1.00
+* Release to Web.
+*****************************************************************************
+.SUBCKT LM5023 CS QR SS COMP VCC VSD OUT GND
+E_U1_ABM7         U1_N15810908 0 VALUE { IF(V(U1_N15810822)<2.5 &
++  V(U1_OUT_Q)>2.5, 5, 0)    }
+R_U1_R24         U1_N15885387 U1_SET  500 TC=0,0
+R_U1_R20         U1_N15821987 N01289  500 TC=0,0
+G_U1_ABMI3         GND SS VALUE { 22u    }
+X_U1_U2         U1_SET U1_RESET U1_OUT_Q srlatch
+C_U1_C19         U1_DMAG_12U GND  100p  TC=0,0
+R_U1_R21         U1_N15822125 N00063  500 TC=0,0
+T_U1_T3         U1_OUT_Q GND U1_N15909853 GND Z0=100000 TD=70n
+C_U1_C15         N00049 GND  3p  TC=0,0
+X_U1_U1         U1_N15856351 U1_N15856421 U1_N15856483 SRLATCH
+E_U1_ABM21         U1_N15885387 0 VALUE { IF(V(U1_ENABLE)>2.5 &
++  V(U1_MAX_FREQ_CL)<2.5  & V(U1_RESET)<2.5 & V(U1_DMAG_SET)>2.5 , 5, 0)    }
+R_U1_R2         U1_N15856395 U1_N15856421  500 TC=0,0
+C_U1_C21         U1_ENABLE GND  3p  TC=0,0
+X_U1_S9    U1_OUT_Q GND OUT GND INTERNAL_U1_S9
+G_U1_ABMII4         U1_OVP_900N GND VALUE { IF(V(U1_OUT_Q)<2.5, -277.77u, 0)
++  }
+R_U1_R14         U1_N15801264 COMP  1 TC=0,0
+C_U1_C22         U1_VDMAG_INI GND  3p  TC=0,0
+E_U1_ABM5         U1_N15807163 0 VALUE { IF(V(VCC)<5, 5, 0)    }
+Q_U1_Q1         U1_N15943214 GND QR NPN
+E_U1_ABM20         U1_N159101451 0 VALUE { IF(V(QR)<0.35, 5, 0)    }
+V_U1_V4         U1_N15801264 U1_N15801092 0.75
+C_U1_C6         U1_EN_OVP GND  3p  TC=0,0
+R_U1_R12         U1_COMP2 U1_N15801092  100k TC=0,0
+C_U1_C14         U1_RESET GND  3p  TC=0,0
+X_U1_S5    U1_OUT_Q GND U1_OVP_900N GND INTERNAL_U1_S5
+D_U1_D7         U1_N15801652 COMP D5K
+R_U1_R13         GND U1_COMP2  50k TC=0,0
+C_U1_C24         U1_MAX_1 GND  3p  TC=0,0
+R_U1_R30         U1_N15879764 U1_MAX_1  500 TC=0,0
+R_U1_R25         U1_N159107352 U1_MAX_FREQ_CL  500 TC=0,0
+X_U1_S3    U1_ENABLE GND SS GND INTERNAL_U1_S3
+E_U1_ABM10         U1_N15806140 0 VALUE { IF(V(QR)>3 & V(U1_OVP_900N)>=2.5, 5,
++  0)    }
+E_U1_ABM24         U1_N159103011 0 VALUE { IF( V(N01289)> 2.5 | V(U1_VSKIP)>2.5
++  | V(N00063)>2.5, 5, 0)    }
+V_U1_V5         U1_N15801298 GND 4.4437
+G_U1_ABMI1         U1_CS_IPT GND VALUE { I(V_U1_VQR)/100    }
+X_U1_S2    U1_TLEB GND CS GND INTERNAL_U1_S2
+C_U1_C25         U1_N15879806 GND  60p  TC=0,0
+R_U1_R6         U1_N15807163 U1_VCC_RST  500 TC=0,0
+G_U1_ABMII6         VCC GND VALUE { IF(V(U1_ENABLE) >2.5, 0.529m, 0.340m)    }
+V_U1_VQR         U1_N15943508 GND 5
+C_U1_C17         U1_MAX_FREQ_CL GND  3p  TC=0,0
+X_U1_S7    U1_MAX_FREQ_CL GND U1_N15879806 GND INTERNAL_U1_S7
+C_U1_C5         U1_VCC_RST GND  3p  TC=0,0
+C_U1_C7         U1_TLEB GND  3p  TC=0,0
+E_U1_ABM19         U1_N159105471 0 VALUE { IF( V(N00049)> 2.5 &
++  V(U1_EN_OVP)<2.5 & V(N00055)>2.5, 5, 0)    }
+R_U1_R23         U1_N15856483 N00049  500 TC=0,0
+D_U1_D10         OUT VCC D_D1
+R_U1_R1         U1_N15856345 U1_N15856351  500 TC=0,0
+E_U1_ABM16         U1_N15801394 0 VALUE { IF(V(COMP)>1.655, 0,
++  if(v(COMP)<1.625, 5, v(U1_VSKIP)))    }
+R_U1_R15         U1_N15801394 U1_VSKIP  500 TC=0,0
+E_U1_ABM13         U1_N15822125 0 VALUE { IF(V(U1_CS_IPT)>0.5, 5, 0)    }
+G_U1_ABMII5         U1_DMAG_12U GND VALUE { IF(V(U1_OUT_Q)<2.5, -20.833u, 0)
++  }
+C_U1_C18         U1_OVP_900N GND  100p  TC=0,0
+X_U1_S8    U1_OUT_Q GND VCC OUT INTERNAL_U1_S8
+X_U1_U5         U1_OVP_SET U1_VCC_RST U1_N15808125 srlatch
+R_U1_R29         U1_TOVP1 U1_N15909995  500 TC=0,0
+R_U1_R11         U1_N15801254 COMP  42k TC=0,0
+R_U1_R8         CS U1_CS_IPT  6.6k TC=0,0
+E_U1_ABM12         U1_N15821987 0 VALUE { IF(V(U1_CS_IPT)>V(U1_COMP2), 5, 0)
++  }
+X_U1_U4         U1_TOVP1 U1_MAX_1 U1_N159107352 srlatch
+R_U1_R10         U1_N15810908 U1_TLEB  500 TC=0,0
+E_U1_E5         U1_N159102590 GND VALUE { V(SS, GND)-0.2 }
+D_U1_D5         COMP U1_N159102590 D5K
+C_U1_C20         U1_N15909995 GND  3p  TC=0,0
+R_U1_R7         U1_N15808125 U1_EN_OVP  500 TC=0,0
+E_U1_ABM22         U1_N15879764 0 VALUE { IF(V(U1_N15879806)>4, 5, 0)    }
+R_U1_R18         U1_N15943508 U1_N15943214  1 TC=0,0
+X_U1_S6    U1_OUT_Q GND U1_DMAG_12U GND INTERNAL_U1_S6
+V_U1_V3         U1_N15801652 GND 0.77
+E_U1_ABM11         U1_N15818989 0 VALUE { IF(V(U1_VDMAG_INI)>2.5 |
++  V(U1_DMAG_12U)>2.5, 5, 0)    }
+T_U1_T2         U1_OUT_Q GND U1_N15810822 GND Z0=100000 TD=90n
+C_U1_C11         U1_DMAG_SET GND  3p  TC=0,0
+R_U1_R17         U1_N15806140 U1_OVP_SET  500 TC=0,0
+C_U1_C13         N00063 GND  3p  TC=0,0
+E_U1_ABM2         U1_N15856395 0 VALUE { IF(V(VCC)<7.5, 5, 0)    }
+R_U1_R22         U1_N159103011 U1_RESET  500 TC=0,0
+C_U1_C1         U1_N15856351 GND  3p  TC=0,0
+D_U1_D9         SS U1_N15801298 D5K
+C_U1_C10         U1_OVP_SET GND  3p  TC=0,0
+R_U1_R27         U1_N159105471 U1_ENABLE  500 TC=0,0
+V_U1_V2         U1_N15801254 GND 5
+C_U1_C12         N01289 GND  3p  TC=0,0
+C_U1_C9         U1_VSKIP GND  3p  TC=0,0
+C_U1_C16         U1_SET GND  3p  TC=0,0
+R_U1_R28         U1_N159101451 U1_VDMAG_INI  500 TC=0,0
+R_U1_R26         U1_N15909853 GND  100k TC=0,0
+E_U1_ABM15         U1_TOVP1 0 VALUE { IF(V(U1_OUT_Q)<2.5 & V(U1_N15909853)>2.5,
++  5, 0)    }
+E_U1_ABM1         U1_N15856345 0 VALUE { IF(V(VCC)>=12.5, 5, 0)    }
+G_U1_ABMI4         GND U1_N15879806 VALUE { IF(V(N00049)>2.5, 30.41u, 0)    }
+R_U1_R9         U1_N15810822 GND  100k TC=0,0
+D_U1_D11         GND OUT D_D1
+C_U1_C2         U1_N15856421 GND  3p  TC=0,0
+R_U1_R19         U1_N15818989 U1_DMAG_SET  500 TC=0,0
+R_U2_R21         U2_N157973101 U2_COUNT_CT  500 TC=0,0
+R_U2_R24         U2_N15764499 U2_COUNT_4  500 TC=0,0
+G_U2_ABMII4         U2_N15764553 0 VALUE { IF(V(U2_COUNT_CT)>=2.5, -335u, 0)
++  }
+C_U2_C18         U2_N15764553 0  50p  TC=0,0
+C_U2_C14         U2_COUNT_CT 0  3p  TC=0,0
+C_U2_C9         U2_OLDTS_RESET 0  3p  TC=0,0
+X_U2_S1    N00049 0 VSD U2_N15768907 HICCUP_MODE_U2_S1
+C_U2_C7         U2_N15763467 0  3p  TC=0,0
+X_U2_U5         U2_N15763467 U2_EN_HIC_RESET U2_N15796807 SRLATCH
+E_U2_ABM8         U2_N15761235 0 VALUE { IF(V(U2_OLDTS)>2.5 & V(N00063)<2.5, 5,
++  0)    }
+V_U2_VVSD         U2_N15768907 0 0Vdc
+G_U2_ABMII3         U2_N15801150 0 VALUE { IF(V(U2_H_CTL)>2.5, -I(V_U2_VVSD),
++  0)    }
+R_U2_R11         U2_N15761235 U2_N15761263  500 TC=0,0
+R_U2_R22         U2_N15801134 U2_OLDTS  500 TC=0,0
+C_U2_C10         U2_EN_HIC_RESET 0  3p  TC=0,0
+E_U2_ABM7         U2_N15763439 0 VALUE { IF(V(U2_OLDTS)>2.5 & V(N00063)>2.5, 5,
++  0)    }
+C_U2_C13         U2_N15801150 0  60n  TC=0,0
+E_U2_ABM13         U2_N157973101 0 VALUE { IF(V(N00049)>2.5 &
++  V(U2_N15764695)<2.5, 5, 0)    }
+C_U2_C21         U2_N15796676 0  3p  TC=0,0
+R_U2_R27         U2_N15796807 U2_N15796676  500 TC=0,0
+C_U2_C15         U2_OLDTS 0  3p  TC=0,0
+R_U2_R12         U2_N15762334 U2_OLDTS_RESET  500 TC=0,0
+R_U2_R26         U2_N15765322 N00055  500 TC=0,0
+X_U2_S5    N00055 0 U2_N15764553 0 HICCUP_MODE_U2_S5
+R_U2_R10         U2_N15763439 U2_N15763467  500 TC=0,0
+X_U2_S4    U2_H_CTL 0 U2_N15801150 0 HICCUP_MODE_U2_S4
+E_U2_ABM14         U2_N15801134 0 VALUE { IF(V(U2_N15801150)>=4, 5, 0)    }
+R_U2_R13         U2_N15766048 U2_EN_HIC_RESET  500 TC=0,0
+E_U2_ABM9         U2_N15762334 0 VALUE { IF(V(U2_N15761263)>2.5 |
++  V(U2_COUNT_4)>2.5, 5, 0)    }
+E_U2_ABM18         U2_N15765322 0 VALUE { IF(V(U2_N15796676)>2.5, 0, 5)    }
+E_U2_ABM16         U2_N15764499 0 VALUE { IF(V(U2_N15764553)>=3.8, 5, 0)    }
+R_U2_R20         U2_N15764695 0  100000 TC=0,0
+C_U2_C8         U2_N15761263 0  3p  TC=0,0
+T_U2_T3         N00049 0 U2_N15764695 0 Z0=100000 TD=150n
+C_U2_C17         U2_COUNT_4 0  3p  TC=0,0
+X_U2_U4         N00063 N01289 U2_H_CTL SRLATCH
+C_U2_C20         N00055 0  3p  TC=0,0
+E_U2_ABM10         U2_N15766048 0 VALUE { IF(V(U2_COUNT_4)>2.5 & V(N00049)<2.5,
++  5, 0)    }
+.ENDS LM5023
+*$
+.subckt INTERNAL_U1_S9 1 2 3 4
+S_U1_S9         3 4 1 2 _U1_S9
+RS_U1_S9         1 2 1G
+.MODEL         _U1_S9 VSWITCH Roff=1e6 Ron=7.1428 Voff=2.41 Von=2.39
+.ends INTERNAL_U1_S9
+*$
+.subckt INTERNAL_U1_S5 1 2 3 4
+S_U1_S5         3 4 1 2 _U1_S5
+RS_U1_S5         1 2 1G
+.MODEL         _U1_S5 VSWITCH Roff=10000e6 Ron=1.0m Voff=2.49 Von=2.51
+.ends INTERNAL_U1_S5
+*$
+.subckt INTERNAL_U1_S3 1 2 3 4
+S_U1_S3         3 4 1 2 _U1_S3
+RS_U1_S3         1 2 1G
+.MODEL         _U1_S3 VSWITCH Roff=100e6 Ron=1.0 Voff=2.51 Von=2.49
+.ends INTERNAL_U1_S3
+*$
+.subckt INTERNAL_U1_S2 1 2 3 4
+S_U1_S2         3 4 1 2 _U1_S2
+RS_U1_S2         1 2 1G
+.MODEL         _U1_S2 VSWITCH Roff=100e6 Ron=35 Voff=2.49 Von=2.51V
+.ends INTERNAL_U1_S2
+*$
+.subckt INTERNAL_U1_S7 1 2 3 4
+S_U1_S7         3 4 1 2 _U1_S7
+RS_U1_S7         1 2 1G
+.MODEL         _U1_S7 VSWITCH Roff=100e6 Ron=1.0m Voff=2.51 Von=2.49
+.ends INTERNAL_U1_S7
+*$
+.subckt INTERNAL_U1_S8 1 2 3 4
+S_U1_S8         3 4 1 2 _U1_S8
+RS_U1_S8         1 2 1G
+.MODEL         _U1_S8 VSWITCH Roff=1e6 Ron=16.67 Voff=2.59 Von=2.61
+.ends INTERNAL_U1_S8
+*$
+.subckt INTERNAL_U1_S6 1 2 3 4
+S_U1_S6         3 4 1 2 _U1_S6
+RS_U1_S6         1 2 1G
+.MODEL         _U1_S6 VSWITCH Roff=10000e6 Ron=1.0m Voff=2.49 Von=2.51
+.ends INTERNAL_U1_S6
+*$
+.subckt HICCUP_MODE_U2_S1 1 2 3 4
+S_U2_S1         3 4 1 2 _U2_S1
+RS_U2_S1         1 2 1G
+.MODEL         _U2_S1 VSWITCH Roff=1000e6 Ron=1.0 Voff=2.49 Von=2.51V
+.ends HICCUP_MODE_U2_S1
+*$
+.subckt HICCUP_MODE_U2_S5 1 2 3 4
+S_U2_S5         3 4 1 2 _U2_S5
+RS_U2_S5         1 2 1G
+.MODEL         _U2_S5 VSWITCH Roff=10000e6 Ron=1.0m Voff=2.49 Von=2.51
+.ends HICCUP_MODE_U2_S5
+*$
+.subckt HICCUP_MODE_U2_S4 1 2 3 4
+S_U2_S4         3 4 1 2 _U2_S4
+RS_U2_S4         1 2 1G
+.MODEL         _U2_S4 VSWITCH Roff=10000e6 Ron=1.0m Voff=2.51 Von=2.49
+.ends HICCUP_MODE_U2_S4
+*$
+.SUBCKT srlatch S R Q
+RD2   20 22 500
+CD2   22 0 3p ic=0
+E2 Q 0 VALUE={IF(V(22)>2.5,5,0)}
+EQ    20 0 VALUE={IF(v(S)>2.5 & v(R)<2.5, 5, if(v(R)>2.5 & v(S)<2.5, 0 ,IF(v(S)>2.5 & v(R)>2.5, 0,  v(22))))}
+.ENDS
+*$
+.MODEL DD D( IS=1F N=0.01 TT = 10p )
+*$
+.MODEL D_D1 D ( IS=1e-15 TT=10p Rs=1m N=.1  )
+*$
+.MODEL D_D2 D
+*$
+.MODEL D5K D IS=1E-14 CJO=0 VJ=1
+*$
+.MODEL NPN NPN
+*$
+.SUBCKT DFF Q QB CLK D
+R1 CLK CLK1 250
+C1 CLK1 0 43.37p
+ECLKINT CLK2 0 VALUE={IF(V(CLK)>2.5 & V(CLK1)<2.5, 5, 0)}
+R2 CLK2 CLKINT 500
+C2 CLKINT 0 3p
+GQ 0 Qint VALUE = {IF(V(CLKint)> 2.5, IF(V(D)> 2.5,1m,-1m),0)}
+CQint Qint 0 2p
+RQint Qint 0 1000MEG
+D_D10 Qint MY5 DD2
+V1 MY5 0 5
+D_D11 0 Qint DD2
+EQ1 Q1 0 VALUE={IF(V(QINT)>2.5, 5, 0)}
+RQ1 Q1 Q 1k
+CQ1 Q 0 36.23p
+EQB QB1 0 VALUE={IF(V(Q)<2.5, 5, 0)}
+RQB1 QB1 QB 500
+CQB1 QB 0 3p
+.MODEL DD2 D
+.ENDS DFF
+*$
