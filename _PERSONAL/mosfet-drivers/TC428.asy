@@ -19,9 +19,9 @@ WINDOW 3 1 -64 Center 2
 SYMATTR Prefix X
 SYMATTR Description Gate Driver
 SYMATTR ModelFile ..\sym\_PERSONAL\mosfet-drivers\TC4426-27-28.sub
-SYMATTR Value TC427
-SYMATTR Value2 TC427
-SYMATTR SpiceModel TC427
+SYMATTR Value TC428
+SYMATTR Value2 TC428
+SYMATTR SpiceModel TC428
 PIN -112 -32 NONE 8
 PINATTR PinName INA
 PINATTR SpiceOrder 1

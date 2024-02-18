@@ -1,0 +1,363 @@
+* Rename Subckt and Pins - eetech@yahoo.com
+.SUBCKT TC426 INA OUTA INB OUTB VDD VGND
+XTC426a INA OUTA VDD VGND TC4426_I2D_B
+XTC426b INB OUTB VDD VGND TC4426_I2D_B
+.ENDS TC426
+*
+* Rename Subckt and Pins - eetech@yahoo.com
+.SUBCKT TC427 INA OUTA INB OUTB VDD VGND
+XTC427a  INA OUTA VDD VGND TC4427_I2D_A
+XTC427b  INB OUTB VDD VGND TC4427_I2D_A
+.ENDS TC4427
+*
+* Rename Subckt and Pins
+.SUBCKT TC428 INA OUTA INB OUTB VDD VGND
+XTC426 INA OUTA VDD VGND TC4426_I2D_B
+XTC427 INB OUTB VDD VGND TC4427_I2D_A
+.ENDS TC428
+*
+
+.SUBCKT TC4426_I2D_B 1 2 3 4
+*                    | | | |
+*                    | | | Negative Supply
+*                    | | Positive Supply
+*                    | Output
+*                    Input
+*
+********************************************************************************
+* Software License Agreement                                                   *
+*                                                                              *
+* The software supplied herewith by Microchip Technology Incorporated (the     *
+* 'Company') is intended and supplied to you, the Company's customer, for use  *
+* soley and exclusively on Microchip products.                                 *
+*                                                                              *
+* The software is owned by the Company and/or its supplier, and is protected   *
+* under applicable copyright laws. All rights are reserved. Any use in         *
+* violation of the foregoing restrictions may subject the user to criminal     *
+* sanctions under applicable laws, as well as to civil liability for the       *
+* breach of the terms and conditions of this license.                          *
+*                                                                              *
+* THIS SOFTWARE IS PROVIDED IN AN 'AS IS' CONDITION. NO WARRANTIES, WHETHER    *
+* EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, IMPLIED        *
+* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE APPLY TO  *
+* THIS SOFTWARE. THE COMPANY SHALL NOT, IN ANY CIRCUMSTANCES, BE LIABLE FOR    *
+* SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES, FOR ANY REASON WHATSOEVER.     *
+********************************************************************************
+*
+* The following MOSFET drivers are covered by this model:
+*      1.5A Inverting Driver - TC4426
+*
+* Polarity: Inverting
+*
+* Date of model creation: 11/12/2008
+* Level of Model Creator: G
+*
+* Revision History:
+*      11/12/08 RAW Initial model creation
+*      11/18/08 RAW Improved Rise and Falls times
+*
+*
+*
+*
+*
+* Recommendations:
+*      Use PSPICE (or SPICE 2G6; other simulators may require translation)
+*      For a quick, effective design, use a combination of: data sheet
+*            specs, bench testing, and simulations with this macromodel
+*      For high impedance circuits, set GMIN=100F in the .OPTIONS statement
+*
+* Supported:
+*      Typical performance for temperature range (-40 to 125) degrees Celsius
+*      DC, AC, Transient, and Noise analyses.
+*      Most specs, including: propgation delays, rise times, fall times, max sink/source current,
+*            input thresholds, voltage ranges, supply current, ... , etc.
+*      Temperature effects for Ibias, Iquiescent, output current, output
+*            resistance,....,etc.
+*
+* Not Supported:
+*      Some Variation in specs vs. Power Supply Voltage
+*      Vos distribution, Ib distribution for Monte Carlo
+*      Some Temperature analysis
+*      Process variation
+*      Behavior outside normal operating region
+*
+* Known Discrepancies in Model vs. Datasheet:
+*
+*
+*
+*Modified for LTspice 03/23/2019 - eetech00@yahoo.com
+*
+.param RP=70
+.param CP=1n
+* Input Impedance/Clamp
+R1  4    1    100MEG
+C1  4    1    12.0P
+*G3  3    1    TABLE { V(3, 1) } ((-770M,-1.00)(-700M,-10.0M)(-630M,-1.00N)(0,0)(20.0,1.00N))
+BG3 3    1    i=table(v(3,1),-770m,-1.00,-700m,-10.0m,-630m,-1.00n,0,0,20.0,1.00n) Rpar={RP} Cpar={CP}
+*G4  1    4    TABLE { V(1, 4) } ((-5.94,-1.00)(-5.4,-10.0M)(-4.86,-1.00N)(0,0)(20.0,1.00N))
+BG4 1    4    i=table(v(1,4),-5.94,-1.00,-5.4,-10.0M,-4.86,-1.00N,0,0,20.0,1.00N) Rpar={RP} Cpar={CP}
+* Threshold
+*G11 4    30   TABLE { V(1, 11) } ( (-1m,10n)(0,0)(0.78,-.1)(1.25,-1)(2,-1) )
+BG11 4 30 i=table(v(1,11),-1m,10n,0,0,0.78,-.1,1.25,-1,2,-1) Rpar={RP} Cpar={CP}
+*G12 4    30   TABLE {V(1,12)} ( (-2,1)(-1.2,1)(-0.6,.1)(0,0)(1,-10n))
+BG12 4    30  i=table(v(1,12),-2,1,-1.2,1,-0.6,.1,0,0,1,-10n) Rpar={RP} Cpar={CP}
+*G21 4    11   TABLE { V(3, 4) } ((0,1.35)(4.00,1.35)(6.00,1.5)(10.0,1.48)(13.0,1.49)(16.0,1.5))
+BG21 4    11   i=table(v(3, 4),0,1.35,4.00,1.35,6.00,1.5,10.0,1.48,13.0,1.49,16.0,1.5) Cpar={CP}
+*G22 4    12   TABLE { V(3, 4) } ((0,1.35)(4.00,1.16)(6.00,1.25)(10.0,1.24)(13.0,1.24)(16.0,1.25))
+BG22 4    12   i=table(V(3, 4),0,1.35,4.00,1.16,6.00,1.25,10.0,1.24,13.0,1.24,16.0,1.25) Cpar={CP}
+R21 4    11   1 TC 504U  2.33U
+R22 4    12   1 TC 231U  -103N
+C30 30   4    1n
+* HL Circuit
+*G31 4    31   TABLE { V(3, 4) } ((0,146)(4.0,63.3)(6.00,43.4)(10.0,34.8)(14.0,32.6)(18.0,28.4))
+BG31 4    31   i=table(V(3, 4),0,146,4.0,63.3,6.00,43.4,10.0,34.8,14.0,32.6,18.0,28.4) Cpar={CP}
+R31 31   4    1 TC 1.93M  -1.89U
+*G33 4    30   TABLE { V(31, 30) } ( (-1M,-10)(0,0)(1,10N) )
+BG33 4    30   i=table(V(31, 30),-1M,-10,0,0,1,10N) Rpar={RP} Cpar={CP}
+S31 31   30 31 30 SS31
+* LH Circuit
+*G32 32   4    TABLE { V(3, 4) } ((0,104)(4.0,36.8)(6.00,19.7)(10.0,12.1)(14.0,10.2)(18.0,9.5))
+BG32 32   4    i=table(V(3, 4),0,104,4.0,36.8,6.00,19.7,10.0,12.1,14.0,10.2,18.0,9.5) Cpar={CP}
+R32 4    32   1 TC 2.26M  2.88U
+*G34 30   4    TABLE { V(30, 32) } ( (-1M,-10)(0,0)(1,10N) )
+BG34 30   4    i=table(V(30, 32),-1M,-10,0,0,1,10N) Rpar={RP} Cpar={CP}
+R30 32   30   1MEG
+* DRIVE
+*G51 4    50   TABLE { V(30, 0) } ( (-5,-1U)(-3,-1U)(0,0)(6,1.00)(18,1.020) )
+BG51 4    50  i=table(V(30, 4),-5,-1U,-3,-1U,0,0,6,1.00,18,1.020) Rpar={RP} Cpar={CP}
+*G52 50   4    TABLE { V(4, 30) } ( (-5,-1U)(-3,-1U)(0,0)(6,1.20)(18,1.220) )
+BG52 50   4   i=table(V(4, 30),-5,-1U,-3,-1U,0,0,6,1.20,18,1.220) Rpar={RP} Cpar={CP}
+R53 4    50   1
+*G50 51   60   VALUE {V(50,0)*300M/(-700M+18/(V(3,4) + 1M))}
+BG50 51   60  i=V(50,4)*300M/(-700M+18/(V(3,4) + 1M)) Rpar={RP} Cpar={CP}
+R51 51    4   1
+*G53  3    0   TABLE {V(51,4)} ((-100,100)(0,0)(1,1n))
+BG53  3    0  i=table(V(51,4),-100,100,0,0,1,1n) Rpar={RP} Cpar={CP}
+*G54  0    4   TABLE {V(4,51)} ((-100,100)(0,0)(1,1n))
+BG54  0    4  i=table(V(4,51),-100,100,0,0,1,1n) Rpar={RP} Cpar={CP}
+R60 4    60   100MEG
+H67 4    69   V67 1
+V67 60   59   0V
+C60 561  60   200P
+R59 59   2    8.19
+L59 59   2    10.0N
+* Shoot-through adjustment
+VC60 56 4 0V
+RC60 56 561 1m
+H60 58 4 VC60 56
+*G60P 0 3 TABLE { V(58, 4) } ((-1,-1u)(0,0)(25,10.0m)(40,0))
+BG60P 0 3 i=table(V(58, 4),-1,-1u,0,0,25,10.0m,40,0) Rpar={RP} Cpar={CP}
+*G60N 4 0 TABLE { V(4, 58) } ((-1,-1u)(0,0)(25,10.0m)(40,0))
+BG60N 4 0 i=table(V(4, 58),-1,-1u,0,0,25,10.0m,40,0) Rpar={RP} Cpar={CP}
+* Source Output
+*E67 67   4    TABLE { V(69, 0) } ( (-1.3,-1.3)(0,0)(1,2.00) )
+BE67 67   4    v=table(V(69, 4),-1.3,-1.3,0,0,1,2.00) Cpar={CP}
+*G63 4    63   POLY(1) 3 4 22.9 -1.86 54.4M
+B63 4    63   i=22.9+-1.86*v(3,4)+54.4m*v(3,4)*v(3,4) Cpar={CP}
+R63 4    63   1 TC 4.29M 11.7U
+*E61 61   65   VALUE {V(67,0)*V(63,0)}
+BE61 61   65   v=V(67,4)*V(63,4) Cpar={CP}
+V63 65   3    100U
+*G61 61   60   TABLE { V(61, 60) } (-20.0M,-130)(-15.0M,-65.0)(-10.0M,-13.0)(0,0)(10,1N))
+BG61 61   60   i=table(V(61, 60),-20.0M,-130,-15.0M,-65.0,-10.0M,-13.0,0,0,10,1N) Rpar={RP} Cpar={CP}
+* Sink Output Time step too small
+*E68 68   4    TABLE { V(69, 0) }  ( (-1,-2.00)(0,0)(1.5,1.5) )
+BE68 68   4    v=table(V(69, 4),-1,-2.00,0,0,1.5,1.5) Cpar={CP}
+*G64 4    64   POLY(1) 3 4 22.9 -1.86 54.4M
+B64 4    64   i=22.9+-1.86*v(3,4)+54.4m*v(3,4)*v(3,4) Cpar={CP}
+R64 4    64   1 TC 4.29M 11.7U
+*E62 62   66   VALUE {V(68,0)*V(64,0)}
+BE62 62   66  v=V(68,4)*V(64,4) Cpar={CP}
+V64 66   4    100U
+*G62 60   62   TABLE { V(60, 62) } (-20.0M,-150)(-15.0M,-75.0)(-10.0M,-15.0)(0,0)(10,1N))
+BG62 60   62  i=table(V(60, 62),-20.0M,-150,-15.0M,-75.0,-10.0M,-15.0,0,0,10,1N) Rpar={RP} Cpar={CP}
+* Bias Current
+*G55 4    55   TABLE { V(3, 4) } ((0,0)(4.5,530U)(10.0,770U)(14.0,910U)(18.0,1.38M))
+BG55 4    55  i=table(V(3, 4),0,0,4.5,530U,10.0,770U,14.0,910U,18.0,1.38M) Cpar={CP}
+G56 3    4    55 0 1
+R55 55   4    1 TC  -1.53M -407N
+*G57 4    57   TABLE { V(3, 4) } ((0,0)(4.5,70.0U)(10.0,80.0U)(14.0,90.0U)(18.0,120U))
+BG57 4    57  i=table(V(3, 4),0,0,4.5,70.0U,10.0,80.0U,14.0,90.0U,18.0,120U) Cpar={CP}
+G58 3    4    57 0 1
+*BG58 3    4    57 0 1
+R57 57   4    1 TC  -1.53M -407N
+S59 55   4    1 0 SS59
+* Models
+*.MODEL SS59 VSWITCH Roff=1m Ron=100Meg Voff=1.2V Von=1.5V
+.MODEL SS59 SW Roff=1m Ron=100Meg Vt=1.35V Vh=-150mV
+*.MODEL SS31 VSWITCH Roff=100MEG Ron=800 Voff=0.2V Von=0.1V
+.MODEL SS31 SW Ron=100MEG Roff=800 Vt=150mV Vh=-50mV
+.ENDS TC4426_I2D_B
+
+.SUBCKT TC4427_I2D_A 1 2 3 4
+*                    | | | |
+*                    | | | Negative Supply
+*                    | | Positive Supply
+*                    | Output
+*                    Input
+*
+********************************************************************************
+* Software License Agreement                                                   *
+*                                                                              *
+* The software supplied herewith by Microchip Technology Incorporated (the     *
+* 'Company') is intended and supplied to you, the Company's customer, for use  *
+* soley and exclusively on Microchip products.                                 *
+*                                                                              *
+* The software is owned by the Company and/or its supplier, and is protected   *
+* under applicable copyright laws. All rights are reserved. Any use in         *
+* violation of the foregoing restrictions may subject the user to criminal     *
+* sanctions under applicable laws, as well as to civil liability for the       *
+* breach of the terms and conditions of this license.                          *
+*                                                                              *
+* THIS SOFTWARE IS PROVIDED IN AN 'AS IS' CONDITION. NO WARRANTIES, WHETHER    *
+* EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, IMPLIED        *
+* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE APPLY TO  *
+* THIS SOFTWARE. THE COMPANY SHALL NOT, IN ANY CIRCUMSTANCES, BE LIABLE FOR    *
+* SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES, FOR ANY REASON WHATSOEVER.     *
+********************************************************************************
+*
+* The following MOSFET drivers are covered by this model:
+*      1.5A Inverting Driver - TC4426
+*
+* Polarity: Inverting
+*
+* Date of model creation: 11/12/2008
+* Level of Model Creator: G
+*
+* Revision History:
+*      11/20/08 RAW Initial model creation
+*
+*
+*
+*
+*
+* Recommendations:
+*      Use PSPICE (or SPICE 2G6; other simulators may require translation)
+*      For a quick, effective design, use a combination of: data sheet
+*            specs, bench testing, and simulations with this macromodel
+*      For high impedance circuits, set GMIN=100F in the .OPTIONS statement
+*
+* Supported:
+*      Typical performance for temperature range (-40 to 125) degrees Celsius
+*      DC, AC, Transient, and Noise analyses.
+*      Most specs, including: propgation delays, rise times, fall times, max sink/source current,
+*            input thresholds, voltage ranges, supply current, ... , etc.
+*      Temperature effects for Ibias, Iquiescent, output current, output
+*            resistance,....,etc.
+*
+* Not Supported:
+*      Some Variation in specs vs. Power Supply Voltage
+*      Vos distribution, Ib distribution for Monte Carlo
+*      Some Temperature analysis
+*      Process variation
+*      Behavior outside normal operating region
+*
+* Known Discrepancies in Model vs. Datasheet:
+*
+*
+*
+*Modified for LTspice 03/23/2019 - eetech00@yahoo.com
+*
+.param RP=70
+.param CP=1n
+* Input Impedance/Clamp
+R1  4    1    100MEG
+C1  4    1    12.0P
+*G3  3    1    TABLE { V(3, 1) } ((-770M,-1.00)(-700M,-10.0M)(-630M,-1.00N)(0,0)(20.0,1.00N))
+BG3 3    1    i=table(v(3,1),-770m,-1.00,-700m,-10.0m,-630m,-1.00n,0,0,20.0,1.00n) Rpar={RP} Cpar={CP}
+*G4  1    4    TABLE { V(1, 4) } ((-5.94,-1.00)(-5.4,-10.0M)(-4.86,-1.00N)(0,0)(20.0,1.00N))
+BG4 1    4    i=table(v(1,4),-5.94,-1.00,-5.4,-10.0M,-4.86,-1.00N,0,0,20.0,1.00N) Rpar={RP} Cpar={CP}
+* Threshold
+*G11 4    30   TABLE { V(1, 11) } ( (-1m,10n)(0,0)(0.78,-.1)(1.25,-1)(2,-1) )
+BG11 4 30 i=table(v(1,11),-1m,10n,0,0,0.78,-.1,1.25,-1,2,-1) Rpar={RP} Cpar={CP}
+*G12 4    30   TABLE {V(1,12)} ( (-2,1)(-1.2,1)(-0.6,.1)(0,0)(1,-10n))
+BG12 4    30  i=table(v(1,12),-2,1,-1.2,1,-0.6,.1,0,0,1,-10n) Rpar={RP} Cpar={CP}
+*G21 4    11   TABLE { V(3, 4) } ((0,1.35)(4.00,1.35)(6.00,1.5)(10.0,1.48)(13.0,1.49)(16.0,1.5))
+BG21 4    11   i=table(v(3, 4),0,1.35,4.00,1.35,6.00,1.5,10.0,1.48,13.0,1.49,16.0,1.5) Cpar={CP}
+*G22 4    12   TABLE { V(3, 4) } ((0,1.35)(4.00,1.16)(6.00,1.25)(10.0,1.24)(13.0,1.24)(16.0,1.25))
+BG22 4    12   i=table(V(3, 4),0,1.35,4.00,1.16,6.00,1.25,10.0,1.24,13.0,1.24,16.0,1.25) Cpar={CP}
+R21 4    11   1 TC 504U  2.33U
+R22 4    12   1 TC 231U  -103N
+C30 30   4    1n
+* HL Circuit
+*G31 4    31   TABLE { V(3, 4) } ((0,146)(4.0,63.3)(6.00,43.4)(10.0,34.8)(14.0,32.6)(18.0,28.4))
+BG31 4    31   i=table(V(3, 4),0,146,4.0,63.3,6.00,43.4,10.0,34.8,14.0,32.6,18.0,28.4) Cpar={CP}
+R31 31   4    1 TC 1.93M  -1.89U
+*G33 4    30   TABLE { V(31, 30) } ( (-1M,-10)(0,0)(1,10N) )
+BG33 4    30   i=table(V(31, 30),-1M,-10,0,0,1,10N) Rpar={RP} Cpar={CP}
+S31 31   30 31 30 SS31
+* LH Circuit
+*G32 32   4    TABLE { V(3, 4) } ((0,104)(4.0,36.8)(6.00,19.7)(10.0,12.1)(14.0,10.2)(18.0,9.5))
+BG32 32   4    i=table(V(3, 4),0,104,4.0,36.8,6.00,19.7,10.0,12.1,14.0,10.2,18.0,9.5) Cpar={CP}
+R32 4    32   1 TC 2.26M  2.88U
+*G34 30   4    TABLE { V(30, 32) } ( (-1M,-10)(0,0)(1,10N) )
+BG34 30   4    i=table(V(30, 32),-1M,-10,0,0,1,10N) Rpar={RP} Cpar={CP}
+R30 32   30   1MEG
+* DRIVE
+*G51 0    50   TABLE { V(0, 30) } ( (-5,-1U)(-3,-1U)(0,0)(6,1.00)(18,1.020) )
+BG51 4    50  i=table(V(4, 30),-5,-1U,-3,-1U,0,0,6,1.00,18,1.020) Rpar={RP} Cpar={CP}
+*G52 50   0    TABLE { V(30,0) } ( (-5,-1U)(-3,-1U)(0,0)(6,1.20)(18,1.220) )
+BG52 50   4   i=table(V(30, 4),-5,-1U,-3,-1U,0,0,6,1.20,18,1.220) Rpar={RP} Cpar={CP}
+R53 4    50   1
+*G50 51   60   VALUE {V(50,0)*300M/(-700M+18/(V(3,4) + 1M))}
+BG50 51   60  i=V(50,4)*300M/(-700M+18/(V(3,4) + 1M)) Rpar={RP} Cpar={CP}
+R51 51    4   1
+*G53  3    0   TABLE {V(51,4)} ((-100,100)(0,0)(1,1n))
+BG53  3    0  i=table(V(51,4),-100,100,0,0,1,1n) Rpar={RP} Cpar={CP}
+*G54  0    4   TABLE {V(4,51)} ((-100,100)(0,0)(1,1n))
+BG54  0    4  i=table(V(4,51),-100,100,0,0,1,1n) Rpar={RP} Cpar={CP}
+R60 4    60   100MEG
+H67 4    69   V67 1
+V67 60   59   0V
+C60 561  60   200P
+R59 59   2    8.19
+L59 59   2    10.0N
+* Shoot-through adjustment
+VC60 56 4 0V
+RC60 56 561 1m
+H60 58 4 VC60 56
+*G60P 0 3 TABLE { V(58, 4) } ((-1,-1u)(0,0)(25,10.0m)(40,0))
+BG60P 0 3 i=table(V(58, 4),-1,-1u,0,0,25,10.0m,40,0) Rpar={RP} Cpar={CP}
+*G60N 4 0 TABLE { V(4, 58) } ((-1,-1u)(0,0)(25,10.0m)(40,0))
+BG60N 4 0 i=table(V(4, 58),-1,-1u,0,0,25,10.0m,40,0) Rpar={RP} Cpar={CP}
+* Source Output
+*E67 67   4    TABLE { V(69, 0) } ( (-1.3,-1.3)(0,0)(1,2.00) )
+BE67 67   4    v=table(V(69, 4),-1.3,-1.3,0,0,1,2.00) Cpar={CP}
+*G63 4    63   POLY(1) 3 4 22.9 -1.86 54.4M
+B63 4    63   i=22.9+-1.86*v(3,4)+54.4m*v(3,4)*v(3,4) Cpar={CP}
+R63 4    63   1 TC 4.29M 11.7U
+*E61 61   65   VALUE {V(67,0)*V(63,0)}
+BE61 61   65   v=V(67,4)*V(63,4) Cpar={CP}
+V63 65   3    100U
+*G61 61   60   TABLE { V(61, 60) } (-20.0M,-130)(-15.0M,-65.0)(-10.0M,-13.0)(0,0)(10,1N))
+BG61 61   60   i=table(V(61, 60),-20.0M,-130,-15.0M,-65.0,-10.0M,-13.0,0,0,10,1N) Rpar={RP} Cpar={CP}
+* Sink Output Time step too small
+*E68 68   4    TABLE { V(69, 0) }  ( (-1,-2.00)(0,0)(1.5,1.5) )
+BE68 68   4    v=table(V(69, 4),-1,-2.00,0,0,1.5,1.5) Cpar={CP}
+*G64 4    64   POLY(1) 3 4 22.9 -1.86 54.4M
+B64 4    64   i=22.9+-1.86*v(3,4)+54.4m*v(3,4)*v(3,4) Cpar={CP}
+R64 4    64   1 TC 4.29M 11.7U
+*E62 62   66   VALUE {V(68,0)*V(64,0)}
+BE62 62   66  v=V(68,4)*V(64,4) Cpar={CP}
+V64 66   4    100U
+*G62 60   62   TABLE { V(60, 62) } (-20.0M,-150)(-15.0M,-75.0)(-10.0M,-15.0)(0,0)(10,1N))
+BG62 60   62  i=table(V(60, 62),-20.0M,-150,-15.0M,-75.0,-10.0M,-15.0,0,0,10,1N) Rpar={RP} Cpar={CP}
+* Bias Current
+*G55 4    55   TABLE { V(3, 4) } ((0,0)(4.5,530U)(10.0,770U)(14.0,910U)(18.0,1.38M))
+BG55 4    55  i=table(V(3, 4),0,0,4.5,530U,10.0,770U,14.0,910U,18.0,1.38M) Cpar={CP}
+G56 3    4    55 0 1
+R55 55   4    1 TC  -1.53M -407N
+*G57 4    57   TABLE { V(3, 4) } ((0,0)(4.5,70.0U)(10.0,80.0U)(14.0,90.0U)(18.0,120U))
+BG57 4    57  i=table(V(3, 4),0,0,4.5,70.0U,10.0,80.0U,14.0,90.0U,18.0,120U) Cpar={CP}
+G58 3    4    57 0 1
+*BG58 3    4    57 0 1
+R57 57   4    1 TC  -1.53M -407N
+S59 55   4    1 0 SS59
+* Models
+*.MODEL SS59 VSWITCH Roff=1m Ron=100Meg Voff=1.2V Von=1.5V
+.MODEL SS59 SW Roff=1m Ron=100Meg Vt=1.35V Vh=-150mV
+*.MODEL SS31 VSWITCH Roff=100MEG Ron=800 Voff=0.2V Von=0.1V
+.MODEL SS31 SW Ron=100MEG Roff=800 Vt=150mV Vh=-50mV
+.ENDS TC4427_I2D_A
+
+
