@@ -1,43 +1,116 @@
-﻿* TL494.asc
-*              1    2   3   4  5  6   7  8  9  10 11 12  13  14  15   16
-.subckt tl494 1IN+ 1IN- FB DTC CT RT GND C1 E1 E2 C2 VCC OC REF 2IN- 2IN+
-XEA1 1IN+ 1IN- VCC 0 N015 level.2 Avol=1e5 GBW=1Meg Slew=10k ilimit=25m rail=0 Vos=0 phimargin=45 en=0 enk=0 in=0 ink=0 Rin=1Meg
-XEA2 2IN+ 2IN- VCC 0 N016 level.2 Avol=1e5 GBW=1Meg Slew=10k ilimit=25m rail=0 Vos=0 phimargin=45 en=0 enk=0 in=0 ink=0 Rin=1Meg
-V§DT N007 DTC 0.12
-V2 N014 CT 0.7
-A1 0 N005 0 N011 0 0 N009 0 OR vhigh=4.8 td=50n
-A2 0 N006 0 N009 0 N002 0 0 OR vhigh=4.8 td=50n
-A3 0 N010 0 N009 0 N012 0 0 OR vhigh=4.8 td=50n
-A4 0 OC` 0 N008 0 0 N006 0 AND vhigh=4.8 td=50n
-A5 0 N004 0 OC` 0 0 N010 0 AND vhigh=4.8 td=50n
-E1 OC` 0 OC 0 1
-A6 N004 0 N009 N001 0 N004 N008 0 DFLOP vhigh=4.8 vlow=0.2 td=50n
-I2 FB 0 0.7m
-R1 N003 N002 470
-R2 N013 N012 470
-R4 N003 E1 2k7
-R5 N013 E2 2k7
-Q3 RT RT Ref 0 PNP
-Q4 CT RT Ref 0 PNP
-S1 0 CT ctl 0 SW off
-A10 CT 0 0 0 0 0 ctl 0 SCHMITT vhigh=1 vlow=-1 vt=1.5 vh=1.495 td=10n tripdt=1n
-R3 VCC Ref 270
-R6 N001 0 470
-C1 N001 VCC 1n
-XU1 N007 CT VCC 0 N005 level.2 Avol=1G GBW=1G Slew=1G ilimit=25m rail=0 Vos=0 phimargin=45 en=0 enk=0 in=0 ink=0 Rin=500Meg
-XU2 FB N014 VCC 0 N011 level.2 Avol=1G GBW=1G Slew=1G ilimit=25m rail=0 Vos=0 phimargin=45 en=0 enk=0 in=0 ink=0 Rin=500Meg
-Q1 C1 N003 E1 0 NPN
-Q2 C2 N013 E2 0 NPN
-D3 0 Ref DZ
-D1 N016 FB D
-D2 N015 FB D
-D4 N001 VCC D
-D5 0 N001 D
-.model D D
-.model NPN NPN
-.model PNP PNP
-.model sw sw(ron=1)
-.lib ltc.lib
-.model dz d(vrev=5)
-.lib UniversalOpamps2.sub
+***** From LTSpice Large Collections > Roberto > Modelo > Final *********
+**** Oscillator Modified ****
+**** Error Amplifier Modified ****
+**** Modified Code commented out ****
+**** has been used to test TL494 Circuit ****
+*
+.subckt tl494 In1 -In1 In2 -In2 Fb Dtc Vref Oct Ct1 Et1 Ct2 Et2 Ct Rt G Vcc
+*******        1    2  16   15   3  4   14  13   8   9  11  10  5  6  7  12
+A1 N004 0 N003 0 0 N004 N009 0 DFLOP Vhigh=5 Trise=50n Rout=30
+A2 0 0 0 N007 N009 0 N005 0 AND Vhigh=5 Trise=50n Rout=30
+A3 N004 N007 0 0 0 0 N011 0 AND Vhigh=5 Trise=50n Rout=30
+A4 N003 N005 0 0 0 N008 0 0 OR Vhigh=5 Trise=300n Rout=30
+A5 N003 N011 0 0 0 N013 0 0 OR Vhigh=5 Trise=300n Rout=30
+G1 N001 et1 N008 G table=(1 0,4 250m)
+G3 N012 et2 N013 G table=(1 0,4 250m)
+A6 Na Nb 0 0 0 0 N003 0 OR Vhigh=5 Trise=50n Rout=30
+*A7 N002 Ct 0 0 0 0 Na 0 SCHMITT Vt=0 Vh=0 Vhigh=5
+*A8 Fb N014 0 0 0 0 Nb 0 SCHMITT Vt=0 Vh=0 Vhigh=5
+BA7 Na   0     V= ( V(Ct) < V(N002)  ?  5 : tanh(V(Ct,N002)) )
+BA8 Nb   0     V= ( V(Fb) > V(N014)  ?  5 : tanh(V(N014,Fb)) )
+V4 N014 Ct .70
+V5 N002 Dtc .15
+D1 N016 Fb Ideal
+D2 N017 Fb Ideal
+*
+*R1 In1 Nc 1e6
+*R2 In2 N010 1e6
+*C1 Nc -In1 15n9
+*C2 N010 -In2 15n9
+*
+D3 et1 N001 IdealZ
+XE1  In1  -In1  N016    AMPSIMP   params: POLE=10 GAIN=100000 VHIGH=5V VLOW=100m
+*
+*E1  N0160 G Nc -In1 table=(0,0 0.5m,0 3m,3 3.4m,3.5 20m,4.5)
+*E11  N016  G  N0160  G  1
+*RE1  N0160 N0161  10K
+*CE1  N0161 G      22.1n
+*DE1H N0160 N0162  Ideal
+*VE1H N0162 G      5V
+*DE1L N0160 N0163  Ideal
+*VE1L G     N0163  100m
+*R3 G -In1 1e7
+*R4 In1 G 1e7
+*R5 In2 G 1e7
+*R6 -In2 G 1e6
+*
+I1 Fb G .7m
+*V2 N015 G 3.65
+V2 Rt 0 3
+*F1 G Ct V2 -1
+B2 0 Ct I=-I(V2)
+*S1 G Ct N006 G Osc
+*
+S1 0 Cts Ct 0 OSC OFF
+DS Ct Cts D
+D4 Ct1 N001 Ideal1
+D5 Ct1 N001 Ideal2
+G2 et1 N001 Vcc et1 table=(0 250m,1.42 243m,1.46 150m,1.57 0)
+D6 et2 N012 IdealZ
+D7 Ct2 N012 Ideal1
+D8 Ct2 N012 Ideal2
+G4 et2 N012 Vcc et2 table=(0 250m,1.42 243m,1.46 150m,1.57 0)
+C3 N001 et1 5p
+C4 N012 et2 5p
+*
+*D9 N015 Rt Ideal
+*R7 G Ct 1e7
+*
+R8 et2 G 1e7
+R9 et1 G 1e7
+G5 Vcc G Vcc G TABLE=(1 0,5 4.5m,6.85 7.6m,40 8.4m)
+I2 G Vref 25m
+D10 G Vref Ideal3
+B1 Vcc G I=I(D10)+25m
+R10 Oct N007 1k
+*
+*R11 N006 Ct 5k
+*C5 G N006 10p
+*
+XE2  In2  -In2  N017   AMPSIMP   params: POLE=10 GAIN=100000 VHIGH=5V VLOW=100m
+*
+*E2 N0170 G N010 -In2 table=(0,0 0.5m,0 3m,3 3.4m,3.5 20m,4.5)
+*E21  N017   G      N0170   G   1
+*RE2  N0170  N0171  10K
+*CE2  N0171  G      22.1n
+*DE2H N0170  N0172  Ideal
+*VE2H N0172  G      5V
+*DE2L N0170  N0173  Ideal
+*VE2L G      N0173  100m
+*
+.Model Idealz D(Ron=0.01 Roff=20meg Vfwd=0 Vrev=41)
+.Model Ideal D(Ron=0.01 Roff=1G Vfwd=0)
+*
+*.Model Osc Sw(Ron=1 Vt=1.51 Vh=1.49 Ilimit=20m)
+*
+.MODEL Ideal1 D(Ron=2 Roff=1G Vfwd=0.66)
+.Model Ideal2 D(Ron=175 Roff=1G Vfwd=0)
+.Model Ideal3 D(Ron=0 Roff=1G Vfwd=0 Vrev=5)
+.Model OSC  SW(vt=1.51  vh=1.489  ron=0.1 roff=10Meg)
+.Model D  D(N=0.01)
+****
+.SUBCKT AMPSIMP 1 5 7 params: POLE=30 GAIN=30000 VHIGH=5V VLOW=100mV
+*  + - OUT
+G1 0 4 1 5 100u
+R1 4 0 {GAIN/100u}
+C1 4 0 {1/(6.28*(GAIN/100u)*POLE)}
+E1 2 0 4 0 1
+Ro 2 7 10
+Vlow  3 0 DC={VLOW}
+Vhigh 8 0 DC={VHIGH}
+Dlow  3 4 DCLP
+Dhigh 4 8 DCLP
+.MODEL DCLP D N=0.01
+.ENDS AMPSIMP
+****
 .ends tl494
