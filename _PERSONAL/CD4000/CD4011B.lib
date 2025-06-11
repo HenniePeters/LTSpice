@@ -1,0 +1,50 @@
+* 2-input NAND gate
+* tpd 125n
+* tr 100n
+.SUBCKT CD4011B  A B Y  VDD VGND  vdd1={vdd} speed1={speed} tripdt1={tripdt}
+.param td1=1e-9*(125-40-10)*5/{vdd1}*{speed1}
+*
+XIN1  A Ai  VDD VGND  CD40_IN_1  vdd2={vdd1}  speed2={speed1}  tripdt2={tripdt1}
+XIN2  B Bi  VDD VGND  CD40_IN_1  vdd2={vdd1}  speed2={speed1}  tripdt2={tripdt1}
+*
+A1  Ai Bi 0 0 0  Yi 0 0  AND  tripdt={tripdt1}  td={td1}
+*
+XOUT  Yi Y  VDD VGND  CD40_OUT_1X  vdd2={vdd1} speed2={speed1}  tripdt2={tripdt1}
+.ends
+*
+*
+.SUBCKT  CD40_IN_1  in out  VDD VGND  vdd3={vdd2} speed3={speed2}  tripdt3={tripdt2}
+* 3ns input delay
+*.param Cval = 0.55e-12*4/({vdd3}-0.5)*{speed3}
+* 10ns delay @5V
+.param Cval = 1.8e-12*5/{vdd3}*{speed3}
+.param vt1=0.5
+.param gain=(1/{vdd3})
+*
+*D1 0   in  CD40DIO1
+*D2 in VDD  CD40DIO1
+R1 in out10 10k
+C1 out10 VGND {Cval}
+R2 in VGND 1e8
+**E1 out20 0 out10 VGND {gain}
+*B1 out20 0 V=LIMIT(0,V(out10,VGND)*{gain},1)
+B1 out20 0 V=LIMIT(0,V(out10,VGND)/max(V(VDD,VGND),1),1)
+AE1  out20 0 0 0 0  0 out 0  BUF  ref={vt1}  vhigh=1  tripdt={tripdt3}
+.ends
+*
+*
+.MODEL DIO2 D(Is=1e-12 Rs=10)
+*
+* Standard output driver
+.SUBCKT  CD40_OUT_1X  in out  VDD VGND  vdd3={vdd2} speed3={speed2}  tripdt3={tripdt2}
+.param trise1=80e-9*5.0/{vdd3}*{speed3}
+.param Rout=500*5.0/{vdd3}*{speed3}
+*
+AE1  in 0 0 0 0  0 out10 0  BUF  tripdt={tripdt3}  trise={trise1}
+*
+*E1 out20 VGND out10 0 {vdd3}
+B1 out20 VGND V=V(out10)*V(VDD,VGND)
+Rout out20 out {Rout}
+*D1 0   out  DIO2
+*D2 out VDD  DIO2
+.ends
