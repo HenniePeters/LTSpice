@@ -1,0 +1,131 @@
+*$
+*  ATL431B
+*****************************************************************************
+*  (C) Copyright 2016 Texas Instruments Incorporated. All rights reserved.
+*****************************************************************************
+** This model is designed as an aid For customers of Texas Instruments.
+** TI and its licensors and suppliers make no warranties, either expressed
+** or implied, with respect to this model, including the warranties of
+** merchantability or fitness for a particular purpose.  The model is
+** provided solely on an "as is" basis.  The entire risk as to its quality
+** and performance is with the customer
+*****************************************************************************
+*
+** Released by: WEBENCH Design Center, Texas Instruments Inc.
+* Part: ATL431B
+* Date: 30MAY2016
+* Model Type: TRANSIENT
+* Simulator: PSPICE
+* Simulator Version: 16.2.0.p001
+* EVM Order Number: ATL431EVM
+* EVM Users Guide: SLVUAE7 – April 2015
+* Datasheet: SLVSCV5C –MARCH 2015–REVISED SEPTEMBER 2015
+*
+* Model Version: Final 1.20
+*
+*****************************************************************************
+*
+* Updates:
+*
+* Final 1.00
+* Release to Web.
+* Final 1.10
+* Reference voltage kept at 2.5V DC
+* Changed the Cathode reverse voltage from 2V to 1.5V
+* Final 1.20
+* AC Response modeled as per new datasheet
+* Reference Input current modeled
+* The IKA v/s VKA modeling changed
+*
+*****************************************************************************
+.SUBCKT ATL431B A FB K
+D_D15         7 8 DCLAMP
+V_V22         N17052054 11 0
+D_D16         5 8 DCLAMP
+E_E2         20 6 2 6 1
+V_V8         5 6 2
+E_E7         VCTRL2 6 VALUE { if(ABS(V(11)-V(6))<1u,0,V(7,6)) }
+E_E30         20 N17046974 VALUE { {I(V_V24)*1E3} }
+G_G10         7 6 TABLE { V(VCTRL2, 6) }
++ ( ((-1,-100m)(-0.65,0)(0.5,0)(2.49,20u)(1k,20u)) )
+R_R21         N17046977 N17046974  1 TC=0,0
+C_C19         6 21  8p
+G_G11         11 6 TABLE { V(VCTRL1, 6) }
++ ( ((-1k,0)(0.5,0)(2.49,30n)(1k,30n)) )
+V_V24         N17046977 21 0Vdc
+E_E3         22 6 21 6 1
+R_R22         0 N17047014  1 TC=0,0
+E_E31         22 N17047262 VALUE { {I(V_V25)*1E3} }
+E_E29         2 N17045353 VALUE { {I(V_V23)*1E3} }
+R_R23         N17047265 N17047262  1 TC=0,0
+E_E8         VCTRL1 6 VALUE { if(ABS(V(11)-V(6))<1u,0,V(11,6)) }
+R_R19         N17045356 N17045353  1 TC=0,0
+C_C20         6 9  8p
+V_V23         N17045356 6 0Vdc
+V_V25         N17047265 9 0Vdc
+C_C22         N17047014 0  1n
+V_V19         1 6 2.5
+R_R24         0 N17047302  1 TC=0,0
+R_R20         0 N17045382  1 TC=0,0
+C_C18         2 6  1.3238u
+V_V21         A 6 0
+C_C23         N17047302 0  1n
+G_ABM2I4         6 8 VALUE { IF((V(9)-V(6))< 0 , 0.04*(V(9)-V(6)) -0.037U ,
++  -0.037U)    }
+C_C21         N17045382 0  1n
+V_V20         K 7 0
+G_G4         6 2 1 11 22.4m
+X_U8         FB N17052054 vnse
+.ENDS ATL431B
+*$
+.subckt vnse 1 2
+.PARAM NLF=1000
+.PARAM FLW=13
+.PARAM NVR=680
+.PARAM GLF={PWR(FLW,0.25)*NLF/1164}
+.PARAM RNV={1.184*PWR(NVR,2)}
+.MODEL DVN D KF={PWR(FLW,0.2)/1E11} IS=1.0E-16
+I1 0 7 10E-3
+I2 0 8 10E-3
+D1 7 0 DVN
+D2 8 0 DVN
+E1 3 6 7 8 {GLF}
+R1 3 0 1E9
+R2 3 0 1E9
+R3 3 6 1E9
+E2 6 4 5 0 10
+R4 5 0 {RNV}
+R5 5 0 {RNV}
+R6 3 4 1E9
+R7 4 0 1E9
+E3 1 2 3 4 1
+C1 1 0 1E-15
+C2 2 0 1E-15
+C3 1 2 1E-15
+.ends vnse
+*$
+.model DCLAMP d
++ is=1.35e-008
++ rs=0.025
++ n=1.59
++ cjo=4.5e-011
++ vj=0.75
++ m=0.302
++ tt=5.04e-008
++ bv=34
++ ibv=0.001
+*$
+.subckt d_d1 1 2
+d1 1 2 dd1
+.model dd1 d
++ is=1.35e-008
++ rs=0.025
++ n=1.59
++ cjo=4.5e-011
++ vj=0.75
++ m=0.302
++ tt=5.04e-008
++ bv=34
++ ibv=0.001
+.ends d_d1
+*$
